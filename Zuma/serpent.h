@@ -7,8 +7,9 @@ using namespace Imagine;
 
 class Serpent
 {
-    std::vector<Bille> s;
 public:
+    std::vector<Bille> s;
+
     //Variables utiles ?
     int nbBilles; // = s.size()
     Bille front, back; // = s.front(), = s.back()

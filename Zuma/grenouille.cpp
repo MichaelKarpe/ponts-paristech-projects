@@ -4,7 +4,16 @@
 
 Grenouille::Grenouille()
 {
+    Bille b1, b2;
+    g.push_back(b1);
+    g.push_back(b2);
 
+}
+
+
+void Grenouille::traceGrenouille() {
+    fillCircle(pos.x,pos.y,R,g[0].col);
+    fillCircle(pos.x,pos.y,R/3,g[1].col);
 }
 
 

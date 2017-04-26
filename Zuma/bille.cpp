@@ -4,7 +4,7 @@
 
 Bille::Bille()
 {
-
+    col=colors[rand()%8];
 }
 
 
@@ -15,6 +15,10 @@ Bille::~Bille()
 
 }
 
+
+void Bille::dessineBille(Point p) {
+    fillCircle(p.x,p.y,r,col);
+}
 
 void Bille::setVitesse(double iv) {
     //Modifie la vitesse de la bille

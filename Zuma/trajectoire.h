@@ -5,14 +5,17 @@ using namespace Imagine;
 
 #include "serpent.h"
 #include "grenouille.h"
+#include "outils.h"
 
-const int w = 1250;
-const int h = 750;
+const int courbure=carre;
 
 class Trajectoire
 {
-    std::vector<Point> t;
 public:
+    std::vector<Point> t;
     Trajectoire();
+    void traceTrajectoire();
+    void trajectoire1();
+    void billesRandom();
 };
 

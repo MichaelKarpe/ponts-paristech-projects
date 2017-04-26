@@ -7,7 +7,6 @@ using namespace Imagine;
 
 #include "outils.h"
 
-const int r = 50;
 const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
 
 const double dt = 0.01;
@@ -24,4 +23,5 @@ public:
 
     void setVitesse(double iv);
     void destructionBille();
+    void dessineBille(Point p);
 };
