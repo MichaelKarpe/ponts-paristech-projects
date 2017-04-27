@@ -2,9 +2,17 @@
 
 //Constructeurs
 
-Bille::Bille()
+Bille::Bille() {
+
+}
+
+Bille::Bille(Point ip, int iabs, double iv)
 {
     col=colors[rand()%8];
+    abs=iabs;
+    v=iv;
+    p=ip;
+
 }
 
 

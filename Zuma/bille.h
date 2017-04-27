@@ -7,18 +7,16 @@ using namespace Imagine;
 
 #include "outils.h"
 
-const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
-
-const double dt = 0.01;
-
 class Bille
 {
 public:
     Color col;
     double v; //pas d'accélération pour l'instant
     Point p;
+    int abs;
 
     Bille();
+    Bille(Point ip, int iabs, double iv);
     ~Bille();
 
     void setVitesse(double iv);

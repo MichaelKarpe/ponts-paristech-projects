@@ -10,7 +10,7 @@ class Grenouille
 public:
     std::vector<Bille> g; // g.size()=2
 
-    Point pos=Point(W/2,H/2);
+    Point pos=Point(w/2,h/2);
     Grenouille();
 
     void traceGrenouille();

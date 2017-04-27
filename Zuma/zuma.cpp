@@ -9,10 +9,11 @@
 using namespace std;
 using namespace Imagine;
 
-#include "trajectoire.h"
+#include "serpent.h"
 
 int main()
 {
+
     //srand((unsigned int)time(0));
 
     Window Fenetre=openWindow(W,H);
@@ -22,14 +23,23 @@ int main()
     quadrillage();
 
     Trajectoire traj;
-    traj.trajectoire1();
+    traj.trajectoire2();
     traj.traceTrajectoire();
-    traj.billesRandom();
+    //traj.billesRandom();
     std::cout << traj.t.size() << std::endl;
 
-    //Serpent snake;
-    //for (int i=)
-    //snake.s.
+    Serpent snake;
+    for (int i=0;i<50;i++) {
+        Bille b(Point(traj.t[2*r*i].x,traj.t[2*r*i].y),2*r*i,vd);
+        snake.s.push_back(b);
+    }
+    snake.traceSerpent(traj);
+
+    for (int i=0;i<380;i++) { //380 fait arriver juste avant la fin de traj2
+        snake.vitesseDiminue(traj);
+        snake.deplacementSerpent(traj);
+    }
+
 
     endGraphics();
     return 0;

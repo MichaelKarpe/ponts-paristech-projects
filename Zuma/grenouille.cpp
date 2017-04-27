@@ -4,7 +4,7 @@
 
 Grenouille::Grenouille()
 {
-    Bille b1, b2;
+    Bille b1(Point(w/2,h/2),-1,1.0), b2(Point(w/2,h/2),-1,1.0);
     g.push_back(b1);
     g.push_back(b2);
 
@@ -12,8 +12,8 @@ Grenouille::Grenouille()
 
 
 void Grenouille::traceGrenouille() {
-    fillCircle(pos.x,pos.y,R,g[0].col);
-    fillCircle(pos.x,pos.y,R/3,g[1].col);
+    fillCircle(pos.x*zoom,pos.y*zoom,carre*zoom,g[0].col);
+    fillCircle(pos.x*zoom,pos.y*zoom,carre*zoom/3,g[1].col);
 }
 
 

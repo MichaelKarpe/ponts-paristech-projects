@@ -4,6 +4,7 @@
 using namespace Imagine;
 
 #include "bille.h"
+#include "trajectoire.h"
 
 class Serpent
 {
@@ -20,9 +21,14 @@ public:
 
     Serpent fusionSerpents(Serpent serp2);
     void vitesseEntree();
-    void vitesseDiminue();
+    void vitesseDiminue(Trajectoire traj);
     void vitesseDestruction();
     void vitesseCombo();
     void vitesseNulle();
+
+    void traceSerpent(Trajectoire traj);
+    void effaceSerpent(Trajectoire traj);
+
+    void deplacementSerpent(Trajectoire traj);
 };
 
