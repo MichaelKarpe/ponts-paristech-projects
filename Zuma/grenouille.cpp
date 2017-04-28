@@ -17,7 +17,33 @@ void Grenouille::traceGrenouille() {
 
 
 //Fonction de tir
-void Grenouille::tir() {
+void Grenouille::tir(Bille b) {
+
+    Event ev;
+    getEvent(1,ev);
+
+    if (ev == EVT_BUT_ON) {
+        if (ev.button() == 3) {
+            // Changer la bille
+            changeBille();
+        }
+        if (ev.button() == 1) {
+            // Tir
+            IntPoint2 P = ev.pix - pos;
+            double costheta = P.x()/sqrt(P.x()**P.x()+P.y()*P.y());
+            double sintheta = P.y()/sqrt(P.x()**P.x()+P.y()*P.y());
+
+            b.col = g[0].col;
+            b.p.x = int(costheta*(carre + r/3.));
+            b.p.y = int(sintheta*(carre + r/3.));
+
+
+
+
+            creationBille();
+        }
+    }
+
     //Si clic gauche, beaucoup de choses à faire!
 }
 
