@@ -12,15 +12,16 @@ class Trajectoire
 {
 public:    
     std::vector<Point> t;
-
     Trajectoire();
+
     void traceTrajectoire();
+
     void trajectoire1();
     void trajectoire2();
-    void billesRandom();
 
     Point absplan(int abs) const;
     int abscurv(Point p) const;
 
+    void billesRandom();
 };
 

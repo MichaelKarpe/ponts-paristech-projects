@@ -21,5 +21,5 @@ public:
 
     void setVitesse(double iv);
     void destructionBille();
-    void dessineBille(Point p);
+    void dessineBille();
 };

@@ -26,9 +26,9 @@ int main()
     traj.trajectoire2();
     traj.traceTrajectoire();
     //traj.billesRandom();
-    std::cout << traj.t.size() << std::endl;
+    cout << traj.t.size() << endl;
 
-    std::vector<Serpent> listSerp;
+    vector<Serpent> listSerp;
     listSerp.push_back(Serpent(traj,20));
 
     for (int i=0;i<listSerp.size();i++)
@@ -40,8 +40,8 @@ int main()
     while (!(listSerp[0].s[listSerp[0].s.size()-1].abs >= traj.t.size())) {
         for (int i=0;i<listSerp.size();i++) {
             listSerp[i].vitesseDiminue(traj);
-            listSerp[i].deplacementSerpent(traj);
-            if (listSerp[listSerp.size()-1].serpentLoin(traj) || serpentMort) {
+            deplacementSerpents(traj,listSerp);
+            if (listSerp[listSerp.size()-1].serpentLoin(traj) || serpentMort) { //rajouter nbSerpents à envoyer
                 listSerp.push_back(Serpent(traj,20));
             }
         }

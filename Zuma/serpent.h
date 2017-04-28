@@ -31,10 +31,9 @@ public:
     void traceSerpent(const Trajectoire &traj);
     void effaceSerpent(const Trajectoire &traj);
 
-    void deplacementSerpent(const Trajectoire &traj);
-
     bool serpentFin(const Trajectoire &traj);
 
     bool serpentLoin(const Trajectoire &traj);
 };
 
+void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp);

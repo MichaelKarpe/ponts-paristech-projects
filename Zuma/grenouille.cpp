@@ -7,7 +7,6 @@ Grenouille::Grenouille()
     Bille b1(Point(w/2,h/2),-1,1.0), b2(Point(w/2,h/2),-1,1.0);
     g.push_back(b1);
     g.push_back(b2);
-
 }
 
 

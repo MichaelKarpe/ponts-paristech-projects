@@ -9,12 +9,12 @@ Trajectoire::Trajectoire()
 
 // Il faut tracer les contours de la trajectoire
 void Trajectoire::traceTrajectoire() {
-    for (int i=0;i<t.size()-2;i++) {
+    for (int i=0;i<t.size()-2;i++)
         drawLine(t[i].x*zoom,t[i].y*zoom,t[i+1].x*zoom,t[i+1].y*zoom,RED);
-        //milliSleep(100);
-    }
-
 }
+
+
+// Fonctions de création de la trajectoire 1
 
 void pointsCercle(std::vector<Point> &p, Point c, int r, int cote) {
     double l=M_PI*r; //longueur de l'arc de cercle
@@ -42,6 +42,9 @@ void Trajectoire::trajectoire1() {
             pointsCercle(t,centres[j],carre,j%2);
     }
 }
+
+
+// Fonctions de création de la trajectoire 2
 
 void pointsCercle2(std::vector<Point> &p, Point c, int r, int cote) {
     double l=M_PI*r/2; //longueur de l'arc de cercle
@@ -86,13 +89,7 @@ void Trajectoire::trajectoire2() {
 }
 
 
-
-void Trajectoire::billesRandom() {
-    for (int i=0;i<t.size()/(2*r);i++)
-        //dessineBille(t[40*i]);
-        fillCircle(t[2*r*i].x*zoom,t[2*r*i].y*zoom,R,colors[rand()%8]);
-}
-
+// Bijection coordonnées du plan - abscisse curviligne
 
 Point Trajectoire::absplan(int abs) const {
     return t[abs];
@@ -103,4 +100,13 @@ int Trajectoire::abscurv(Point p) const {
         if (t[i].x==p.x && t[i].y==p.y)
             return i;
     }
+}
+
+
+// Fonctions inutiles
+
+void Trajectoire::billesRandom() {
+    for (int i=0;i<t.size()/(2*r);i++)
+        //dessineBille(t[40*i]);
+        fillCircle(t[2*r*i].x*zoom,t[2*r*i].y*zoom,R,colors[rand()%8]);
 }

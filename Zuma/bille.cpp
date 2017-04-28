@@ -24,7 +24,7 @@ Bille::~Bille()
 }
 
 
-void Bille::dessineBille(Point p) {
+void Bille::dessineBille() {
     fillCircle(p.x,p.y,r,col);
 }
 
