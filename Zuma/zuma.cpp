@@ -28,18 +28,26 @@ int main()
     //traj.billesRandom();
     std::cout << traj.t.size() << std::endl;
 
-    Serpent snake;
-    for (int i=0;i<50;i++) {
-        Bille b(Point(traj.t[2*r*i].x,traj.t[2*r*i].y),2*r*i,vd);
-        snake.s.push_back(b);
-    }
-    snake.traceSerpent(traj);
+    std::vector<Serpent> listSerp;
+    listSerp.push_back(Serpent(traj,20));
 
-    for (int i=0;i<380;i++) { //380 fait arriver juste avant la fin de traj2
-        snake.vitesseDiminue(traj);
-        snake.deplacementSerpent(traj);
+    for (int i=0;i<listSerp.size();i++)
+        listSerp[i].traceSerpent(traj);
+
+    bool serpentMort=false;
+
+    //Le premier serpent est celui qui est le plus proche de la fin
+    while (!(listSerp[0].s[listSerp[0].s.size()-1].abs >= traj.t.size())) {
+        for (int i=0;i<listSerp.size();i++) {
+            listSerp[i].vitesseDiminue(traj);
+            listSerp[i].deplacementSerpent(traj);
+            if (listSerp[listSerp.size()-1].serpentLoin(traj) || serpentMort) {
+                listSerp.push_back(Serpent(traj,20));
+            }
+        }
     }
 
+    //Hypothèse simplificatrice : tous la vitesse du plus lent
 
     endGraphics();
     return 0;

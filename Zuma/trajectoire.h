@@ -19,8 +19,8 @@ public:
     void trajectoire2();
     void billesRandom();
 
-    Point absplan(int abs);
-    int abscurv(Point p);
+    Point absplan(int abs) const;
+    int abscurv(Point p) const;
 
 };
 

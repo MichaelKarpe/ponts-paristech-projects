@@ -8,9 +8,12 @@ Serpent::Serpent()
 
 }
 
-void Serpent::SerpentAleatoire()
-{ //Créer un serpent sous conditions en fonction des niveaux
-
+Serpent::Serpent(const Trajectoire &traj, int nbBilles)
+{
+    for (int i=0;i<nbBilles;i++) {
+        Bille b(Point(traj.t[2*r*i].x,traj.t[2*r*i].y),2*r*i,vDepart);
+        s.push_back(b);
+    }
 }
 
 //Destructeur
@@ -21,14 +24,14 @@ Serpent::~Serpent()
 }
 
 
-void Serpent::traceSerpent(Trajectoire traj) {
+void Serpent::traceSerpent(const Trajectoire &traj) {
     for (int i=0;i<s.size()-1;i++) {
         if (s[i].abs<traj.t.size()-1)
             fillCircle(s[i].p.x*zoom,s[i].p.y*zoom,R,s[i].col);
     }
 }
 
-void Serpent::effaceSerpent(Trajectoire traj) {
+void Serpent::effaceSerpent(const Trajectoire &traj) {
     for (int i=0;i<s.size()-1;i++) {
         if (s[i].abs<traj.t.size()-1)
             fillCircle(s[i].p.x*zoom,s[i].p.y*zoom,R,WHITE);
@@ -53,18 +56,19 @@ void Serpent::vitesseEntree() {
 }
 
 
-void Serpent::vitesseDiminue(Trajectoire traj) {
-    double nv = vd*(1-s.back().abs/traj.t.size())+1.0; //pour pas que vitesse nulle avant la fin
-    for (int i=0;i<s.size()-1;i++)
+void Serpent::vitesseDiminue(const Trajectoire &traj) {
+    double nv = vDepart*(1.0-double(s.back().abs)/double(traj.t.size()))+1.0; //pour pas que vitesse nulle avant la fin
+    //cout << nv << endl;
+    for (int i=0;i<s.size();i++)
         s[i].v=nv;
     //Diminue la vitesse lorsque le serpent s'approche de la fin
 }
 
-void Serpent::deplacementSerpent(Trajectoire traj) {
+void Serpent::deplacementSerpent(const Trajectoire &traj) {
     int indtete=0, dstete=0;
     //effaceSerpent();
-
-    for (int i=0;i<s.size()-1;i++) {
+    double ds=s[s.size()-1].v*dt;
+    /*for (int i=0;i<s.size()-1;i++) {
         int ds=s[i].v*dt;
         if (ds>0) {
             //s[i].abs+=ds;
@@ -74,18 +78,23 @@ void Serpent::deplacementSerpent(Trajectoire traj) {
         }
         else //Sortie de boucle
             i=s.size();
-    }
+    }*/
 
-    for (int j=0;j<dstete;j++) {
+    for (int j=0;j<ds;j++) {
+        noRefreshBegin();
         effaceSerpent(traj);
+        //traj.traceTrajectoire();
         //Il faudrait ajouter une fonction qui retrace la trajectoire
         //Mais ça lague trop
-        for (int i=0;i<indtete+1;i++) {
+        //cout << indtete << endl;
+        for (int i=0;i<s.size();i++) {
             s[i].abs+=1;
             s[i].p=traj.absplan(s[i].abs);
         }
         traceSerpent(traj);
-        milliSleep(5); //milliSleep(50/dstete);
+        noRefreshEnd();
+        //cout << dstete << endl;
+        milliSleep(50.0/ds); //milliSleep(50/dstete);
     }
 
 }
@@ -106,6 +115,11 @@ void Serpent::vitesseNulle() {
     //Vitesse nulle pour la partie avant du serpent
 }
 
+bool Serpent::serpentFin(const Trajectoire &traj) {
+    return (s[s.size()-1].abs >= traj.t.size());
+}
 
-
+bool Serpent::serpentLoin(const Trajectoire &traj) {
+    return (s[s.size()-1].abs >= 1.0/6.0*traj.t.size());
+}
 

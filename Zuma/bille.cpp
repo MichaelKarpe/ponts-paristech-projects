@@ -8,7 +8,7 @@ Bille::Bille() {
 
 Bille::Bille(Point ip, int iabs, double iv)
 {
-    col=colors[rand()%8];
+    col=colors[rand()%nbCouleurs];
     abs=iabs;
     v=iv;
     p=ip;

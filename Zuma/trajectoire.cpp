@@ -7,9 +7,10 @@ Trajectoire::Trajectoire()
 
 }
 
+// Il faut tracer les contours de la trajectoire
 void Trajectoire::traceTrajectoire() {
     for (int i=0;i<t.size()-2;i++) {
-        drawLine(t[i].x*zoom,t[i].y*zoom,t[i+1].x*zoom,t[i+1].y*zoom,RED,zoom);
+        drawLine(t[i].x*zoom,t[i].y*zoom,t[i+1].x*zoom,t[i+1].y*zoom,RED);
         //milliSleep(100);
     }
 
@@ -93,11 +94,11 @@ void Trajectoire::billesRandom() {
 }
 
 
-Point Trajectoire::absplan(int abs) {
+Point Trajectoire::absplan(int abs) const {
     return t[abs];
 }
 
-int Trajectoire::abscurv(Point p) {
+int Trajectoire::abscurv(Point p) const {
     for (int i=0;i<t.size();i++) {
         if (t[i].x==p.x && t[i].y==p.y)
             return i;

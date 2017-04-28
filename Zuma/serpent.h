@@ -2,6 +2,8 @@
 
 #include <Imagine/Graphics.h>
 using namespace Imagine;
+#include <iostream>
+using namespace std;
 
 #include "bille.h"
 #include "trajectoire.h"
@@ -16,19 +18,23 @@ public:
     Bille front, back; // = s.front(), = s.back()
 
     Serpent();
-    void SerpentAleatoire();
+    Serpent(const Trajectoire &traj, int nbBilles);
     ~Serpent();
 
     Serpent fusionSerpents(Serpent serp2);
     void vitesseEntree();
-    void vitesseDiminue(Trajectoire traj);
+    void vitesseDiminue(const Trajectoire &traj);
     void vitesseDestruction();
     void vitesseCombo();
     void vitesseNulle();
 
-    void traceSerpent(Trajectoire traj);
-    void effaceSerpent(Trajectoire traj);
+    void traceSerpent(const Trajectoire &traj);
+    void effaceSerpent(const Trajectoire &traj);
 
-    void deplacementSerpent(Trajectoire traj);
+    void deplacementSerpent(const Trajectoire &traj);
+
+    bool serpentFin(const Trajectoire &traj);
+
+    bool serpentLoin(const Trajectoire &traj);
 };
 
