@@ -2,6 +2,8 @@
 
 #include <Imagine/Graphics.h>
 using namespace Imagine;
+#include <iostream>
+using namespace std;
 
 const int w = 240;
 const int h = 120;
@@ -17,15 +19,21 @@ const int CARRE = carre*zoom;
 const int nbCouleurs = 4;
 const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
 
-const double dt = 1.0;
-const double vDepart = 4.0;
+const double dt = 0.2;
+const double vDepart = 5.0;
+const double Vtir = 30.0;
 
 class Point
 {
-public:
     int x,y;
+public:
     Point();
     Point(int ix, int iy);
+
+    int getX() const ;
+    int getY() const ;
+    void setX(int ix);
+    void setY(int iy);
 };
 
 void quadrillage();

@@ -12,7 +12,6 @@ Bille::Bille(Point ip, int iabs, double iv)
     abs=iabs;
     v=iv;
     p=ip;
-
 }
 
 
@@ -24,15 +23,59 @@ Bille::~Bille()
 }
 
 
-void Bille::dessineBille() {
-    fillCircle(p.x,p.y,r,col);
+// Assesseurs
+
+Color Bille::getCol() const {
+    return col;
 }
 
-void Bille::setVitesse(double iv) {
-    //Modifie la vitesse de la bille
+double Bille::getVit() const {
+    return v;
+}
+
+Point Bille::getCoor() const {
+    return p;
+}
+
+int Bille::getAbs() const {
+    return abs;
+}
+
+void Bille::setCol(Color icol) {
+    col = icol;
+}
+
+void Bille::setVit(double iv) {
+    v = iv;
+}
+
+void Bille::setCoor(Point ip) {
+    p = ip;
+}
+
+void Bille::setAbs(double iabs) {
+    abs = iabs;
 }
 
 
-void Bille::destructionBille() {
+// Fonctions
 
+void Bille::avanceTirBille(double vx, double vy) {
+    fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
+    p.setX(p.getX() + dt*vx);
+    p.setY(p.getY() + dt*vy);
+    fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
+
+}
+
+void Bille::traceBille() {
+    fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
+}
+
+void Bille::effaceBille() {
+    fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
+}
+
+double dist(Bille b1, Bille b2) {
+    return sqrt((b1.getCoor().getX()-b2.getCoor().getX())*(b1.getCoor().getX()-b2.getCoor().getX()) + (b1.getCoor().getY()-b2.getCoor().getY())*(b1.getCoor().getY()-b2.getCoor().getY()));
 }

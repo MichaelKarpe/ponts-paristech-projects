@@ -7,10 +7,12 @@ Trajectoire::Trajectoire()
 
 }
 
+// Faire assesseurs pour Point
+
 // Il faut tracer les contours de la trajectoire
 void Trajectoire::traceTrajectoire() {
     for (int i=0;i<t.size()-2;i++)
-        drawLine(t[i].x*zoom,t[i].y*zoom,t[i+1].x*zoom,t[i+1].y*zoom,RED);
+        drawLine(t[i].getX()*zoom,t[i].getY()*zoom,t[i+1].getX()*zoom,t[i+1].getY()*zoom,RED);
 }
 
 
@@ -20,9 +22,9 @@ void pointsCercle(std::vector<Point> &p, Point c, int r, int cote) {
     double l=M_PI*r; //longueur de l'arc de cercle
     for (int i=0;i<l;i++) {
         if (cote==0) //droite
-            p.push_back(Point(c.x+r*sin(M_PI*i/l),c.y-r*cos(M_PI*i/l)));
+            p.push_back(Point(c.getX()+r*sin(M_PI*i/l),c.getY()-r*cos(M_PI*i/l)));
         else //gauche
-            p.push_back(Point(c.x-r*sin(M_PI*i/l),c.y-r*cos(M_PI*i/l)));
+            p.push_back(Point(c.getX()-r*sin(M_PI*i/l),c.getY()-r*cos(M_PI*i/l)));
     }
 }
 
@@ -50,13 +52,13 @@ void pointsCercle2(std::vector<Point> &p, Point c, int r, int cote) {
     double l=M_PI*r/2; //longueur de l'arc de cercle
     for (int i=0;i<l;i++) {
         if (cote==0) //droite
-            p.push_back(Point(c.x+r*sin(M_PI*i/(2*l)),c.y-r*cos(M_PI*i/(2*l))));
+            p.push_back(Point(c.getX()+r*sin(M_PI*i/(2*l)),c.getY()-r*cos(M_PI*i/(2*l))));
         else if (cote==1)//gauche
-            p.push_back(Point(c.x+r*cos(M_PI*i/(2*l)),c.y+r*sin(M_PI*i/(2*l))));
+            p.push_back(Point(c.getX()+r*cos(M_PI*i/(2*l)),c.getY()+r*sin(M_PI*i/(2*l))));
         else if (cote==2)//gauche
-            p.push_back(Point(c.x-r*sin(M_PI*i/(2*l)),c.y+r*cos(M_PI*i/(2*l))));
+            p.push_back(Point(c.getX()-r*sin(M_PI*i/(2*l)),c.getY()+r*cos(M_PI*i/(2*l))));
         else //gauche
-            p.push_back(Point(c.x-r*cos(M_PI*i/(2*l)),c.y-r*sin(M_PI*i/(2*l))));
+            p.push_back(Point(c.getX()-r*cos(M_PI*i/(2*l)),c.getY()-r*sin(M_PI*i/(2*l))));
     }
 }
 
@@ -97,7 +99,7 @@ Point Trajectoire::absplan(int abs) const {
 
 int Trajectoire::abscurv(Point p) const {
     for (int i=0;i<t.size();i++) {
-        if (t[i].x==p.x && t[i].y==p.y)
+        if (t[i].getX()==p.getX() && t[i].getY()==p.getY())
             return i;
     }
 }
@@ -107,6 +109,5 @@ int Trajectoire::abscurv(Point p) const {
 
 void Trajectoire::billesRandom() {
     for (int i=0;i<t.size()/(2*r);i++)
-        //dessineBille(t[40*i]);
-        fillCircle(t[2*r*i].x*zoom,t[2*r*i].y*zoom,R,colors[rand()%8]);
+        fillCircle(t[2*r*i].getX()*zoom,t[2*r*i].getY()*zoom,R,colors[rand()%8]); //mettre traceBille plutôt
 }

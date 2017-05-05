@@ -10,8 +10,10 @@ using namespace std;
 
 class Serpent
 {
+
 public:
     std::vector<Bille> s;
+    vector<Bille> getSerp();
 
     //Variables utiles ?
     int nbBilles; // = s.size()
@@ -21,12 +23,15 @@ public:
     Serpent(const Trajectoire &traj, int nbBilles);
     ~Serpent();
 
-    Serpent fusionSerpents(Serpent serp2);
+    //void fusionSerpents(vector<Serpent> &listSerp);
     void vitesseEntree();
     void vitesseDiminue(const Trajectoire &traj);
     void vitesseDestruction();
     void vitesseCombo();
     void vitesseNulle();
+
+    void insererBille(const Trajectoire &traj, Bille &B, int j);
+    int insererTir(const Trajectoire &traj , Bille &B, bool &finTir);
 
     void traceSerpent(const Trajectoire &traj);
     void effaceSerpent(const Trajectoire &traj);
@@ -34,6 +39,9 @@ public:
     bool serpentFin(const Trajectoire &traj);
 
     bool serpentLoin(const Trajectoire &traj);
+
+    void destructionBilles(int &i);
 };
 
 void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp);
+void fusionSerpents(vector<Serpent> &listSerp);

@@ -4,56 +4,102 @@
 
 Grenouille::Grenouille()
 {
-    Bille b1(Point(w/2,h/2),-1,1.0), b2(Point(w/2,h/2),-1,1.0);
-    g.push_back(b1);
-    g.push_back(b2);
+    B1=Bille(Point(w/2,h/2),-1,1.0);
+    B2=Bille(Point(w/2,h/2),-1,1.0);
 }
 
 
 void Grenouille::traceGrenouille() {
-    fillCircle(pos.x*zoom,pos.y*zoom,carre*zoom,g[0].col);
-    fillCircle(pos.x*zoom,pos.y*zoom,carre*zoom/3,g[1].col);
+    fillCircle(pos.getX()*zoom,pos.getY()*zoom,carre*zoom,B2.getCol());
+    fillCircle(pos.getX()*zoom,pos.getY()*zoom,R,B1.getCol());
 }
 
 
-//Fonction de tir
-void Grenouille::tir(Bille b) {
+// Assesseurs
+
+Point Grenouille::getPos() const {
+    return pos;
+}
+
+Bille Grenouille::getB1() const {
+    return B1;
+}
+
+Bille Grenouille::getB2() const {
+    return B2;
+}
+
+void Grenouille::setB1(Bille iB) {
+    B1=iB;
+}
+
+void Grenouille::setB2(Bille iB) {
+    B2=iB;
+}
+
+
+// Fonctions
+
+void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir) {
 
     Event ev;
-    getEvent(1,ev);
+    getEvent(0,ev);
+    if (ev.type == EVT_BUT_ON) {
+        if (finTir) {
+            if (ev.button == 1) {
+                // click gauche : Tir
+                Point P;
+                P.setX(ev.pix.x() - pos.getX()*zoom);
+                P.setY(ev.pix.y() - pos.getY()*zoom);
 
-    if (ev == EVT_BUT_ON) {
-        if (ev.button() == 3) {
-            // Changer la bille
-            changeBille();
+                double costheta = P.getX()/sqrt(P.getX()*P.getX()+P.getY()*P.getY());
+                double sintheta = P.getY()/sqrt(P.getX()*P.getX()+P.getY()*P.getY());
+
+                Btir = B1;
+                vx = costheta * Vtir;
+                vy = sintheta * Vtir;
+
+                finTir = false;
+                creationBille();
+            }
+
+            if (ev.button == 3) {
+                // click droit : Changer la bille
+                changeBille();
+            }
         }
-        if (ev.button() == 1) {
-            // Tir
-            IntPoint2 P = ev.pix - pos;
-            double costheta = P.x()/sqrt(P.x()**P.x()+P.y()*P.y());
-            double sintheta = P.y()/sqrt(P.x()**P.x()+P.y()*P.y());
 
-            b.col = g[0].col;
-            b.p.x = int(costheta*(carre + r/3.));
-            b.p.y = int(sintheta*(carre + r/3.));
-
-
-
-
-            creationBille();
-        }
     }
 
-    //Si clic gauche, beaucoup de choses à faire!
+    if (!finTir) {
+        Btir.avanceTirBille(vx,vy);
+    }
+
+    // Si la bille sort de l'écran alors on peut tirer à nouveau
+
+    if ((Btir.getCoor().getX()<-R || Btir.getCoor().getX()>W+R) || (Btir.getCoor().getY()<-R || Btir.getCoor().getY()>H+R)) {
+        finTir = true;
+        Btir.setCoor(Point(0,0));
+    }
 }
+
+
 
 
 void Grenouille::changeBille() {
     //Si clic droit, échange de bille
+    Bille B;
+    B = B1;
+    B1 = B2;
+    B2 = B;
+
 }
 
 void Grenouille::creationBille() {
     //Pour remplacer la 2e bille lorsque la 1e est tirée
+    B1 = B2;
+    B2 = Bille(pos, 0, 0);
+
 }
 
 void Grenouille::verifieCouleurs() {
