@@ -1,6 +1,6 @@
 #include "outils.h"
 
-//Constructeur
+// Constructeurs
 
 Point::Point()
 {
@@ -11,6 +11,9 @@ Point::Point(int ix, int iy)
 {
     x=ix, y=iy;
 }
+
+
+// Assesseurs
 
 int Point::getX() const {
     return x;
@@ -27,6 +30,9 @@ void Point::setX(int ix) {
 void Point::setY(int iy) {
     y=iy;
 }
+
+
+// Fonctions de tracé
 
 void quadrillage() {
     for (int i=1;i<w/carre;i++)

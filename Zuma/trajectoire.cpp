@@ -7,12 +7,35 @@ Trajectoire::Trajectoire()
 
 }
 
+
+// Assesseurs
+
+int Trajectoire::size() {
+    return t.size();
+}
+
+vector<Point> Trajectoire::getTraj() {
+    return t;
+}
+
+Point Trajectoire::getPoint(int i) {
+    return t[i];
+}
+
 // Faire assesseurs pour Point
 
-// Il faut tracer les contours de la trajectoire
-void Trajectoire::traceTrajectoire() {
-    for (int i=0;i<t.size()-2;i++)
-        drawLine(t[i].getX()*zoom,t[i].getY()*zoom,t[i+1].getX()*zoom,t[i+1].getY()*zoom,RED);
+
+// Bijection coordonnées du plan - abscisse curviligne
+
+Point Trajectoire::absplan(int abs) const {
+    return t[abs];
+}
+
+int Trajectoire::abscurv(Point p) const {
+    for (int i=0;i<t.size();i++) {
+        if (t[i].getX()==p.getX() && t[i].getY()==p.getY())
+            return i;
+    }
 }
 
 
@@ -90,19 +113,12 @@ void Trajectoire::trajectoire2() {
     }
 }
 
-
-// Bijection coordonnées du plan - abscisse curviligne
-
-Point Trajectoire::absplan(int abs) const {
-    return t[abs];
+// Il faut tracer les contours de la trajectoire
+void Trajectoire::traceTrajectoire() {
+    for (int i=0;i<t.size()-2;i++)
+        drawLine(t[i].getX()*zoom,t[i].getY()*zoom,t[i+1].getX()*zoom,t[i+1].getY()*zoom,RED);
 }
 
-int Trajectoire::abscurv(Point p) const {
-    for (int i=0;i<t.size();i++) {
-        if (t[i].getX()==p.getX() && t[i].getY()==p.getY())
-            return i;
-    }
-}
 
 
 // Fonctions inutiles

@@ -10,17 +10,23 @@ const int courbure=carre;
 
 class Trajectoire
 {
-public:    
     std::vector<Point> t;
+public:    
+
+    // Constructeur
     Trajectoire();
 
-    void traceTrajectoire();
-
-    void trajectoire1();
-    void trajectoire2();
+    // Assesseurs
+    int size();
+    vector<Point> getTraj();
+    Point getPoint(int i);
 
     Point absplan(int abs) const;
     int abscurv(Point p) const;
+
+    void trajectoire1();
+    void trajectoire2();
+    void traceTrajectoire();
 
     void billesRandom();
 };

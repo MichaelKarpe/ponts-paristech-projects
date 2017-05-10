@@ -58,15 +58,17 @@ void Bille::setAbs(double iabs) {
 }
 
 
-// Fonctions
+// Fonctions traitant les données
 
 void Bille::avanceTirBille(double vx, double vy) {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
     p.setX(p.getX() + dt*vx);
     p.setY(p.getY() + dt*vy);
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
-
 }
+
+
+// Fonctions de tracé
 
 void Bille::traceBille() {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
@@ -76,6 +78,8 @@ void Bille::effaceBille() {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
 }
 
+
+// Autres fonctions
 double dist(Bille b1, Bille b2) {
     return sqrt((b1.getCoor().getX()-b2.getCoor().getX())*(b1.getCoor().getX()-b2.getCoor().getX()) + (b1.getCoor().getY()-b2.getCoor().getY())*(b1.getCoor().getY()-b2.getCoor().getY()));
 }

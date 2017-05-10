@@ -19,29 +19,34 @@ public:
     int nbBilles; // = s.size()
     Bille front, back; // = s.front(), = s.back()
 
+    // Constructeurs et destructeur
     Serpent();
-    Serpent(const Trajectoire &traj, int nbBilles);
+    Serpent(Trajectoire &traj, int nbBilles);
     ~Serpent();
+
+
+    // Fonctions traitant les données
 
     //void fusionSerpents(vector<Serpent> &listSerp);
     void vitesseEntree();
-    void vitesseDiminue(const Trajectoire &traj);
-    void vitesseDestruction();
-    void vitesseCombo();
-    void vitesseNulle();
+    void vitesseDiminue(Trajectoire &traj);
+
+    bool serpentFin(Trajectoire &traj);
+    bool serpentLoin(Trajectoire &traj);
 
     void insererBille(const Trajectoire &traj, Bille &B, int j);
     int insererTir(const Trajectoire &traj , Bille &B, bool &finTir);
-
-    void traceSerpent(const Trajectoire &traj);
-    void effaceSerpent(const Trajectoire &traj);
-
-    bool serpentFin(const Trajectoire &traj);
-
-    bool serpentLoin(const Trajectoire &traj);
-
     void destructionBilles(int &i);
+
+    void vitesseNulle();
+    void vitesseDestruction();
+    void vitesseCombo();
+
+    // Fonctions de tracé
+    void traceSerpent(Trajectoire &traj);
+    void effaceSerpent(Trajectoire &traj);
 };
 
-void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp);
-void fusionSerpents(vector<Serpent> &listSerp);
+// Autres fonctions
+void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp);
+void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj);

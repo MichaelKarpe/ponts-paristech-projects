@@ -11,6 +11,7 @@ class Grenouille
     Point pos=Point(w/2,h/2);
 public:
 
+    // Constructeur
     Grenouille();
 
     //Assesseurs inutiles (sauf getPos) ?
@@ -20,11 +21,13 @@ public:
     void setB1(Bille iB);
     void setB2(Bille iB);
 
-    void traceGrenouille();
-
+    // Fonctions traitant les données
     void tir(bool &finTir, double &vx, double &vy, Bille &Btir);
-    void changeBille();
     void creationBille();
+    void changeBille();
     void verifieCouleurs();
+
+    // Fonctions de tracé
+    void traceGrenouille();
 };
 

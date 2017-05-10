@@ -9,10 +9,10 @@ Serpent::Serpent()
 
 }
 
-Serpent::Serpent(const Trajectoire &traj, int nbBilles)
+Serpent::Serpent(Trajectoire &traj, int nbBilles)
 {
     for (int i=0;i<nbBilles;i++) {
-        Bille b(Point(traj.t[2*r*i].getX(),traj.t[2*r*i].getY()),2*r*i,vDepart);
+        Bille b(Point(traj.getTraj()[2*r*i].getX(),traj.getTraj()[2*r*i].getY()),2*r*i,vDepart);
         s.push_back(b);
     }
 }
@@ -24,71 +24,15 @@ Serpent::~Serpent()
 
 }
 
+
 // Assesseurs
 
 vector<Bille> Serpent::getSerp() {
     return s;
 }
 
-// Fonctions pour tracer et effacer le serpent
 
-void Serpent::traceSerpent(const Trajectoire &traj) {
-    for (int i=0;i<s.size();i++) {
-        if (s[i].getAbs()<traj.t.size()-1)
-            s[i].traceBille();
-    }
-}
-
-void Serpent::effaceSerpent(const Trajectoire &traj) {
-    for (int i=0;i<s.size();i++) {
-        if (s[i].getAbs()<traj.t.size()-1)
-            s[i].effaceBille();
-    }
-}
-
-// Insérer une bille dans un serpent en position j
-
-void Serpent::insererBille(const Trajectoire &traj, Bille &B, int j) {
-    s.insert(s.begin()+j,B);
-    s[j].setVit(s[j+1].getVit());
-    s[j].setAbs(s[j+1].getAbs());
-    for (int i=j;i<s.size();i++) {
-        s[i].setCoor(traj.absplan(traj.abscurv(s[i].getCoor())+2*R));
-        s[i].traceBille();
-    }
-}
-
-// insérer la bille tirée dans le serpent (ne prend pas en cmopte les tris sur les ezxtrémités pour l'intant)
-int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
-
-    if (finTir) {
-        return -1;
-    }
-
-    else {
-
-        for (int i=1;i<s.size();i++) {
-            if (dist(s[i-1],B) < 2*R) {
-
-                if (dist(s[i],B) < 2*R) {
-                    insererBille(traj,B,i);
-                    return i;
-                }
-
-                else {
-                    insererBille(traj,B,i-1);
-                    return i-1;
-                }
-
-                finTir = true;
-
-            }
-        }
-    }
-
-}
-
-//Fonctions du jeu
+// Fonctions traitant les données
 
 // Vitesse du serpent : pour l'instant abandonné, on considère que tout est à la même vitesse
 void Serpent::vitesseEntree() {
@@ -97,25 +41,22 @@ void Serpent::vitesseEntree() {
 
 }
 
-
-void Serpent::vitesseDiminue(const Trajectoire &traj) {
+void Serpent::vitesseDiminue(Trajectoire &traj) {
     //Diminue la vitesse lorsque le serpent s'approche de la fin
-    double nv = vDepart*(1.0-double(s.back().getAbs())/double(traj.t.size()))+1.0; //pour pas que vitesse nulle avant la fin
-    for (int i=0;i<s.size();i++)
+    double nv = vDepart*(1.0-double(s.back().getAbs())/double(traj.size()))+1/dt; //pour pas que vitesse nulle avant la fin car ds > 1
+    for (int i=0;i<s.size();i++) {
         if (s[i].getVit()!=0)
             s[i].setVit(nv);
+    }
 }
 
 
-
-void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp) {
+void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
     for (int j=0;j<listSerp.size();j++) {
         noRefreshBegin();
         listSerp[j].effaceSerpent(traj);
-        //double ds=listSerp[j].s[listSerp[j].s.size()-1].v*dt; //ou 0 si serpents à la même vitesse
-        //cout << ds << endl;
         for (int k=0;k<listSerp[j].s.size();k++) {
-            double ds=2*listSerp[j].s[k].getVit()*dt; //à modifier
+            double ds=listSerp[j].s[k].getVit()*dt; //à modifier ds = v*dt > 1
             cout << ds << endl;
             if (ds>1) //problème lorsque ds < 1
                 listSerp[j].s[k].setAbs(listSerp[j].s[k].getAbs()+ds);
@@ -128,25 +69,11 @@ void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp) {
     }
 }
 
-
-
-
-//Fonction qui arrête le jeu si le serpent arrive à la fin
-bool Serpent::serpentFin(const Trajectoire &traj) {
-    return (s[s.size()-1].getAbs() >= traj.t.size());
-}
-
-//Fonction qui envoie un serpent si le dernier serpent envoyé a bien avancé
-bool Serpent::serpentLoin(const Trajectoire &traj) {
-    return (s[s.size()-1].getAbs() >= 1.0/6.0*traj.t.size());
-}
-
-
-
+//Fonctionne si la tête du serpent entrant ne dépasse pas la queue du dernier serpent
 //Fusion de serpents : pour l'instant inutile car tous à la même vitesse
-void fusionSerpents(vector<Serpent> &listSerp) {
+void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
     for (int i=0;i<listSerp.size()-1;i++) {
-        if (std::abs(listSerp[i].s[0].getAbs()-listSerp[i+1].s[listSerp[i+1].s.size()-1].getAbs())<=2*R) {
+        if (std::abs(listSerp[i].s[0].getAbs()-listSerp[i+1].s[listSerp[i+1].s.size()-1].getAbs())<=2*r) {
             for (int j=0;j<listSerp[i+1].s.size();j++) {
                 listSerp[i+1].s[j].setVit(listSerp[i].s[0].getVit());
             }
@@ -154,14 +81,59 @@ void fusionSerpents(vector<Serpent> &listSerp) {
             for (int j=0;j<listSerp[i].s.size();j++) {
                 listSerp[i+1].s.push_back(listSerp[i].s[j]);
             }
-            //listSerp[i].effaceSerpent();
-            //listSerp[i+1].effaceSerpent();
-            listSerp.erase(listSerp.begin()+i+1); // ?
-            //listSerp[i].traceSerpent();
+            listSerp[i+1].effaceSerpent(traj);
+            listSerp.erase(listSerp.begin()+i); //Vérifier les indices, normalement OK
+            listSerp[i].traceSerpent(traj);
         }
 
     }
 }
+
+
+//Fonction qui arrête le jeu si le serpent arrive à la fin
+bool Serpent::serpentFin(Trajectoire &traj) {
+    return (s[s.size()-1].getAbs() >= traj.size());
+}
+
+//Fonction qui envoie un serpent si le dernier serpent envoyé a bien avancé
+bool Serpent::serpentLoin(Trajectoire &traj) {
+    return (s[s.size()-1].getAbs() >= 1.0/6.0*traj.size());
+}
+
+
+
+// Insérer une bille dans un serpent en position j
+void Serpent::insererBille(const Trajectoire &traj, Bille &B, int j) {
+    s.insert(s.begin()+j,B);
+    s[j].setVit(s[j+1].getVit());
+    s[j].setAbs(s[j+1].getAbs());
+    for (int i=j;i<s.size();i++) {
+        s[i].setCoor(traj.absplan(traj.abscurv(s[i].getCoor())+2*R));
+        s[i].traceBille();
+    }
+}
+
+// insérer la bille tirée dans le serpent (ne prend pas en cmopte les tris sur les ezxtrémités pour l'intant)
+int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
+    if (finTir)
+        return -1;
+    else {
+        for (int i=1;i<s.size();i++) {
+            if (dist(s[i-1],B) < 2*r) {
+                if (dist(s[i],B) < 2*r) {
+                    insererBille(traj,B,i);
+                    return i;
+                }
+                else {
+                    insererBille(traj,B,i-1);
+                    return i-1;
+                }
+                finTir = true;
+            }
+        }
+    }
+}
+
 //Remplacer par front et back
 
 void Serpent::destructionBilles(int &i) {
@@ -199,6 +171,23 @@ void Serpent::vitesseCombo() {
     //Vitesse négative pour la partie avant du serpent
 }
 
+
+
+// Fonctions de tracé
+
+void Serpent::traceSerpent(Trajectoire &traj) {
+    for (int i=0;i<s.size();i++) {
+        if (s[i].getAbs()<traj.size()-1)
+            s[i].traceBille();
+    }
+}
+
+void Serpent::effaceSerpent(Trajectoire &traj) {
+    for (int i=0;i<s.size();i++) {
+        if (s[i].getAbs()<traj.size()-1)
+            s[i].effaceBille();
+    }
+}
 
 
 

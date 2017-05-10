@@ -14,8 +14,13 @@ class Bille
     Point p;
     int abs;
 public:
-    // Assesseurs
 
+    // Constructeurs et destructeur
+    Bille();
+    Bille(Point ip, int iabs, double iv);
+    ~Bille();
+
+    // Assesseurs
     Color getCol() const ;
     double getVit() const ;
     Point getCoor() const ;
@@ -26,15 +31,13 @@ public:
     void setCoor(Point ip);
     void setAbs(double iabs);
 
-
-    Bille();
-    Bille(Point ip, int iabs, double iv);
-    ~Bille();
-
-    void setVitesse(double iv);
-    void effaceBille();
-    void traceBille();
+    // Fonctions traitant les données
     void avanceTirBille(double vx, double vy);
+
+    // Fonctions de tracé
+    void traceBille();
+    void effaceBille();
 };
 
+// Autres fonctions
 double dist(Bille b1, Bille b2);

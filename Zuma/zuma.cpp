@@ -1,7 +1,7 @@
 // Imagine++ project
 // Project:  Vide
 // Author:   Michaël Karpe & Bastien Déchamps
-// Date:     26/04/2017
+// Date:     10/05/2017
 
 #include <Imagine/Graphics.h>
 #include <iostream>
@@ -20,16 +20,16 @@ int main()
 
     Grenouille G;
     G.traceGrenouille();
-    quadrillage();
+    //quadrillage();
 
     Trajectoire traj;
     traj.trajectoire2();
     traj.traceTrajectoire();
     //traj.billesRandom();
-    cout << traj.t.size() << endl;
+    cout << traj.size() << endl;
 
     vector<Serpent> listSerp;
-    listSerp.push_back(Serpent(traj,20));
+    listSerp.push_back(Serpent(traj,nbBilles));
 
     for (int i=0;i<listSerp.size();i++)
         listSerp[i].traceSerpent(traj);
@@ -43,60 +43,36 @@ int main()
     Bille Btir(G.getPos(),0,0);
 
     //Le premier serpent est celui qui est le plus proche de la fin
-    while (!(listSerp[0].getSerp()[listSerp[0].getSerp().size()-1].getAbs() >= traj.t.size())) {
+    while (!(listSerp[0].getSerp()[listSerp[0].getSerp().size()-1].getAbs() >= traj.size())) {
 
-        for (int i=0;i<listSerp.size();i++) {
+        //Diminution de la vitesse
+        for (int i=0;i<listSerp.size();i++)
             listSerp[i].vitesseDiminue(traj);
-            int I = listSerp[i].insererTir(traj,Btir,finTir);
-        }
 
-        for (int i=0; i<listSerp[0].getSerp().size();i++)
-            cout << listSerp[0].getSerp()[i].getVit() << endl;
-
+        //Déplacement des serpents
         deplacementSerpents(traj,listSerp);
 
-        if (listSerp[listSerp.size()-1].serpentLoin(traj) || serpentMort) //rajouter nbSerpents à envoyer
-            listSerp.push_back(Serpent(traj,20));
+        //Fusion des serpents
+        fusionSerpents(listSerp, traj);
 
-        milliSleep(10);
-
-        //for (int i=0;i<listSerp.size();i++)
-        //    listSerp[i].effaceSerpent(traj);
-
-        fusionSerpents(listSerp);
-
-        //for (int i=0;i<listSerp.size();i++)
-        //    listSerp[i].traceSerpent(traj);
-
-        //for (int i=0;i<listSerp[0].s.size();i++)
-            //listSerp[0].destructionBilles(i);
-
-        // Tir de la grenouille
+        //Tir de la grenouille
         G.tir(finTir,vx,vy,Btir);
         G.traceGrenouille();
 
+        //Insertion du tir
+        for (int i=0;i<listSerp.size();i++)
+            int I = listSerp[i].insererTir(traj,Btir,finTir);
 
-        // Fusion avec les serpent : fonction inserer bille a completer
-        /*
-        if (!finTir) {
-            for (int i=0;i<listSerp.size()-1;i++) {
-                for (int j=1;j<listSerp[i].nbBilles-1;j++) {
-                    if (dist(Btir.p,listSerp[i].s[j].p) < 2*R && dist(Btir.p,listSerp[i].s[j-1].p) < 2*R) {
-                        listSerp[i].insererBille(traj,Btir,j-1);
-                        finTir = true;
-                    }
-                    else {
-                        listSerp[i].insererBille(traj,Btir,j);
-                        finTir = true;
-                    }
-                }
-            }
-        }
-        */
+        //Arrivée d'un nouveau serpent
+        if (listSerp[listSerp.size()-1].serpentLoin(traj) && listSerp[listSerp.size()-1].getSerp()[0].getAbs()>2*r*(nbBilles+5) || serpentMort) //rajouter nbSerpents à envoyer
+            listSerp.push_back(Serpent(traj,nbBilles));
+
+        //Pause pour affichage
+        milliSleep(10); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
 
     }
 
-    //Hypothèse simplificatrice : tous la vitesse du plus lent
+    //Hypothèse simplificatrice : tous la vitesse du plus lent, mais pas utilisée pour le moment
     endGraphics();
     return 0;
 }
