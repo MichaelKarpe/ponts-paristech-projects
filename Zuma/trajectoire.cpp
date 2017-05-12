@@ -14,11 +14,7 @@ int Trajectoire::size() {
     return t.size();
 }
 
-vector<Point> Trajectoire::getTraj() {
-    return t;
-}
-
-Point Trajectoire::getPoint(int i) {
+Point &Trajectoire::getPoint(int i) {
     return t[i];
 }
 

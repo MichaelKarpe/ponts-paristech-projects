@@ -37,7 +37,7 @@ void Grenouille::setB2(Bille iB) {
 void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir) {
 
     Event ev;
-    getEvent(-1,ev);
+    getEvent(0,ev); //-1 pour clic plusieurs fois
     if (ev.type == EVT_BUT_ON) {
         if (finTir) {
             if (ev.button == 1) {

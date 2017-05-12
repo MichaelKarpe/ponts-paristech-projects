@@ -1,19 +1,17 @@
 #pragma once
 
-#include <Imagine/Graphics.h>
-using namespace Imagine;
-#include <iostream>
-using namespace std;
-
-#include "bille.h"
-#include "trajectoire.h"
+#include "grenouille.h"
 
 class Serpent
 {
+    std::vector<Bille> s;
 
 public:
-    std::vector<Bille> s;
-    vector<Bille> getSerp();
+
+    //Assesseurs
+    int size();
+    Bille &getBille(int i);
+    void push(Bille b);
 
     //Variables utiles ?
     int nbBilles; // = s.size()
