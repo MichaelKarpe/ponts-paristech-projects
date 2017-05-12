@@ -1,7 +1,6 @@
 #pragma once
 
 #include "bille.h"
-#include "serpent.h"
 
 class Grenouille
 {
@@ -21,13 +20,12 @@ public:
     void setB2(Bille iB);
 
     // Fonctions traitant les données
-    void tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp);
+    void tir(bool &finTir, double &vx, double &vy, Bille &Btir);
+    void creationBille();
     void changeBille();
-    void creationBille(vector<Serpent> &listSerp);
+    void verifieCouleurs();
 
     // Fonctions de tracé
     void traceGrenouille();
 };
 
-
-Color verifieCouleurs(vector<Serpent> &listSerp);

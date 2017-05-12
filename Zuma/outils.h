@@ -6,7 +6,6 @@
 using namespace Imagine;
 #include <iostream>
 using namespace std;
-#include <numeric>
 
 // Variables de traitement des données
 const int w = 240;

@@ -4,7 +4,6 @@
 // Date:     10/05/2017
 
 #include "serpent.h"
-#include "grenouille.h"
 
 int main()
 {
@@ -38,7 +37,7 @@ int main()
     Bille Btir(G.getPos(),0,0);
 
     //Le premier serpent est celui qui est le plus proche de la fin
-    while (!(listSerp.front().back().getAbs() >= traj.size())) {
+    while (!(listSerp[0].getBille(listSerp[0].size()-1).getAbs() >= traj.size())) {
 
         //Diminution de la vitesse
         for (int i=0;i<listSerp.size();i++)
@@ -51,25 +50,25 @@ int main()
         fusionSerpents(listSerp, traj);
 
         //Tir de la grenouille
-        G.tir(finTir,vx,vy,Btir,listSerp);
+        G.tir(finTir,vx,vy,Btir);
         G.traceGrenouille();
 
         //Insertion du tir en indice I (s'il existe)
         for (int i=0;i<listSerp.size();i++) {
             int I = listSerp[i].insererTir(traj,Btir,finTir);
-            //listSerp[i].destructionBilles(I);
+            listSerp[i].destructionBilles(I,i,listSerp);
         }
 
         //Arrivée d'un nouveau serpent
-        if (listSerp.back().serpentLoin(traj) && listSerp.back().front().getAbs()>2*r*(nbBilles+5) || listSerp.size()==0) //rajouter nbSerpents à envoyer
+        if (listSerp[listSerp.size()-1].serpentLoin(traj) && listSerp[listSerp.size()-1].getBille(0).getAbs()>2*r*(nbBilles+5) || serpentMort) //rajouter nbSerpents à envoyer
             listSerp.push_back(Serpent(traj,nbBilles));
 
         //Pause pour affichage
         milliSleep(10); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
-
     }
 
     //Hypothèse simplificatrice : tous la vitesse du plus lent, mais pas utilisée pour le moment
     endGraphics();
+
     return 0;
 }

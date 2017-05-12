@@ -1,7 +1,6 @@
 #pragma once
 
-#include "bille.h"
-#include "trajectoire.h"
+#include "grenouille.h"
 
 class Serpent
 {
@@ -13,8 +12,11 @@ public:
     int size();
     Bille &getBille(int i);
     void push(Bille b);
-    Bille &front();
-    Bille &back();
+    void setVitSerp(double v);
+
+    //Variables utiles ?
+    int nbBilles; // = s.size()
+    Bille front, back; // = s.front(), = s.back()
 
     // Constructeurs et destructeur
     Serpent();
@@ -33,7 +35,7 @@ public:
 
     void insererBille(const Trajectoire &traj, Bille &B, int j);
     int insererTir(const Trajectoire &traj , Bille &B, bool &finTir);
-    void destructionBilles(int &i);
+    void destructionBilles(int &i, int ind_list_serp, vector<Serpent> &listSerp);
 
     void vitesseNulle();
     void vitesseDestruction();

@@ -1,9 +1,4 @@
 #include "grenouille.h"
-#include "serpent.h"
-
-#include <iostream>
-using namespace std;
-#include <numeric>
 
 //Constructeurs
 
@@ -39,7 +34,7 @@ void Grenouille::setB2(Bille iB) {
 
 // Fonctions traitant les données
 
-void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp) {
+void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir) {
 
     Event ev;
     getEvent(0,ev); //-1 pour clic plusieurs fois
@@ -59,7 +54,7 @@ void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<S
                 vy = sintheta * Vtir;
 
                 finTir = false;
-                creationBille(listSerp);
+                creationBille();
             }
 
             if (ev.button == 3) {
@@ -82,53 +77,11 @@ void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<S
     }
 }
 
-//Vérifier si cela fonctionne
-Color verifieCouleurs(vector<Serpent> &listSerp) {
-    //Empêcher le tir de couleurs qui ne sont plus présentes
-    vector<int> colenjeu;
-    for (int i=0;i<nbCouleurs;i++)
-        colenjeu.push_back(0);
 
-    bool finParcours = false;
-    int Serp=0, bille=0;
-
-    while (accumulate(colenjeu.begin(),colenjeu.end(),0)<nbCouleurs || finParcours) {
-        Color c = listSerp[Serp].getBille(bille).getCol();
-        for (int i=0;i<nbCouleurs;i++) {
-            if (c==colors[i]) {
-                colenjeu[i]=1;
-                break;
-            }
-        }
-        if (bille==listSerp[Serp].size()-1) {
-            if (Serp==listSerp.size()-1)
-                finParcours = true;
-            else {
-                bille=0;
-                Serp+1;
-            }
-        }
-        else
-            bille+=1;
-    }
-
-    if (accumulate(colenjeu.begin(),colenjeu.end(),0)==nbCouleurs)
-        return colors[rand()%nbCouleurs];
-    else {
-        while (true) {
-            int aleat = rand()%nbCouleurs;
-            if (colenjeu[aleat]==1)
-                return colors[aleat];
-        }
-    }
-
-}
-
-void Grenouille::creationBille(vector<Serpent> &listSerp) {
+void Grenouille::creationBille() {
     //Pour remplacer la 2e bille lorsque la 1e est tirée
     B1 = B2;
     B2 = Bille(pos, 0, 0);
-    B2.setCol(verifieCouleurs(listSerp));
 }
 
 void Grenouille::changeBille() {
@@ -139,10 +92,17 @@ void Grenouille::changeBille() {
     B2 = B;
 }
 
+
+void Grenouille::verifieCouleurs() {
+    //Empêcher le tir de couleurs qui ne sont plus présentes
+}
+
+
+
 // Fonctions de tracé
 
 void Grenouille::traceGrenouille() {
-    fillCircle(pos.getX()*zoom,pos.getY()*zoom,carre*zoom,B1.getCol());
-    fillCircle(pos.getX()*zoom,pos.getY()*zoom,R,B2.getCol()); //inverser B1 et B2?
+    fillCircle(pos.getX()*zoom,pos.getY()*zoom,carre*zoom,B2.getCol());
+    fillCircle(pos.getX()*zoom,pos.getY()*zoom,R,B1.getCol()); //inverser B1 et B2?
     drawCircle(pos.getX()*zoom,pos.getY()*zoom,R,WHITE);
 }

@@ -39,12 +39,9 @@ void Serpent::push(Bille b) {
     s.push_back(b);
 }
 
-Bille &Serpent::front() {
-    s.front();
-}
-
-Bille &Serpent::back() {
-    s.back();
+void Serpent::setVitSerp(double v) {
+    for (int i=0;i<s.size();i++)
+        s[i].setVit(v);
 }
 
 // Fonctions traitant les données
@@ -88,11 +85,13 @@ void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
 //Fusion de serpents : pour l'instant inutile car tous à la même vitesse
 void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
     for (int i=0;i<listSerp.size()-1;i++) {
-        int dist = std::abs(listSerp[i].front().getAbs()-listSerp[i+1].back().getAbs());
+        int dist = std::abs(listSerp[i].getBille(0).getAbs()-listSerp[i+1].getBille(listSerp[i+1].size()-1).getAbs());
         if (dist<=2*r) {
+            if (listSerp[i].getBille(0).getVit() == 0)
+                listSerp[i].setVitSerp(listSerp[i+1].getBille(0).getVit());
             for (int j=0;j<listSerp[i+1].size();j++)
-                listSerp[i+1].getBille(j).setVit(listSerp[i].front().getVit());
-            for (int j=0;j<listSerp[i].size();j++) {
+                listSerp[i+1].getBille(j).setVit(listSerp[i].getBille(0).getVit());
+             for (int j=0;j<listSerp[i].size();j++) {
                 Bille B = listSerp[i].getBille(j);
                 B.setAbs(B.getAbs()+2*r-dist);
                 listSerp[i+1].push(B);
@@ -101,19 +100,18 @@ void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
             listSerp.erase(listSerp.begin()+i); //Vérifier les indices, normalement OK
             listSerp[i].traceSerpent(traj);
         }
-
     }
 }
 
 
 //Fonction qui arrête le jeu si le serpent arrive à la fin
 bool Serpent::serpentFin(Trajectoire &traj) {
-    return (s.back().getAbs() >= traj.size());
+    return (s[s.size()-1].getAbs() >= traj.size());
 }
 
 //Fonction qui envoie un serpent si le dernier serpent envoyé a bien avancé
 bool Serpent::serpentLoin(Trajectoire &traj) {
-    return (s.back().getAbs() >= 1.0/6.0*traj.size());
+    return (s[s.size()-1].getAbs() >= 1.0/6.0*traj.size());
 }
 
 
@@ -159,20 +157,24 @@ int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
 
 //Remplacer par front et back
 
-void Serpent::destructionBilles(int &i) {
-    if (i!=1) {
+void Serpent::destructionBilles(int &i, int ind_list_serp, vector<Serpent> &listSerp) {
+    if (i != -1) {
         Color colbille = s[i].getCol();
         int ig=0, id=0;
-        while (s[i-1-ig].getCol()==colbille)
+        while (i-ig > 0 && s[i-1-ig].getCol()==colbille)
             ig+=1;
-        while (s[i+1+id].getCol()==colbille)
+        while (i+1+id < s.size() && s[i+1+id].getCol()==colbille)
             id+=1;
         if (id+ig+1 >= 3) {
+            Serpent Snew;
             for (int j=i-id;j<i+id+1;j++)
                 s[j].effaceBille();
-            for (int j=i+id+1;j<s.size();j++)
+            for (int j=i+id+1;j<s.size();j++) {
                 s[j].setVit(0.0);
-            s.erase(s.begin()+i-ig,s.begin()+i+id+1); //Pk +1 ?
+                Snew.push(s[j]);
+            }
+            s.erase(s.begin()+i-ig,s.begin()+s.size()); //Pk +1 ?
+            listSerp.insert(listSerp.begin()+ind_list_serp,Snew);
         }
     }
 }
