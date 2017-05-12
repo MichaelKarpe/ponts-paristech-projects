@@ -3,12 +3,6 @@
 // Author:   Michaël Karpe & Bastien Déchamps
 // Date:     10/05/2017
 
-#include <Imagine/Graphics.h>
-#include <iostream>
-#include <ctime>
-using namespace std;
-using namespace Imagine;
-
 #include "serpent.h"
 
 int main()
@@ -43,7 +37,7 @@ int main()
     Bille Btir(G.getPos(),0,0);
 
     //Le premier serpent est celui qui est le plus proche de la fin
-    while (!(listSerp[0].getSerp()[listSerp[0].getSerp().size()-1].getAbs() >= traj.size())) {
+    while (!(listSerp[0].getBille(listSerp[0].size()-1).getAbs() >= traj.size())) {
 
         //Diminution de la vitesse
         for (int i=0;i<listSerp.size();i++)
@@ -64,7 +58,7 @@ int main()
             int I = listSerp[i].insererTir(traj,Btir,finTir);
 
         //Arrivée d'un nouveau serpent
-        if (listSerp[listSerp.size()-1].serpentLoin(traj) && listSerp[listSerp.size()-1].getSerp()[0].getAbs()>2*r*(nbBilles+5) || serpentMort) //rajouter nbSerpents à envoyer
+        if (listSerp[listSerp.size()-1].serpentLoin(traj) && listSerp[listSerp.size()-1].getBille(0).getAbs()>2*r*(nbBilles+5) || serpentMort) //rajouter nbSerpents à envoyer
             listSerp.push_back(Serpent(traj,nbBilles));
 
         //Pause pour affichage

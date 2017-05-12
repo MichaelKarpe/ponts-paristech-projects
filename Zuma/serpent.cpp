@@ -12,7 +12,7 @@ Serpent::Serpent()
 Serpent::Serpent(Trajectoire &traj, int nbBilles)
 {
     for (int i=0;i<nbBilles;i++) {
-        Bille b(Point(traj.getTraj()[2*r*i].getX(),traj.getTraj()[2*r*i].getY()),2*r*i,vDepart);
+        Bille b(Point(traj.getPoint(2*r*i).getX(),traj.getPoint(2*r*i).getY()),2*r*i,vDepart);
         s.push_back(b);
     }
 }
@@ -27,10 +27,17 @@ Serpent::~Serpent()
 
 // Assesseurs
 
-vector<Bille> Serpent::getSerp() {
-    return s;
+int Serpent::size() {
+    return s.size();
 }
 
+Bille &Serpent::getBille(int i) {
+    return s[i];
+}
+
+void Serpent::push(Bille b) {
+    s.push_back(b);
+}
 
 // Fonctions traitant les données
 
@@ -55,14 +62,14 @@ void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
     for (int j=0;j<listSerp.size();j++) {
         noRefreshBegin();
         listSerp[j].effaceSerpent(traj);
-        for (int k=0;k<listSerp[j].s.size();k++) {
-            double ds=listSerp[j].s[k].getVit()*dt; //à modifier ds = v*dt > 1
-            cout << ds << endl;
+        for (int k=0;k<listSerp[j].size();k++) {
+            double ds=listSerp[j].getBille(k).getVit()*dt; //à modifier ds = v*dt > 1
+            //cout << ds << endl;
             if (ds>1) //problème lorsque ds < 1
-                listSerp[j].s[k].setAbs(listSerp[j].s[k].getAbs()+ds);
+                listSerp[j].getBille(k).setAbs(listSerp[j].getBille(k).getAbs()+ds);
             //else
                 //listSerp[j].s[k].abs+=1;
-            listSerp[j].s[k].setCoor(traj.absplan(listSerp[j].s[k].getAbs()));
+            listSerp[j].getBille(k).setCoor(traj.absplan(listSerp[j].getBille(k).getAbs()));
         }
         listSerp[j].traceSerpent(traj);
         noRefreshEnd();
@@ -73,13 +80,13 @@ void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
 //Fusion de serpents : pour l'instant inutile car tous à la même vitesse
 void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
     for (int i=0;i<listSerp.size()-1;i++) {
-        if (std::abs(listSerp[i].s[0].getAbs()-listSerp[i+1].s[listSerp[i+1].s.size()-1].getAbs())<=2*r) {
-            for (int j=0;j<listSerp[i+1].s.size();j++) {
-                listSerp[i+1].s[j].setVit(listSerp[i].s[0].getVit());
+        if (std::abs(listSerp[i].getBille(0).getAbs()-listSerp[i+1].getBille(listSerp[i+1].size()-1).getAbs())<=2*r) {
+            for (int j=0;j<listSerp[i+1].size();j++) {
+                listSerp[i+1].getBille(j).setVit(listSerp[i].getBille(0).getVit());
             }
 
-            for (int j=0;j<listSerp[i].s.size();j++) {
-                listSerp[i+1].s.push_back(listSerp[i].s[j]);
+            for (int j=0;j<listSerp[i].size();j++) {
+                listSerp[i+1].push(listSerp[i].getBille(j));
             }
             listSerp[i+1].effaceSerpent(traj);
             listSerp.erase(listSerp.begin()+i); //Vérifier les indices, normalement OK

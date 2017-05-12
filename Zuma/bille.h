@@ -5,7 +5,7 @@
 #include <Imagine/Graphics.h>
 using namespace Imagine;
 
-#include "outils.h"
+#include "trajectoire.h"
 
 class Bille
 {
@@ -13,6 +13,7 @@ class Bille
     double v; //pas d'accélération pour l'instant
     Point p;
     int abs;
+
 public:
 
     // Constructeurs et destructeur
