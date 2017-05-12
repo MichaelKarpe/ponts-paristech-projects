@@ -131,6 +131,8 @@ int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
                     finTir = true;
                     return i;
                 }
+                
+                
 
                 else {
                     insererBille(traj,Binser,i-1);

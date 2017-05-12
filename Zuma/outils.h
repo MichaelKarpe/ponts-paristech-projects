@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <ctime>
 #include <Imagine/Graphics.h>
 using namespace Imagine;
 #include <iostream>
@@ -25,9 +23,9 @@ const int nbBilles = 15;
 const int nbCouleurs = 4;
 const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
 
-const double dt = 1.0;      //Modifier tous ces pas de temps!
-const double vDepart = 1.0;    //Level hardcore : vDepart = 20, dt = 1 !
-const double Vtir = 5.0;
+const double dt = 0.1;      //Modifier tous ces pas de temps!
+const double vDepart = 0.5;    //Level hardcore : vDepart = 20, dt = 1 !
+const double Vtir = 50.;
 
 
 class Point

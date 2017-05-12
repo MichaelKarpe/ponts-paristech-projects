@@ -1,17 +1,19 @@
 #pragma once
 
-#include "grenouille.h"
+#include <Imagine/Graphics.h>
+using namespace Imagine;
+#include <iostream>
+using namespace std;
+
+#include "bille.h"
+#include "trajectoire.h"
 
 class Serpent
 {
-    std::vector<Bille> s;
 
 public:
-
-    //Assesseurs
-    int size();
-    Bille &getBille(int i);
-    void push(Bille b);
+    std::vector<Bille> s;
+    vector<Bille> getSerp();
 
     //Variables utiles ?
     int nbBilles; // = s.size()
@@ -41,8 +43,8 @@ public:
     void vitesseCombo();
 
     // Fonctions de tracé
-    void traceSerpent(Trajectoire &traj);
-    void effaceSerpent(Trajectoire &traj);
+    void traceSerpent(Trajectoire traj);
+    void effaceSerpent(Trajectoire traj);
 };
 
 // Autres fonctions
