@@ -8,10 +8,12 @@
 
 int main()
 {
+    Window Fenetre = openWindow(W,H,"Test Event");
+
+    // Menu
+    menu();
 
     //srand((unsigned int)time(0));
-
-    Window Fenetre=openWindow(W,H);
 
     Grenouille G;
     G.traceGrenouille();
@@ -33,12 +35,16 @@ int main()
 
     // Paramètres servant pour le tir
     bool finTir = true;
+    int ind_combo = -1;
     double vx;
     double vy;
     Bille Btir(G.getPos(),0,0);
 
     //Le premier serpent est celui qui est le plus proche de la fin
     while (!(listSerp.front().back().getAbs() >= traj.size())) {
+
+        // Il faudrait retracer la trajectoire à chaque fois, mais ça ralentit le programme
+        // traj.traceTrajectoire();
 
         //Diminution de la vitesse
         for (int i=0;i<listSerp.size();i++)
@@ -48,7 +54,7 @@ int main()
         deplacementSerpents(traj,listSerp);
 
         //Fusion des serpents
-        fusionSerpents(listSerp, traj);
+        fusionSerpents(ind_combo,listSerp, traj);
 
         //Tir de la grenouille
         G.tir(finTir,vx,vy,Btir,listSerp);
@@ -57,7 +63,7 @@ int main()
         //Insertion du tir en indice I (s'il existe)
         for (int i=0;i<listSerp.size();i++) {
             int I = listSerp[i].insererTir(traj,Btir,finTir);
-            listSerp[i].destructionBilles(I,i,listSerp);
+            listSerp[i].destructionBilles(ind_combo,I,i,listSerp);
         }
 
         //Arrivée d'un nouveau serpent
@@ -71,5 +77,6 @@ int main()
 
     //Hypothèse simplificatrice : tous la vitesse du plus lent, mais pas utilisée pour le moment
     endGraphics();
+
     return 0;
 }

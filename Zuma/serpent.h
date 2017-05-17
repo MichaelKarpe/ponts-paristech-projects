@@ -34,7 +34,7 @@ public:
 
     void insererBille(const Trajectoire &traj, Bille &B, int j);
     int insererTir(const Trajectoire &traj , Bille &B, bool &finTir);
-    void destructionBilles(int &i, int ind_list_serp, vector<Serpent> &listSerp);
+    void destructionBilles(int &ind_combo, int &i, int ind_list_serp, vector<Serpent> &listSerp);
 
     void vitesseNulle();
     void vitesseDestruction();
@@ -47,4 +47,4 @@ public:
 
 // Autres fonctions
 void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp);
-void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj);
+void fusionSerpents(int ind_combo, vector<Serpent> &listSerp, Trajectoire &traj);

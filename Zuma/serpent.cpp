@@ -91,10 +91,11 @@ void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
 
 //Fonctionne si la tête du serpent entrant ne dépasse pas la queue du dernier serpent
 //Fusion de serpents : pour l'instant inutile car tous à la même vitesse
-void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
+void fusionSerpents(int ind_combo,vector<Serpent> &listSerp, Trajectoire &traj) {
     for (int i=0;i<listSerp.size()-1;i++) {
         int dist = std::abs(listSerp[i].front().getAbs()-listSerp[i+1].back().getAbs());
         if (dist<=2*r) {
+            int J = listSerp[i+1].size()-1;
             if (listSerp[i].getBille(0).getVit()==0)
                 listSerp[i].setVitSerp(listSerp[i+1].front().getVit());
             for (int j=0;j<listSerp[i+1].size();j++)
@@ -107,8 +108,11 @@ void fusionSerpents(vector<Serpent> &listSerp, Trajectoire &traj) {
             listSerp[i+1].effaceSerpent(traj);
             listSerp.erase(listSerp.begin()+i); //Vérifier les indices, normalement OK
             listSerp[i].traceSerpent(traj);
+            if (ind_combo == i) {
+                listSerp[i].destructionBilles(ind_combo,J,i,listSerp);
+                ind_combo = -1;
+            }
         }
-
     }
 }
 
@@ -145,7 +149,7 @@ int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
         return -1;
     else {
         int i=1;
-        while (i<s.size() && !finTir) {
+        while (i<=s.size() && !finTir) {
             if (dist(s[i-1],B) < 2*r) {
                 if (dist(s[i],B) < 2*r) {
                     insererBille(traj,Binser,i);
@@ -165,8 +169,7 @@ int Serpent::insererTir(const Trajectoire &traj , Bille &B, bool &finTir) {
 }
 
 //Remplacer par front et back
-
-void Serpent::destructionBilles(int &i, int ind_list_serp, vector<Serpent> &listSerp) {
+void Serpent::destructionBilles(int &ind_combo, int &i, int ind_list_serp, vector<Serpent> &listSerp) {
     if (i!=-1) {
         Color colbille = s[i].getCol();
         int ig=0, id=0;
@@ -175,15 +178,24 @@ void Serpent::destructionBilles(int &i, int ind_list_serp, vector<Serpent> &list
         while (i+1+id<s.size() && s[i+1+id].getCol()==colbille)
             id+=1;
         if (id+ig+1 >= 3) {
-            Serpent Snew;
             for (int j=i-id;j<i+id+1;j++)
                 s[j].effaceBille();
-            for (int j=i+id+1;j<s.size();j++) {
-                s[j].setVit(0.0);
-                Snew.push(s[j]);
+            if (ig+id+1 == s.size())
+                listSerp.erase(listSerp.begin()+ind_list_serp);
+            else if (i-ig == 0)
+                s.erase(s.begin(),s.begin()+i+id+1);
+            else if (i+id == s.size()-1)
+                s.erase(s.begin()+i-ig,s.begin()+s.size());
+            else {
+                Serpent Sreste;
+                ind_combo = ind_list_serp;
+                for (int j=i+id+1;j<s.size();j++) {
+                    s[j].setVit(0.0);
+                    Sreste.push(s[j]);
+                }
+                s.erase(s.begin()+i-ig,s.begin()+s.size());
+                listSerp.insert(listSerp.begin()+ind_list_serp,Sreste);
             }
-            s.erase(s.begin()+i-ig,s.begin()+s.size()); //Pk +1 ?
-            listSerp.insert(listSerp.begin()+ind_list_serp,Snew);
         }
     }
 }
@@ -210,7 +222,6 @@ void Serpent::vitesseCombo() {
 
 
 // Fonctions de tracé
-
 void Serpent::traceSerpent(Trajectoire traj) {
     for (int i=0;i<s.size();i++) {
         if (s[i].getAbs()<traj.size()-1)
