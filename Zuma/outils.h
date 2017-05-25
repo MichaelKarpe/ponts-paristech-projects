@@ -8,6 +8,7 @@ using namespace Imagine;
 using namespace std;
 #include <numeric>
 
+
 // Variables de traitement des données
 const int w = 240;
 const int h = 120;
@@ -26,10 +27,15 @@ const int nbBilles = 15;
 const int nbCouleurs = 4;
 const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
 
-const double dt = 0.1;      //Modifier tous ces pas de temps!
-const double vDepart = 0.5;    //Level hardcore : vDepart = 20, dt = 1 !
-const double Vtir = 100.0;
+const int nbTraj = 1;
+const int nbVit = 1;
+const int nbNiveaux = 5*nbVit*nbTraj;
 
+const double dt = 0.05;      //Modifier tous ces pas de temps!
+const double vDepart = 5;    //Level hardcore : vDepart = 20, dt = 1 !
+const double Vtir = 4000*dt;
+
+const float newSerp = 30.0/float(nbBilles);
 
 class Point
 {

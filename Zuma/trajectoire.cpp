@@ -8,6 +8,7 @@ Trajectoire::Trajectoire()
 }
 
 
+
 // Assesseurs
 
 int Trajectoire::size() {

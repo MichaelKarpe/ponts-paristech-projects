@@ -124,7 +124,7 @@ bool Serpent::serpentFin(Trajectoire &traj) {
 
 //Fonction qui envoie un serpent si le dernier serpent envoyé a bien avancé
 bool Serpent::serpentLoin(Trajectoire &traj) {
-    return (s.back().getAbs() >= 1.0/6.0*traj.size());
+    return (s.back().getAbs() >= 1.0/newSerp*traj.size());
 }
 
 
@@ -188,7 +188,8 @@ void Serpent::destructionBilles(int &ind_combo, int &i, int ind_list_serp, vecto
                 s.erase(s.begin()+i-ig,s.begin()+s.size());
             else {
                 Serpent Sreste;
-                ind_combo = ind_list_serp;
+                if (s[i-ig-1].getCol()==s[i+id+1].getCol())
+                    ind_combo = ind_list_serp;
                 for (int j=i+id+1;j<s.size();j++) {
                     s[j].setVit(0.0);
                     Sreste.push(s[j]);

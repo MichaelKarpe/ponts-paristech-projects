@@ -6,5 +6,5 @@ find_package(Imagine REQUIRED)
 
 project(Zuma)
 add_executable(Zuma
-               zuma.cpp serpent.cpp serpent.h bille.cpp bille.h grenouille.cpp grenouille.h trajectoire.cpp trajectoire.h outils.cpp outils.h)
+               zuma.cpp serpent.cpp serpent.h bille.cpp bille.h grenouille.cpp grenouille.h trajectoire.cpp trajectoire.h outils.cpp outils.h niveau.cpp niveau.h)
 ImagineUseModules(Zuma Graphics)

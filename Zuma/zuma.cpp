@@ -3,8 +3,16 @@
 // Author:   Michaël Karpe & Bastien Déchamps
 // Date:     10/05/2017
 
+// ATTENTION ! remplacer \ par / dans les srcpth (imagine\...) et faire attention au maj min dans les noms de fichier (Cmakelists...)
+
+
 #include "serpent.h"
 #include "grenouille.h"
+#include "niveau.h"
+
+
+
+
 
 int main()
 {
@@ -43,6 +51,7 @@ int main()
     //Le premier serpent est celui qui est le plus proche de la fin
     while (!(listSerp.front().back().getAbs() >= traj.size())) {
 
+
         // Il faudrait retracer la trajectoire à chaque fois, mais ça ralentit le programme
         // traj.traceTrajectoire();
 
@@ -71,7 +80,8 @@ int main()
             listSerp.push_back(Serpent(traj,nbBilles));
 
         //Pause pour affichage
-        milliSleep(10); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
+        milliSleep(20); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
+
 
     }
 

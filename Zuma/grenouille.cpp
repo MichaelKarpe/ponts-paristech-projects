@@ -88,11 +88,33 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
     vector<int> colenjeu;
     for (int i=0;i<nbCouleurs;i++)
         colenjeu.push_back(0);
-
     bool finParcours = false;
     int Serp=0, bille=0;
 
+    for (int i=0;i<listSerp.size();i++) {
+        for (int j=0;j<listSerp[i].size();j++) {
+            Color c = listSerp[i].getBille(j).getCol();
+            for (int i=0;i<nbCouleurs;i++) {
+                if (c==colors[i]) {
+                    colenjeu[i]=1;
+                    break;
+                }
+            }
+            if (accumulate(colenjeu.begin(),colenjeu.end(),0)==nbCouleurs)
+                return colors[rand()%nbCouleurs];
+        }
+    }
+    if (accumulate(colenjeu.begin(),colenjeu.end(),0)<nbCouleurs) {
+        while (true) {
+            int aleat = rand()%nbCouleurs;
+            if (colenjeu[aleat]==1)
+                return colors[aleat];
+        }
+    }
+
+    /*
     while (accumulate(colenjeu.begin(),colenjeu.end(),0)<nbCouleurs || finParcours) {
+
         Color c = listSerp[Serp].getBille(bille).getCol();
         for (int i=0;i<nbCouleurs;i++) {
             if (c==colors[i]) {
@@ -100,7 +122,9 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
                 break;
             }
         }
-        if (bille==listSerp[Serp].size()-1) {
+        if (bille<listSerp[Serp].size()-1)
+            bille++;
+        else {
             if (Serp==listSerp.size()-1)
                 finParcours = true;
             else {
@@ -108,8 +132,6 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
                 Serp+1;
             }
         }
-        else
-            bille+=1;
     }
 
     if (accumulate(colenjeu.begin(),colenjeu.end(),0)==nbCouleurs)
@@ -120,8 +142,7 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
             if (colenjeu[aleat]==1)
                 return colors[aleat];
         }
-    }
-
+    }*/
 }
 
 void Grenouille::creationBille(vector<Serpent> &listSerp) {
