@@ -5,7 +5,7 @@
 #include <Imagine/Graphics.h>
 using namespace Imagine;
 
-#include "trajectoire.h"
+#include "Niveau.h"
 
 class Bille
 {
@@ -18,13 +18,13 @@ public:
 
     // Constructeurs et destructeur
     Bille();
-    Bille(Point ip, int iabs, double iv);
+    Bille(Point ip, int iabs, double iv, Niveau Niv);
     ~Bille();
 
     // Assesseurs
     Color getCol() const ;
     double getVit() const ;
-    Point getCoor() const ;
+    Point &getCoor();
     int getAbs() const ;
 
     void setCol(Color icol);

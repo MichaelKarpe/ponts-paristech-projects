@@ -19,7 +19,7 @@ public:
 
     // Constructeurs et destructeur
     Serpent();
-    Serpent(Trajectoire &traj, int nbBilles);
+    Serpent(Trajectoire &traj, int nbBilles, Niveau Niv);
     ~Serpent();
 
 

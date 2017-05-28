@@ -10,6 +10,8 @@ class Trajectoire
 
 public:    
 
+    Point pos;
+
     // Constructeur
     Trajectoire();
 
@@ -22,6 +24,7 @@ public:
 
     void trajectoire1();
     void trajectoire2();
+    void trajectoire3();
     void traceTrajectoire();
 
     void billesRandom();

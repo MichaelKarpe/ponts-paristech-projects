@@ -7,10 +7,11 @@ using namespace std;
 
 //Constructeurs
 
-Grenouille::Grenouille()
+Grenouille::Grenouille(Trajectoire traj, Niveau Niv)
 {
-    B1=Bille(Point(w/2,h/2),-1,1.0);
-    B2=Bille(Point(w/2,h/2),-1,1.0);
+    pos = traj.pos;
+    B1=Bille(pos,-1,1.0,Niv);
+    B2=Bille(pos,-1,1.0,Niv);
 }
 
 
@@ -39,7 +40,7 @@ void Grenouille::setB2(Bille iB) {
 
 // Fonctions traitant les données
 
-void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp) {
+void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp, Niveau Niv) {
 
     Event ev;
     getEvent(0,ev); //-1 pour clic plusieurs fois
@@ -59,7 +60,7 @@ void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<S
                 vy = sintheta * Vtir;
 
                 finTir = false;
-                creationBille(listSerp);
+                creationBille(listSerp,Niv);
             }
 
             if (ev.button == 3) {
@@ -83,10 +84,10 @@ void Grenouille::tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<S
 }
 
 //Vérifier si cela fonctionne
-Color verifieCouleurs(vector<Serpent> &listSerp) {
+Color verifieCouleurs(vector<Serpent> &listSerp, Niveau Niv) {
     //Empêcher le tir de couleurs qui ne sont plus présentes
     vector<int> colenjeu;
-    for (int i=0;i<nbCouleurs;i++)
+    for (int i=0;i<Niv.getNbCol();i++)
         colenjeu.push_back(0);
     bool finParcours = false;
     int Serp=0, bille=0;
@@ -94,19 +95,19 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
     for (int i=0;i<listSerp.size();i++) {
         for (int j=0;j<listSerp[i].size();j++) {
             Color c = listSerp[i].getBille(j).getCol();
-            for (int i=0;i<nbCouleurs;i++) {
+            for (int i=0;i<Niv.getNbCol();i++) {
                 if (c==colors[i]) {
                     colenjeu[i]=1;
                     break;
                 }
             }
-            if (accumulate(colenjeu.begin(),colenjeu.end(),0)==nbCouleurs)
-                return colors[rand()%nbCouleurs];
+            if (accumulate(colenjeu.begin(),colenjeu.end(),0)==Niv.getNbCol())
+                return colors[rand()%Niv.getNbCol()];
         }
     }
-    if (accumulate(colenjeu.begin(),colenjeu.end(),0)<nbCouleurs) {
+    if (accumulate(colenjeu.begin(),colenjeu.end(),0)<Niv.getNbCol()) {
         while (true) {
-            int aleat = rand()%nbCouleurs;
+            int aleat = rand()%Niv.getNbCol();
             if (colenjeu[aleat]==1)
                 return colors[aleat];
         }
@@ -145,11 +146,11 @@ Color verifieCouleurs(vector<Serpent> &listSerp) {
     }*/
 }
 
-void Grenouille::creationBille(vector<Serpent> &listSerp) {
+void Grenouille::creationBille(vector<Serpent> &listSerp, Niveau Niv) {
     //Pour remplacer la 2e bille lorsque la 1e est tirée
     B1 = B2;
-    B2 = Bille(pos, 0, 0);
-    B2.setCol(verifieCouleurs(listSerp));
+    B2 = Bille(pos, 0, 0,Niv);
+    B2.setCol(verifieCouleurs(listSerp, Niv));
 }
 
 void Grenouille::changeBille() {

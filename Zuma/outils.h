@@ -23,8 +23,8 @@ const int R = r*zoom;
 const int CARRE = carre*zoom;
 
 // Paramètres
-const int nbBilles = 15;
-const int nbCouleurs = 4;
+const int nbBilles = 20;
+//const int nbCouleurs = 4;
 const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
 
 const int nbTraj = 1;
@@ -35,7 +35,7 @@ const double dt = 0.05;      //Modifier tous ces pas de temps!
 const double vDepart = 5;    //Level hardcore : vDepart = 20, dt = 1 !
 const double Vtir = 4000*dt;
 
-const float newSerp = 30.0/float(nbBilles);
+const float newSerp = 10.0*4.0/float(nbBilles); // >2, <6 pour le 4.0
 
 class Point
 {

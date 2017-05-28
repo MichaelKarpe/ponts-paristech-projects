@@ -9,10 +9,10 @@ Serpent::Serpent()
 
 }
 
-Serpent::Serpent(Trajectoire &traj, int nbBilles)
+Serpent::Serpent(Trajectoire &traj, int nbBilles, Niveau Niv)
 {
     for (int i=0;i<nbBilles;i++) {
-        Bille b(Point(traj.getPoint(2*r*i).getX(),traj.getPoint(2*r*i).getY()),2*r*i,vDepart);
+        Bille b(Point(traj.getPoint(2*r*i).getX(),traj.getPoint(2*r*i).getY()),2*r*i,vDepart,Niv);
         s.push_back(b);
     }
 }
@@ -73,7 +73,7 @@ void Serpent::vitesseDiminue(Trajectoire &traj) {
 
 void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
     for (int j=0;j<listSerp.size();j++) {
-        noRefreshBegin();
+        //noRefreshBegin();
         listSerp[j].effaceSerpent(traj);
         for (int k=0;k<listSerp[j].size();k++) {
             double ds=listSerp[j].getBille(k).getVit()*dt; //à modifier ds = v*dt > 1
@@ -85,7 +85,7 @@ void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp) {
             listSerp[j].getBille(k).setCoor(traj.absplan(listSerp[j].getBille(k).getAbs()));
         }
         listSerp[j].traceSerpent(traj);
-        noRefreshEnd();
+        //noRefreshEnd();
     }
 }
 

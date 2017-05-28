@@ -1,14 +1,15 @@
 #include "bille.h"
 
+
 //Constructeurs
 
 Bille::Bille() {
 
 }
 
-Bille::Bille(Point ip, int iabs, double iv)
+Bille::Bille(Point ip, int iabs, double iv, Niveau Niv)
 {
-    col=colors[rand()%nbCouleurs];
+    col=colors[rand()%Niv.getNbCol()];
     abs=iabs;
     v=iv;
     p=ip;
@@ -33,7 +34,7 @@ double Bille::getVit() const {
     return v;
 }
 
-Point Bille::getCoor() const {
+Point &Bille::getCoor() {
     return p;
 }
 

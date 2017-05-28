@@ -21,68 +21,78 @@ int main()
     // Menu
     menu();
 
-    //srand((unsigned int)time(0));
+    for (int i_traj=1;i_traj<4;i_traj++) {
+        for (int i_col=4;i_col<9;i_col++) {
+            Niveau Niv(i_traj,i_col);
 
-    Grenouille G;
-    G.traceGrenouille();
-    //quadrillage();
+            //srand((unsigned int)time(0));
+            quadrillage();
 
-    Trajectoire traj;
-    traj.trajectoire2();
-    traj.traceTrajectoire();
-    //traj.billesRandom();
-    cout << traj.size() << endl;
+            Trajectoire traj;
+            traj = Niv.getTraj();
+            traj.traceTrajectoire();
+            //traj.billesRandom();
 
-    vector<Serpent> listSerp;
-    listSerp.push_back(Serpent(traj,nbBilles));
+            Grenouille G(traj,Niv);
+            G.traceGrenouille();
 
-    for (int i=0;i<listSerp.size();i++)
-        listSerp[i].traceSerpent(traj);
+            vector<Serpent> listSerp;
+            listSerp.push_back(Serpent(traj,nbBilles,Niv));
 
-    bool serpentMort=false;
+            for (int i=0;i<listSerp.size();i++)
+                listSerp[i].traceSerpent(traj);
 
-    // Paramètres servant pour le tir
-    bool finTir = true;
-    int ind_combo = -1;
-    double vx;
-    double vy;
-    Bille Btir(G.getPos(),0,0);
+            bool serpentMort=false;
 
-    //Le premier serpent est celui qui est le plus proche de la fin
-    while (!(listSerp.front().back().getAbs() >= traj.size())) {
+            // Paramètres servant pour le tir
+            bool finTir = true;
+            int ind_combo = -1;
+            double vx;
+            double vy;
+            Bille Btir(G.getPos(),0,0,Niv);
 
+            //Le premier serpent est celui qui est le plus proche de la fin
+            while (!(listSerp.front().back().getAbs() >= traj.size())) {
 
-        // Il faudrait retracer la trajectoire à chaque fois, mais ça ralentit le programme
-        // traj.traceTrajectoire();
+                noRefreshBegin();
 
-        //Diminution de la vitesse
-        for (int i=0;i<listSerp.size();i++)
-            listSerp[i].vitesseDiminue(traj);
+                // On retrace la trajectoire à chaque fois
+                //traj.traceTrajectoire();
 
-        //Déplacement des serpents
-        deplacementSerpents(traj,listSerp);
+                //Diminution de la vitesse
+                for (int i=0;i<listSerp.size();i++)
+                    listSerp[i].vitesseDiminue(traj);
 
-        //Fusion des serpents
-        fusionSerpents(ind_combo,listSerp, traj);
+                //Déplacement des serpents
+                deplacementSerpents(traj,listSerp);
 
-        //Tir de la grenouille
-        G.tir(finTir,vx,vy,Btir,listSerp);
-        G.traceGrenouille();
+                //Fusion des serpents
+                fusionSerpents(ind_combo,listSerp, traj);
 
-        //Insertion du tir en indice I (s'il existe)
-        for (int i=0;i<listSerp.size();i++) {
-            int I = listSerp[i].insererTir(traj,Btir,finTir);
-            listSerp[i].destructionBilles(ind_combo,I,i,listSerp);
+                //Tir de la grenouille
+                G.tir(finTir,vx,vy,Btir,listSerp,Niv);
+                G.traceGrenouille();
+
+                //Insertion du tir en indice I (s'il existe)
+                for (int i=0;i<listSerp.size();i++) {
+                    int I = listSerp[i].insererTir(traj,Btir,finTir);
+                    listSerp[i].destructionBilles(ind_combo,I,i,listSerp);
+                }
+
+                //Arrivée d'un nouveau serpent
+                if (listSerp.back().serpentLoin(traj) && listSerp.back().front().getAbs()>2*r*(nbBilles+5) || listSerp.size()==0) //rajouter nbSerpents à envoyer
+                    listSerp.push_back(Serpent(traj,nbBilles,Niv));
+
+                noRefreshEnd();
+
+                //Pause pour affichage
+                milliSleep(10); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
+
+            }
+
+            clearWindow();
+
         }
-
-        //Arrivée d'un nouveau serpent
-        if (listSerp.back().serpentLoin(traj) && listSerp.back().front().getAbs()>2*r*(nbBilles+5) || listSerp.size()==0) //rajouter nbSerpents à envoyer
-            listSerp.push_back(Serpent(traj,nbBilles));
-
-        //Pause pour affichage
-        milliSleep(20); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
-
-
     }
 
     //Hypothèse simplificatrice : tous la vitesse du plus lent, mais pas utilisée pour le moment
