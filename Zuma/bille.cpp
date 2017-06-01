@@ -7,7 +7,7 @@ Bille::Bille() {
 
 }
 
-Bille::Bille(Point ip, int iabs, double iv, Niveau Niv)
+Bille::Bille(const Point &ip, const int &iabs, const double &iv, const Niveau &Niv)
 {
     col=colors[rand()%Niv.getNbCol()];
     abs=iabs;
@@ -34,7 +34,7 @@ double Bille::getVit() const {
     return v;
 }
 
-Point &Bille::getCoor() {
+Point Bille::getCoor() const {
     return p;
 }
 
@@ -42,26 +42,26 @@ int Bille::getAbs() const {
     return abs;
 }
 
-void Bille::setCol(Color icol) {
+void Bille::setCol(const Color &icol) {
     col = icol;
 }
 
-void Bille::setVit(double iv) {
+void Bille::setVit(const double &iv) {
     v = iv;
 }
 
-void Bille::setCoor(Point ip) {
+void Bille::setCoor(const Point &ip) {
     p = ip;
 }
 
-void Bille::setAbs(double iabs) {
+void Bille::setAbs(const int &iabs) {
     abs = iabs;
 }
 
 
 // Fonctions traitant les données
 
-void Bille::avanceTirBille(double vx, double vy) {
+void Bille::avanceTirBille(const double &vx, const double &vy) {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
     p.setX(p.getX() + dt*vx);
     p.setY(p.getY() + dt*vy);
@@ -71,11 +71,11 @@ void Bille::avanceTirBille(double vx, double vy) {
 
 // Fonctions de tracé
 
-void Bille::traceBille() {
+void Bille::traceBille() const {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
 }
 
-void Bille::effaceBille() {
+void Bille::effaceBille() const {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
 }
 

@@ -7,7 +7,7 @@ Point::Point()
 
 }
 
-Point::Point(int ix, int iy)
+Point::Point(const int &ix, const int &iy)
 {
     x=ix, y=iy;
 }
@@ -23,17 +23,18 @@ int Point::getY() const {
     return y;
 }
 
-void Point::setX(int ix) {
+void Point::setX(const int &ix) {
     x=ix;
 }
 
-void Point::setY(int iy) {
+void Point::setY(const int &iy) {
     y=iy;
 }
 
 
 // Fonctions de tracé
 
+//Quadrillage utilisé pour la conception des trajectoires, inutile au jeu
 void quadrillage() {
     for (int i=1;i<w/carre;i++)
         drawLine(i*CARRE,0,i*CARRE,H,BLACK);

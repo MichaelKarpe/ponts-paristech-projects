@@ -1,33 +1,37 @@
 #pragma once
 
-#include "trajectoire.h"
+//#include "trajectoire.h"
 #include "serpent.h"
 
 class Grenouille
 {
-    Bille B1,B2; //On tire B1, B2 en attente
-    Point pos;//=Point(w/2,h/2);
+    Bille B1,B2; //B1 bille de tir, B2 bille de rechange
+    Point pos; //Position de la grenouille
 
 public:
 
     // Constructeur
-    Grenouille(Trajectoire traj,Niveau Niv);
+    Grenouille(const Trajectoire &traj, const Niveau &Niv);
 
-    //Assesseurs inutiles (sauf getPos) ?
+    //Assesseurs
+
+    //Get
     Point getPos() const;
     Bille getB1() const;
     Bille getB2() const;
-    void setB1(Bille iB);
-    void setB2(Bille iB);
 
-    // Fonctions traitant les données
-    void tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp, Niveau Niv);
+    //Set
+    void setB1(const Bille &iB);
+    void setB2(const Bille &iB);
+
+    // Méthodes modifiant la classe
     void changeBille();
-    void creationBille(vector<Serpent> &listSerp,Niveau Niv);
+    void creationBille(const vector<Serpent> &listSerp, const Niveau &Niv);
+    void tir(bool &finTir, double &vx, double &vy, Bille &Btir, vector<Serpent> &listSerp, const Niveau &Niv);
 
     // Fonctions de tracé
-    void traceGrenouille();
+    void traceGrenouille() const;
 };
 
-
-Color verifieCouleurs(vector<Serpent> &listSerp);
+//Autres fonctions
+Color verifieCouleurs(const vector<Serpent> &listSerp, const Niveau &Niv);

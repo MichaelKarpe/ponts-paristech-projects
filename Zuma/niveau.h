@@ -3,15 +3,22 @@
 #include "trajectoire.h"
 
 class Niveau {
-    int nbCol;
-    Trajectoire Traj;
+    int nbCol; //Nombre de couleurs
+    Trajectoire Traj; //Trajectoire
 
 public:
 
-    Niveau(int ind_traj, int nbCoul);
-    int getNbCol();
-    Trajectoire getTraj();
-    void setNbCol(int i);
-    void setTraj(Trajectoire traj);
+    //Constructeur
+    Niveau(const int &ind_traj, const int &nbCoul);
+
+    //Assesseurs
+
+    //Get
+    int getNbCol() const;
+    Trajectoire getTraj() const;
+
+    //Set
+    void setNbCol(const int &i);
+    void setTraj(const Trajectoire &traj);
 };
 

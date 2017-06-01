@@ -1,50 +1,53 @@
 #pragma once
 
 #include "bille.h"
-#include "trajectoire.h"
+//#include "trajectoire.h"
 
 class Serpent
 {
-    std::vector<Bille> s;
+    std::vector<Bille> s; //Vecteur de billes
 
 public:
 
-    //Assesseurs
-    int size();
-    Bille &getBille(int i);
-    void push(Bille b);
-    Bille &front();
-    Bille &back();
-    void setVitSerp(double v);
-
     // Constructeurs et destructeur
     Serpent();
-    Serpent(Trajectoire &traj, int nbBilles, Niveau Niv);
+    Serpent(const Trajectoire &traj, const int &nbBilles, const Niveau &Niv);
     ~Serpent();
 
+    //Assesseurs
 
-    // Fonctions traitant les données
+    //Get
+    int size() const;
+    Bille getBille(const int &i) const;
 
-    //void fusionSerpents(vector<Serpent> &listSerp);
-    void vitesseEntree();
-    void vitesseDiminue(Trajectoire &traj);
+    //Get et Set
+    Bille &front();
+    Bille &back();
 
-    bool serpentFin(Trajectoire &traj);
-    bool serpentLoin(Trajectoire &traj);
+    //Set
+    void push(const Bille &b);
+    void setVitSerp(const double &iv);
+    void setAbsBille(const int &ibille, const int &iabs);
+    void setCoorBille(const int &ibille, const Point &icoor);
+    void setVitBille(const int &ibille, const double &ivit);
 
-    void insererBille(const Trajectoire &traj, Bille &B, int j);
-    int insererTir(const Trajectoire &traj , Bille &B, bool &finTir);
-    void destructionBilles(int &ind_combo, int &i, int ind_list_serp, vector<Serpent> &listSerp);
 
-    void vitesseNulle();
-    void vitesseDestruction();
-    void vitesseCombo();
+    // Méthodes modifiant la classe
+
+    bool serpentFin(const Trajectoire &traj);
+    bool serpentLoin(const Trajectoire &traj);
+
+    void vitesseDiminue(const Trajectoire &traj);
+
+    void insererBille(const Trajectoire &traj, const Bille &B, const int &j);
+    int insererTir(const Trajectoire &traj, const Bille &B, bool &finTir);
+    void destructionBilles(int &ind_combo, const int &i, const int &ind_list_serp, vector<Serpent> &listSerp);
 
     // Fonctions de tracé
-    void traceSerpent(Trajectoire traj);
-    void effaceSerpent(Trajectoire traj);
+    void traceSerpent(const Trajectoire &traj) const;
+    void effaceSerpent(const Trajectoire &traj) const;
 };
 
 // Autres fonctions
-void deplacementSerpents(Trajectoire &traj, vector<Serpent> &listSerp);
-void fusionSerpents(int ind_combo, vector<Serpent> &listSerp, Trajectoire &traj);
+void deplacementSerpents(const Trajectoire &traj, vector<Serpent> &listSerp);
+void fusionSerpents(const Trajectoire &traj, int &ind_combo, vector<Serpent> &listSerp);
