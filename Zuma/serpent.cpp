@@ -99,6 +99,7 @@ void Serpent::insererBille(const Trajectoire &traj, const Bille &B, const int &j
     effaceSerpent(traj);
     //Insertion de la bille B et mise à jour avec les paramètres des billes juxtaposées
     s.insert(s.begin()+j,B);
+
     s[j].setVit(s[j+1].getVit()); //problème ici ?
     s[j].setAbs(s[j+1].getAbs());
     //Décalage des billes à l'avant du serpent pour permettre l'insertion de la bille

@@ -23,7 +23,7 @@ const int R = r*zoom;
 const int CARRE = carre*zoom;
 
 // Paramètres
-const int nbBilles = 15; //Nombre de billes par serpent
+const int nbBilles = 10; //Nombre de billes par serpent
 const int nbCouleurs = 8;
 const Color colors[nbCouleurs] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, Color(128,128,128), BLACK}; //Couleurs des billes
 
@@ -66,3 +66,6 @@ void quadrillage();
 
 // Affichage du menu
 void menu();
+void pagePerdu();
+void pageGagne();
+void rules();

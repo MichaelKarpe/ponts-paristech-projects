@@ -58,6 +58,11 @@ void menu() {
     fillRect(P,L,l,AlphaColor(150,150,150,255));
     drawString(Q,"NEW GAME",WHITE,15);
 
+    // Bouton Rules:
+    IntPoint2 RULES(W - W/10,H-H/10);
+    fillRect(RULES,100,50,AlphaColor(150,150,150,255));
+    drawString(RULES + IntPoint2(15,35),"RULES",WHITE,15);
+
     bool b = false;
     // receiving mouse move events even if no button is pressed
     enableMouseTracking(true);
@@ -79,6 +84,15 @@ void menu() {
                 fillRect(P,L,l,Color(150,150,150));
                 drawString(Q,"NEW GAME",WHITE,15);
             }
+            // Cursor is in the "RULES" box.
+            if(x>RULES.x() && y>RULES.y() && x<RULES.x()+100 && y<RULES.y()+50) {
+                // Changing the box's style
+                fillRect(RULES,100,50,Color(128,139,203));
+                drawString(RULES + IntPoint2(15,35),"RULES",YELLOW,15);
+            } else {
+                fillRect(RULES,100,50,AlphaColor(150,150,150,255));
+                drawString(RULES + IntPoint2(15,35),"RULES",WHITE,15);
+            }
             break;
         }
         case EVT_BUT_ON: {
@@ -88,6 +102,13 @@ void menu() {
             if(P.x()<=x && x<P.x()+L && P.y()<=y && y<P.y()+l) {
                 b = true;         // Stoppe la boucle du menu
             }
+            if(x>RULES.x() && y>RULES.y() && x<RULES.x()+100 && y<RULES.y()+50) {
+                rules();
+                drawString(ZUMA,"Z",BLUE,130);
+                drawString(ZUMA+INT1,"U",YELLOW,130);
+                drawString(ZUMA+INT1+INT2,"M",RED,130);
+                drawString(ZUMA+INT1+INT2+INT3,"A",GREEN,130);
+            }
             break;
         }
         default: break;
@@ -95,4 +116,69 @@ void menu() {
     } while ((ev.type!=EVT_KEY_ON || ev.key!='q' )&& !b);
     clearWindow();
     enableMouseTracking(false);
+}
+
+// Affichage d'un message de défaite et retour au menu
+void pagePerdu() {
+    drawString(W/3,200,"Vous avez perdu !",BLUE,30);
+
+    fillRect(IntPoint2(W/3,2*H/3),W/3,H/10,AlphaColor(150,150,150,255));
+    drawString(IntPoint2(W/3 + 10,2*H/3 +40),"Revenir au menu principal",WHITE,20);
+    bool b = true;
+    while (b) {
+        Event ev;
+        getEvent(-1,ev);
+        if (ev.type == EVT_BUT_ON) {
+            int x = ev.pix.x();
+            int y = ev.pix.y();
+            if (x>W/3 && y>2*H/3 && x<2*W/3 && y<2*H/3+H/10)
+                b = false;
+        }
+    }
+    clearWindow();
+}
+
+// Affichage d'un message de victoire et passage au niveau suivant
+void pageGagne() {
+    drawString(W/3+W/15,200,"Bien joué !",RED,30);
+
+    fillRect(IntPoint2(W/3,2*H/3),W/3,H/10,AlphaColor(150,150,150,255));
+    drawString(IntPoint2(W/3 + 80,2*H/3 +40),"Niveau suivant",WHITE,20);
+    bool b = true;
+    while (b) {
+        Event ev;
+        getEvent(-1,ev);
+        if (ev.type == EVT_BUT_ON) {
+            int x = ev.pix.x();
+            int y = ev.pix.y();
+            if (x>W/3 && y>2*H/3 && x<2*W/3 && y<2*H/3+H/10)
+                b = false;
+        }
+    }
+    clearWindow();
+}
+
+void rules() {
+    clearWindow();
+    drawString(IntPoint2(20,H/7),"- Tire des boules de couleurs à l'aide du clic gauche de la souris",BLACK,10);
+    drawString(IntPoint2(20,2*H/7),"- La couleur de la bille tirée est celle qui entoure le lanceur",BLACK,10);
+    drawString(IntPoint2(20,3*H/7),"- Change de couleur avec celle au centre du lanceur en faisant un clic droit",BLACK,10);
+    drawString(IntPoint2(20,4*H/7),"- Essaie de viser les groupes de 2 billes (ou plus) de la même couleur pour les détruire",BLACK,10);
+    drawString(IntPoint2(20,5*H/7),"- Quand un groupe de bille est détruit et que son entourage est aussi un groupe de bille de la même couleur, il se détruit lui aussi !",BLACK,10);
+    drawString(IntPoint2(20,6*H/7),"- Détruis tous les serpents avant qu'ils n'atteigent l'arrivée !",BLACK,10);
+
+    fillRect(IntPoint2(W-W/5,H-H/10),200,50,AlphaColor(150,150,150,255));
+    drawString(IntPoint2(W-W/5+5 ,H-H/10 +30),"Revenir au menu principal",WHITE,10);
+    bool b = true;
+    while (b) {
+        Event ev;
+        getEvent(-1,ev);
+        if (ev.type == EVT_BUT_ON) {
+            int x = ev.pix.x();
+            int y = ev.pix.y();
+            if (x>W-W/5 && y>H-H/10 && x<W-W/5+200 && y<H-H/10+50)
+                b = false;
+        }
+    }
+    clearWindow();
 }
