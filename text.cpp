@@ -1,6 +1,5 @@
 #include "text.h"
 
-
 //Assessors
 
 Word::Word(string ncontent, int nindice) {
@@ -69,19 +68,20 @@ void Text::changeSection(int &currentSection) {
 
 //Constructor
 
-Text::Text(string filename)
+Text::Text(char* filename)
 {
     //Initialization
-    nbSections = 0; // Normalement OK
-    nbSpaces = 0; // OK, vérifié
-    nbWords = 0; // Pas bon, à revoir
-    sizeText = 0; // = 0; // Argument non self ?
-    sizeCleanedText = 0; // = 0; // OK, vérifié
+    nbSections = 0;
+    nbSpaces = 0;
+    nbWords = 0;
+    sizeText = 0;
+    sizeCleanedText = 0;
 
     char punctuationtable[6] = {'.' , ',' , ';' , '\'' , '(' , ')'};
     punctuation.insert(punctuation.end(), punctuationtable, punctuationtable+6);
+
     //Ne fonctionne pas si on met filename...
-    ifstream filefirst("dudh_fr.txt", ios::in);  // on ouvre en lecture // ATTENTION : fichier doit être dans dossier build !
+    ifstream filefirst(filename, ios::in);  // on ouvre en lecture // ATTENTION : fichier doit être dans dossier build !
     if(filefirst) {
         char character;
         while(filefirst.get(character))
@@ -136,7 +136,6 @@ Text::Text(string filename)
             }
         }
     }
-    cout << cleanedContent << endl;
 
     isLinguaContinua = double(nbSpaces)/double(sizeCleanedText)<0.1;
 
@@ -172,10 +171,10 @@ void Text::Tests() {
     cout << "Size of cleaned text: " << sizeCleanedText << endl;
     cout << "Is lingua continua: " << isLinguaContinua << endl;
 
-    cout << "Size of sections: ";
-    for (map<int, int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it)
-        cout << it->second << " ; " ;
-    cout << endl;
+//    cout << "Size of sections: ";
+//    for (map<int, int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it)
+//        cout << it->second << " ; " ;
+//    cout << endl;
 
 //    cout << "Word Indices: ";
 //    for (map<string, vector<int> >::iterator it = wordIndices.begin(); it!=wordIndices.end(); ++it)
@@ -187,9 +186,9 @@ void Text::Tests() {
 //        cout << it->first << " : " << it->second[0] << " ; ";
 //    cout << endl;
 
-    cout << "Section contents: ";
-    for (map<int, string>::iterator it = sectionContent.begin(); it!=sectionContent.end(); ++it)
-        cout << "Section " << it->first << " : " << it->second << endl;
+//    cout << "Section contents: ";
+//    for (map<int, string>::iterator it = sectionContent.begin(); it!=sectionContent.end(); ++it)
+//        cout << "Section " << it->first << " : " << it->second << endl;
 
 }
 
@@ -201,43 +200,43 @@ string Text::getContent() {
     return content;
 }
 
-int Text::getNbSections() { // = 0; // Normalement OK
+int Text::getNbSections() {
     return nbSections;
 }
 
-int Text::getNbSpaces() { // = 0; // OK, vérifié
+int Text::getNbSpaces() {
     return nbSpaces;
 }
 
-int Text::getNbWords() { // = 0 // Pas bon, à revoir
+int Text::getNbWords() {
     return nbWords;
 }
 
-int Text::getSizeText() { // = 0; // Argument non self ?
+int Text::getSizeText() {
     return sizeText;
 }
 
-int Text::getSizeCleanedText() { // = 0; // OK, vérifié
+int Text::getSizeCleanedText() {
     return sizeCleanedText;
 }
 
-map<int, int> Text::getSizeSections() { // = [0]
+map<int, int> Text::getSizeSections() {
     return sizeSections;
 }
 
-map<string, vector<int> > Text::getWordIndices() { // = {} // Dictionnaire {mot : [indice1, ..., indicen]}
+map<string, vector<int> > Text::getWordIndices() {
     return wordIndices;
 }
 
-map<string, vector<int> > Text::getWordPosition() { // = {} // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
+map<string, vector<int> > Text::getWordPosition() {
     return wordPosition;
 }
 
-map<string, vector<int> > Text::getWordRecency() { // = {} // Dictionnaire de récence normalisée
+map<string, vector<int> > Text::getWordRecency() {
     return wordRecency;
 }
 
-map<string, vector<int> > Text::getWordSectionIndices() { // = {} // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
+map<string, vector<int> > Text::getWordSectionIndices() {
     return wordSectionIndices;
 }
 

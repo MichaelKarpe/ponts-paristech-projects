@@ -37,22 +37,22 @@ class Text
     vector<char> punctuation;
 
     string content;
-    string cleanedContent; // = "" // Texte nettoyé
+    string cleanedContent; // Texte nettoyé
 
-    int nbSections; // Normalement OK
+    int nbSections; // OK, vérifié
     int nbSpaces; // OK, vérifié
     int nbWords; // Pas bon, à revoir
-    int sizeText; // Argument non self ?
+    int sizeText;
     int sizeCleanedText; // OK, vérifié
     bool isLinguaContinua;
 
-    map<int, int> sizeSections; // = [0]
-    map<int, string> sectionContent; // = [""] // Dictionnaire : {indice section : texte de la section}
+    map<int, int> sizeSections; // Dictionnaire : {indice section : taille de la section}
+    map<int, string> sectionContent; // Dictionnaire : {indice section : texte de la section}
 
-    map<string, vector<int> > wordIndices; // = {} // Dictionnaire {mot : [indice1, ..., indicen]}
-    map<string, vector<int> > wordPosition; // = {} // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
-    map<string, vector<int> > wordRecency; // = {} // Dictionnaire de récence normalisée
-    map<string, vector<int> > wordSectionIndices; // = {} // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
+    map<string, vector<int> > wordIndices; // Dictionnaire {mot : [indice1, ..., indicen]}
+    map<string, vector<int> > wordPosition; // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
+    map<string, vector<int> > wordRecency; // Dictionnaire de récence normalisée
+    map<string, vector<int> > wordSectionIndices; // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
     map<string, double> wordFrequency;
 
     //Methods for constructor
@@ -63,31 +63,31 @@ class Text
 
 public:
     //Constructor
-    Text(string filename);
+    Text(char *filename);
 
     //Assessors
     //Get
     string getContent();
 
-    int getNbSections(); // = 0; // Normalement OK
-    int getNbSpaces(); // = 0; // OK, vérifié
-    int getNbWords(); // = 0 // Pas bon, à revoir
-    int getSizeText(); // = 0; // Argument non self ?
-    int getSizeCleanedText(); // = 0; // OK, vérifié
+    int getNbSections();
+    int getNbSpaces();
+    int getNbWords();
+    int getSizeText();
+    int getSizeCleanedText();
 
-    map<int, int> getSizeSections(); // = [0]
+    map<int, int> getSizeSections();
     map <int, string> getSectionContent();
 
-    map<string, vector<int> > getWordIndices(); // = {} // Dictionnaire {mot : [indice1, ..., indicen]}
-    map<string, vector<int> > getWordPosition(); // = {} // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
-    map<string, vector<int> > getWordRecency(); // = {} // Dictionnaire de récence normalisée
-    map<string, vector<int> > getWordSectionIndices(); // = {} // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
+    map<string, vector<int> > getWordIndices();
+    map<string, vector<int> > getWordPosition();
+    map<string, vector<int> > getWordRecency();
+    map<string, vector<int> > getWordSectionIndices();
 
     //Set
-//    void setWordIndices(); // = {} // Dictionnaire {mot : [indice1, ..., indicen]}
-//    void setWordPosition(); // = {} // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
-//    void setWordRecency(); // = {} // Dictionnaire de récence normalisée
-//    void setWordSectionIndices(); // = {} // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
+//    void setWordIndices();
+//    void setWordPosition();
+//    void setWordRecency();
+//    void setWordSectionIndices();
 //    void setSectionContent();
 
     //Tests
