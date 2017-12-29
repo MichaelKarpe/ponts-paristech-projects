@@ -6,31 +6,14 @@
 #include <vector>
 #include <cctype> //tolower
 #include <algorithm> //find
+#include <cmath> //abs
 using namespace std;
 
 #include <map>
+#include "word.h"
 
 //#ifndef TEXT_H
 //#define TEXT_H
-
-
-class Word {
-    string content;
-    int indice;
-
-public:
-    string getContent();
-    int getIndice();
-    int getSection();
-    int getSize();
-
-    void setContent(string ncontent);
-    void setIndice(int nindice);
-    void setSection(int nsection);
-
-    Word(string ncontent, int nindice);
-};
-
 
 class Text
 {
@@ -46,12 +29,16 @@ class Text
     int sizeCleanedText; // OK, vérifié
     bool isLinguaContinua;
 
+    vector<string> words;
+    vector< vector<string> > wordsClusters;
+    vector<string> oftenUsedWords;
+
     map<int, int> sizeSections; // Dictionnaire : {indice section : taille de la section}
     map<int, string> sectionContent; // Dictionnaire : {indice section : texte de la section}
 
     map<string, vector<int> > wordIndices; // Dictionnaire {mot : [indice1, ..., indicen]}
-    map<string, vector<int> > wordPosition; // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
-    map<string, vector<int> > wordRecency; // Dictionnaire de récence normalisée
+    map<string, vector<double> > wordPosition; // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
+    map<string, vector<double> > wordRecency; // Dictionnaire de récence normalisée
     map<string, vector<int> > wordSectionIndices; // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
     map<string, double> wordFrequency;
 
@@ -74,13 +61,18 @@ public:
     int getNbWords();
     int getSizeText();
     int getSizeCleanedText();
+    bool getIsLinguaContinua();
 
     map<int, int> getSizeSections();
     map <int, string> getSectionContent();
 
+    vector<string> getWords();
+    vector< vector<string> > getWordsClusters();
+    vector<string> getOftenUsedWords();
+
     map<string, vector<int> > getWordIndices();
-    map<string, vector<int> > getWordPosition();
-    map<string, vector<int> > getWordRecency();
+    map<string, vector<double> > getWordPosition();
+    map<string, vector<double> > getWordRecency();
     map<string, vector<int> > getWordSectionIndices();
 
     //Set
@@ -90,8 +82,9 @@ public:
 //    void setWordSectionIndices();
 //    void setSectionContent();
 
-    //Tests
-    void Tests();
+    void hierarchicClustering(double threshold);
 };
+
+double jaro_winkler_distance(string str1, string str2, double coeff_winkler);
 
 //#endif // TEXT_H

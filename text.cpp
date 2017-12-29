@@ -1,37 +1,17 @@
 #include "text.h"
 
-//Assessors
-
-Word::Word(string ncontent, int nindice) {
-    content=ncontent;
-    indice=nindice;
-}
-
-string Word::getContent() {
-    return content;
-}
-
-int Word::getIndice() {
-    return indice;
-}
-
-int Word::getSize() {
-    return content.length();
-}
-
-void Word::setContent(string ncontent) {
-    content=ncontent;
-}
-
-void Word::setIndice(int nindice) {
-    indice=nindice;
-}
-
-
 //Methods for constructor
+
 void Text::addWordToTables(Word &currentWord, int &currentSection) {
     wordIndices[currentWord.getContent()].push_back(currentWord.getIndice());
+    if (wordIndices[currentWord.getContent()].size()==1) {
+        words.push_back(currentWord.getContent());
+        vector<string> cluster;
+        cluster.push_back(currentWord.getContent());
+        wordsClusters.push_back(cluster);
+    }
     wordPosition[currentWord.getContent()].push_back(sizeCleanedText-currentWord.getSize());
+    //cout << sizeCleanedText-currentWord.getSize() << endl;
     if (wordSectionIndices[currentWord.getContent()].empty() || wordSectionIndices[currentWord.getContent()].back()!=currentSection)
         wordSectionIndices[currentWord.getContent()].push_back(currentSection);
 
@@ -90,7 +70,7 @@ Text::Text(char* filename)
 
     filefirst.close();
 
-    ifstream file("dudh_fr.txt", ios::in);
+    ifstream file(filename, ios::in);
 
     int currentSection = 0;
     if(file) {
@@ -139,15 +119,23 @@ Text::Text(char* filename)
 
     isLinguaContinua = double(nbSpaces)/double(sizeCleanedText)<0.1;
 
+    //Construct oftenUsedWords
+    for (map<string, vector<int> >::iterator it = wordSectionIndices.begin(); it!=wordSectionIndices.end(); ++it)
+        if (it->second.size()>=nbSections/4)
+            oftenUsedWords.push_back(it->first);
+
+    //Construct wordFrequency
     for (map<string, vector<int> >::iterator it = wordIndices.begin(); it!=wordIndices.end(); ++it)
-        wordFrequency[it->first]=it->second.size()/nbWords;
+        wordFrequency[it->first]=double(it->second.size())/double(nbWords);
 
-    for (map<string, vector<int> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it)
+    //Normalize wordPosition
+    for (map<string, vector<double> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it)
         for (int i=0;i<it->second.size();i++)
-            it->second[i]/=sizeCleanedText;
+            it->second[i]=double(it->second[i])/double(sizeCleanedText);
 
-    for (map<string, vector<int> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it) {
-        int temp = it->second[0];
+    //Construct wordRecency
+    for (map<string, vector<double> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it) {
+        double temp = it->second[0];
         wordRecency[it->first].push_back(temp);
         if (it->second.size()>1) {
             for (int i=1;i<it->second.size();i++) {
@@ -160,39 +148,8 @@ Text::Text(char* filename)
 
 }
 
-void Text::Tests() {
 
-    //cout << "Content: " << content << endl;
-    //cout << "Cleaned Content: " << cleanedContent << endl;
-    cout << "Number of sections: " << nbSections << endl;
-    cout << "Number of spaces: " << nbSpaces << endl;
-    cout << "Number of words: " << nbWords << endl;
-    cout << "Size of text: " << sizeText << endl;
-    cout << "Size of cleaned text: " << sizeCleanedText << endl;
-    cout << "Is lingua continua: " << isLinguaContinua << endl;
-
-//    cout << "Size of sections: ";
-//    for (map<int, int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it)
-//        cout << it->second << " ; " ;
-//    cout << endl;
-
-//    cout << "Word Indices: ";
-//    for (map<string, vector<int> >::iterator it = wordIndices.begin(); it!=wordIndices.end(); ++it)
-//        cout << it->first << " : " << it->second[0] << " ; ";
-//    cout << endl;
-
-//    cout << "Word Section Indices: ";
-//    for (map<string, vector<int> >::iterator it = wordSectionIndices.begin(); it!=wordSectionIndices.end(); ++it)
-//        cout << it->first << " : " << it->second[0] << " ; ";
-//    cout << endl;
-
-//    cout << "Section contents: ";
-//    for (map<int, string>::iterator it = sectionContent.begin(); it!=sectionContent.end(); ++it)
-//        cout << "Section " << it->first << " : " << it->second << endl;
-
-}
-
-//Assesseurs
+///Assesseurs
 
 //Get
 
@@ -220,6 +177,22 @@ int Text::getSizeCleanedText() {
     return sizeCleanedText;
 }
 
+bool Text::getIsLinguaContinua() {
+    return isLinguaContinua;
+}
+
+vector<string> Text::getWords() {
+    return words;
+}
+
+vector< vector<string> > Text::getWordsClusters() {
+    return wordsClusters;
+}
+
+vector<string> Text::getOftenUsedWords() {
+    return oftenUsedWords;
+}
+
 map<int, int> Text::getSizeSections() {
     return sizeSections;
 }
@@ -228,11 +201,11 @@ map<string, vector<int> > Text::getWordIndices() {
     return wordIndices;
 }
 
-map<string, vector<int> > Text::getWordPosition() {
+map<string, vector<double> > Text::getWordPosition() {
     return wordPosition;
 }
 
-map<string, vector<int> > Text::getWordRecency() {
+map<string, vector<double> > Text::getWordRecency() {
     return wordRecency;
 }
 
@@ -242,4 +215,49 @@ map<string, vector<int> > Text::getWordSectionIndices() {
 
 map <int, string> Text::getSectionContent() {
     return sectionContent;
+}
+
+
+
+///Clustering methods
+
+void Text::hierarchicClustering(double threshold = 0.8) {
+    int size = wordsClusters.size();
+    //double* distances = new double[size*size];
+    double maxsim = 0;
+    int i = 0, j = 0;
+    for (int k=0;k<size;k++)
+        for (int l=k+1;l<size;l++) {
+            double dist = 0;
+            for (int m=0;m<wordsClusters[k].size();m++)
+                for (int n=0;n<wordsClusters[l].size();n++)
+                    dist+=jaro_winkler_distance(wordsClusters[k][m], wordsClusters[l][n], 0.1);
+            dist=dist/(wordsClusters[k].size()*wordsClusters[l].size());
+            if (dist>maxsim) {
+                maxsim = dist; i = k; j = l;
+            }
+            //distances[i*size+j]=jaro_winkler_distance(wordsClusters[i][0], wordsClusters[j][0], 0.1);
+            //cout << distances[i*size+j] << endl;
+        }
+
+    if (maxsim>=threshold) {
+        //Affichage du nb de clusters
+        cout << size << endl;
+        swap(wordsClusters[j], wordsClusters[size-1]);
+        for (int k=0; k<wordsClusters[size-1].size();k++)
+            wordsClusters.at(i).push_back(wordsClusters[size-1].at(k));
+        wordsClusters.pop_back();
+        this->hierarchicClustering(threshold);
+    }
+    else {
+        for (int k=0; k<size;k++) {
+            if (wordsClusters[k].size()>=2) {
+                for (int l=0; l<wordsClusters[k].size();l++)
+                    cout << wordsClusters[k][l] << " ; ";
+                cout << endl;
+                cout << endl;
+            }
+        }
+        cout << "Fini" << endl;
+    }
 }
