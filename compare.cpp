@@ -23,7 +23,8 @@ map< pair<string,string>,double > DTWCompare(Text txt1, Text txt2, vector< pair<
         vector<double> rec1 = txt1.getWordRecency()[compare[i].first];
         vector<double> rec2 = txt2.getWordRecency()[compare[i].second];
         dtwCompare[compare[i]]=DTW(rec1,rec2);
-        cout << compare[i].first << " ; " << compare[i].second << " : " << dtwCompare[compare[i]] << endl;
+        if (dtwCompare[compare[i]]<0.1)
+            cout << compare[i].first << " ; " << compare[i].second << " : " << dtwCompare[compare[i]] << endl;
     }
 
     return dtwCompare;

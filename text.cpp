@@ -121,7 +121,7 @@ Text::Text(char* filename)
 
     //Construct oftenUsedWords
     for (map<string, vector<int> >::iterator it = wordSectionIndices.begin(); it!=wordSectionIndices.end(); ++it)
-        if (it->second.size()>=nbSections/4)
+        if (it->second.size()>=3)//nbSections/20) //>3 et dtwCompare < 0.1
             oftenUsedWords.push_back(it->first);
 
     //Construct wordFrequency
