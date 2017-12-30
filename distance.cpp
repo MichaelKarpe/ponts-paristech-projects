@@ -61,7 +61,7 @@ double jaro_distance(const std::string s1, const std::string s2) {
     return (m / l1 + m / l2 + (m - t) / m) / 3.0;
 }
 
-double jaro_winkler_distance(string str1, string str2, double coeff_winkler = 0.1) {
+double jaro_winkler_distance(const string str1, const string str2, const double coeff_winkler) {
     double d_j = jaro_distance(str1, str2);
     int prefix = 0;
     while (prefix < min(str1.size(), str2.size()) && prefix < 4 && str1[prefix] == str2[prefix])
@@ -69,7 +69,25 @@ double jaro_winkler_distance(string str1, string str2, double coeff_winkler = 0.
     return (d_j + prefix * coeff_winkler * (1-d_j));
 }
 
-double levenshtein_distance(string str1, string str2) {
+double DTW(const vector<double> v1, const vector<double> v2) {
+    int s1 = v1.size(), s2=v2.size();
+    double* dtw = new double[(s1+1)*(s2+1)];
+    dtw[0]=0;
+    for (unsigned int i = 0; i < s1; i++)
+        dtw[(i+1)*(s2+1)+0]=1;
+    for (unsigned int j = 0; j < s2; j++)
+        dtw[0*(s2+1)+(j+1)]=1;
+
+    for (unsigned int i = 0; i < s1; i++)
+        for (unsigned int j = 0; j < s2; j++)
+            dtw[(i+1)*(s2+1)+(j+1)] = abs(v1[i]-v2[j]) + min(min(dtw[i*(s2+1)+(j+1)], dtw[(i+1)*(s2+1)+j]), dtw[i*(s2+1)+j]);
+
+    return dtw[s1*(s2+1)+s2];
+}
+
+
+// Levenshtein distance (useless?)
+double levenshtein_distance(const string str1, const string str2) {
     int len1 = str1.size(), len2 = str2.size();
     vector<unsigned int> col(len2+1), prevCol(len2+1);
 
@@ -84,20 +102,4 @@ double levenshtein_distance(string str1, string str2) {
         col.swap(prevCol);
     }
     return prevCol[len2]; //Sans normalisation
-}
-
-double DTW(vector<double> v1, vector<double> v2) {
-    int s1 = v1.size(), s2=v2.size();
-    double* dtw = new double[(s1+1)*(s2+1)];
-    dtw[0]=0;
-    for (unsigned int i = 0; i < s1; i++)
-        dtw[(i+1)*(s2+1)+0]=1;
-    for (unsigned int j = 0; j < s2; j++)
-        dtw[0*(s2+1)+(j+1)]=1;
-
-    for (unsigned int i = 0; i < s1; i++)
-        for (unsigned int j = 0; j < s2; j++)
-            dtw[(i+1)*(s2+1)+(j+1)] = abs(v1[i]-v2[j]) + min(min(dtw[i*(s2+1)+(j+1)], dtw[(i+1)*(s2+1)+j]), dtw[i*(s2+1)+j]);
-
-    return dtw[s1*(s2+1)+s2];
 }

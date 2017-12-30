@@ -5,24 +5,28 @@ Word::Word()
 
 }
 
-//Assessors
-
 Word::Word(string ncontent, int nindice) {
     content=ncontent;
     indice=nindice;
 }
 
-string Word::getContent() {
+///Assessors
+
+//Get
+
+string Word::getContent() const {
     return content;
 }
 
-int Word::getIndice() {
+int Word::getIndice() const {
     return indice;
 }
 
-int Word::getSize() {
+int Word::getSize() const {
     return content.length();
 }
+
+//Set
 
 void Word::setContent(string ncontent) {
     content=ncontent;

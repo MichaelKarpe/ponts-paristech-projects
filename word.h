@@ -20,15 +20,14 @@ class Word {
 
 public:
     Word();
-    string getContent();
-    int getIndice();
-    int getSection();
-    int getSize();
+    Word(string ncontent, int nindice);
+
+    string getContent() const;
+    int getIndice() const;
+    int getSize() const;
 
     void setContent(string ncontent);
     void setIndice(int nindice);
-    void setSection(int nsection);
-
-    Word(string ncontent, int nindice);
 };
+
 //#endif // WORD_H

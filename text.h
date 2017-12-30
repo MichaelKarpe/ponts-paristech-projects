@@ -44,36 +44,36 @@ class Text
 
     //Methods for constructor
     void addWordToTables(Word &currentWord, int &currentSection);
-    void addCharToCleanedText(char character, int &currentSection);
-    void addSpaceToCleanedText(string line, int indChar, int &currentSection);
+    void addCharToCleanedText(const char character, int &currentSection);
+    void addSpaceToCleanedText(const string line, const int indChar, int &currentSection);
     void changeSection(int &currentSection);
 
 public:
     //Constructor
-    Text(char *filename);
+    Text(char *filename, double thresholdOftenUsedWords);
 
     //Assessors
     //Get
-    string getContent();
+    string getContent() const;
 
-    int getNbSections();
-    int getNbSpaces();
-    int getNbWords();
-    int getSizeText();
-    int getSizeCleanedText();
-    bool getIsLinguaContinua();
+    int getNbSections() const;
+    int getNbSpaces() const;
+    int getNbWords() const;
+    int getSizeText() const;
+    int getSizeCleanedText() const;
+    bool getIsLinguaContinua() const;
 
-    map<int, int> getSizeSections();
-    map <int, string> getSectionContent();
+    map<int, int> getSizeSections() const;
+    map <int, string> getSectionContent() const;
 
-    vector<string> getWords();
-    vector< vector<string> > getWordsClusters();
-    vector<string> getOftenUsedWords();
+    vector<string> getWords() const;
+    vector< vector<string> > &getWordsClusters();
+    vector<string> getOftenUsedWords() const;
 
-    map<string, vector<int> > getWordIndices();
-    map<string, vector<double> > getWordPosition();
-    map<string, vector<double> > getWordRecency();
-    map<string, vector<int> > getWordSectionIndices();
+    map<string, vector<int> > getWordIndices() const;
+    map<string, vector<double> > getWordPosition() const;
+    map<string, vector<double> > getWordRecency() const;
+    map<string, vector<int> > getWordSectionIndices() const;
 
     //Set
 //    void setWordIndices();
@@ -82,9 +82,8 @@ public:
 //    void setWordSectionIndices();
 //    void setSectionContent();
 
-    void hierarchicClustering(double threshold);
 };
 
-double jaro_winkler_distance(string str1, string str2, double coeff_winkler);
+double jaro_winkler_distance(const string str1, const string str2, const double coeff_winkler);
 
 //#endif // TEXT_H

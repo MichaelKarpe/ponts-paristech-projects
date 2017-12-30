@@ -10,13 +10,12 @@ public:
     Distance();
 };
 
-double jaro_distance(string str1, string str2);
+double jaro_distance(const string str1, const string str2);
 
-double jaro_winkler_distance(string str1, string str2, double coeff_winkler);
+double jaro_winkler_distance(const string str1, const string str2, const double coeff_winkler = 0.1);
 
-double levenshtein_distance(string str1, string str2);
+double DTW(const vector<double> v1, const vector<double> v2);
 
-double DTW(vector<double> v1, vector<double> v2);
-
+double levenshtein_distance(const string str1, const string str2);
 
 #endif // DISTANCE_H

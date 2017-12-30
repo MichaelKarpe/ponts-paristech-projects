@@ -20,7 +20,7 @@ void Text::addWordToTables(Word &currentWord, int &currentSection) {
     nbWords+=1;
 }
 
-void Text::addCharToCleanedText(char character, int &currentSection) {
+void Text::addCharToCleanedText(const char character, int &currentSection) {
     cleanedContent+=character;
     if (character!='\n') {
         sizeCleanedText+=1;
@@ -33,7 +33,7 @@ void Text::addCharToCleanedText(char character, int &currentSection) {
     }
 }
 
-void Text::addSpaceToCleanedText(string line, int indChar, int &currentSection) {
+void Text::addSpaceToCleanedText(const string line, const int indChar, int &currentSection) {
     if (line[indChar+1]!='\n') {
         addCharToCleanedText(' ', currentSection);
         nbSpaces+=1;
@@ -48,7 +48,7 @@ void Text::changeSection(int &currentSection) {
 
 //Constructor
 
-Text::Text(char* filename)
+Text::Text(char* filename, double thresholdOftenUsedWords)
 {
     //Initialization
     nbSections = 0;
@@ -57,10 +57,10 @@ Text::Text(char* filename)
     sizeText = 0;
     sizeCleanedText = 0;
 
-    char punctuationtable[6] = {'.' , ',' , ';' , '\'' , '(' , ')'};
-    punctuation.insert(punctuation.end(), punctuationtable, punctuationtable+6);
+    char punctuationtable[7] = {'.' , ',' , ';' , '\'' , '(' , ')', '-'};
+    punctuation.insert(punctuation.end(), punctuationtable, punctuationtable+7);
 
-    //Ne fonctionne pas si on met filename...
+    //Open file
     ifstream filefirst(filename, ios::in);  // on ouvre en lecture // ATTENTION : fichier doit être dans dossier build !
     if(filefirst) {
         char character;
@@ -70,8 +70,9 @@ Text::Text(char* filename)
 
     filefirst.close();
 
-    ifstream file(filename, ios::in);
+    ifstream file(filename, ios::in); //A améliorer
 
+    //Main loop for cleaning text + construct some tables
     int currentSection = 0;
     if(file) {
         string line;
@@ -121,7 +122,7 @@ Text::Text(char* filename)
 
     //Construct oftenUsedWords
     for (map<string, vector<int> >::iterator it = wordSectionIndices.begin(); it!=wordSectionIndices.end(); ++it)
-        if (it->second.size()>=3)//nbSections/20) //>3 et dtwCompare < 0.1
+        if (it->second.size()>=thresholdOftenUsedWords*nbSections)//nbSections/20) //>3 et dtwCompare < 0.1
             oftenUsedWords.push_back(it->first);
 
     //Construct wordFrequency
@@ -153,111 +154,66 @@ Text::Text(char* filename)
 
 //Get
 
-string Text::getContent() {
+string Text::getContent() const {
     return content;
 }
 
-int Text::getNbSections() {
+int Text::getNbSections() const {
     return nbSections;
 }
 
-int Text::getNbSpaces() {
+int Text::getNbSpaces() const {
     return nbSpaces;
 }
 
-int Text::getNbWords() {
+int Text::getNbWords() const {
     return nbWords;
 }
 
-int Text::getSizeText() {
+int Text::getSizeText() const {
     return sizeText;
 }
 
-int Text::getSizeCleanedText() {
+int Text::getSizeCleanedText() const {
     return sizeCleanedText;
 }
 
-bool Text::getIsLinguaContinua() {
+bool Text::getIsLinguaContinua() const {
     return isLinguaContinua;
 }
 
-vector<string> Text::getWords() {
+vector<string> Text::getWords() const {
     return words;
 }
 
-vector< vector<string> > Text::getWordsClusters() {
+vector<vector<string> > &Text::getWordsClusters() {
     return wordsClusters;
 }
 
-vector<string> Text::getOftenUsedWords() {
+vector<string> Text::getOftenUsedWords() const {
     return oftenUsedWords;
 }
 
-map<int, int> Text::getSizeSections() {
+map<int, int> Text::getSizeSections() const {
     return sizeSections;
 }
 
-map<string, vector<int> > Text::getWordIndices() {
+map<string, vector<int> > Text::getWordIndices() const {
     return wordIndices;
 }
 
-map<string, vector<double> > Text::getWordPosition() {
+map<string, vector<double> > Text::getWordPosition() const {
     return wordPosition;
 }
 
-map<string, vector<double> > Text::getWordRecency() {
+map<string, vector<double> > Text::getWordRecency() const {
     return wordRecency;
 }
 
-map<string, vector<int> > Text::getWordSectionIndices() {
+map<string, vector<int> > Text::getWordSectionIndices() const {
     return wordSectionIndices;
 }
 
-map <int, string> Text::getSectionContent() {
+map <int, string> Text::getSectionContent() const {
     return sectionContent;
-}
-
-
-
-///Clustering methods
-
-void Text::hierarchicClustering(double threshold = 0.8) {
-    int size = wordsClusters.size();
-    //double* distances = new double[size*size];
-    double maxsim = 0;
-    int i = 0, j = 0;
-    for (int k=0;k<size;k++)
-        for (int l=k+1;l<size;l++) {
-            double dist = 0;
-            for (int m=0;m<wordsClusters[k].size();m++)
-                for (int n=0;n<wordsClusters[l].size();n++)
-                    dist+=jaro_winkler_distance(wordsClusters[k][m], wordsClusters[l][n], 0.1);
-            dist=dist/(wordsClusters[k].size()*wordsClusters[l].size());
-            if (dist>maxsim) {
-                maxsim = dist; i = k; j = l;
-            }
-            //distances[i*size+j]=jaro_winkler_distance(wordsClusters[i][0], wordsClusters[j][0], 0.1);
-            //cout << distances[i*size+j] << endl;
-        }
-
-    if (maxsim>=threshold) {
-        //Affichage du nb de clusters
-        cout << size << endl;
-        swap(wordsClusters[j], wordsClusters[size-1]);
-        for (int k=0; k<wordsClusters[size-1].size();k++)
-            wordsClusters.at(i).push_back(wordsClusters[size-1].at(k));
-        wordsClusters.pop_back();
-        this->hierarchicClustering(threshold);
-    }
-    else {
-        for (int k=0; k<size;k++) {
-            if (wordsClusters[k].size()>=2) {
-                for (int l=0; l<wordsClusters[k].size();l++)
-                    cout << wordsClusters[k][l] << " ; ";
-                cout << endl;
-                cout << endl;
-            }
-        }
-        cout << "Fini" << endl;
-    }
 }

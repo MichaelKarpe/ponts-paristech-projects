@@ -12,4 +12,6 @@ public:
     Clustering();
 };
 
+void hierarchicClustering(Text &txt, const double threshold);
+
 //#endif // CLUSTERING_H
