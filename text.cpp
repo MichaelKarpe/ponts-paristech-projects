@@ -147,6 +147,12 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
         wordRecency[it->first].push_back(1-temp);
     }
 
+    //Normalization of sectionPosition
+    double somme = 0;
+    for (map<int,int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it) {
+        sectionPosition[it->first] = somme/sizeCleanedText;
+        somme += it->second;
+    }
 }
 
 
@@ -196,6 +202,10 @@ vector<string> Text::getOftenUsedWords() const {
 
 map<int, int> Text::getSizeSections() const {
     return sizeSections;
+}
+
+map<int, double> Text::getSectionPosition() const {
+    return sectionPosition;
 }
 
 map<string, vector<int> > Text::getWordIndices() const {

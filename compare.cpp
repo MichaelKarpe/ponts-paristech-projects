@@ -96,3 +96,5 @@ map< pair< vector<string>,vector<string> >,double > JRCompareClusters(Text txt1,
 
 
 }
+
+

@@ -7,7 +7,7 @@ Clustering::Clustering()
 
 ///Clustering methods
 
-void hierarchicClustering(Text &txt, const double threshold = 0.8) {
+void hierarchicClustering(Text &txt, const double threshold) {
     int size = txt.getWordsClusters().size();
     //double* distances = new double[size*size];
     double maxsim = 0;
@@ -19,12 +19,14 @@ void hierarchicClustering(Text &txt, const double threshold = 0.8) {
             double dist = 0;
             for (int m=0;m<txt.getWordsClusters()[k].size();m++)
                 for (int n=0;n<txt.getWordsClusters()[l].size();n++)
-                    dist+=jaro_winkler_distance(txt.getWordsClusters()[k][m], txt.getWordsClusters()[l][n], 0.1);
-            dist=dist/(txt.getWordsClusters()[k].size()*txt.getWordsClusters()[l].size());
-            if (dist>maxsim) {
+                    dist+=jaro_winkler_distance(txt.getWordsClusters()[k][m], txt.getWordsClusters()[l][n]);
+            double size1 = txt.getWordsClusters()[k].size();
+            double size2 = txt.getWordsClusters()[l].size();
+            dist = dist / (size1 * size2); // Voir Warp distance plutôt
+            if (dist > maxsim) {
                 maxsim = dist; i = k; j = l;
             }
-            //distances[i*size+j]=jaro_winkler_distance(txt.getWordsClusters()[i][0], txt.getWordsClusters()[j][0], 0.1);
+            //distances[i*size+j]=jaro_winkler_distance(txt.getWordsClusters()[i][0], txt.getWordsClusters()[j][0]);
             //cout << distances[i*size+j] << endl;
         }
 

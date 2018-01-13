@@ -57,5 +57,12 @@ Tests::Tests(Text txt)
 //        cout << endl;
 //    }
 //    cout << endl;
+//    cout << "Word Recency: ";
+//    for (map<int, double >::iterator it = txt.getSectionPosition().begin(); it!=txt.getSectionPosition().end(); ++it) {
+//        cout << it->first << " : " << it->second << " ; ";
+
+//        cout << endl;
+//        }
+//    cout<<txt.getSectionPosition().size();
 }
 

@@ -32,7 +32,7 @@ double jaro_distance(const std::string s1, const std::string s2) {
     bool s2_matches[l2];
     std::fill(s1_matches, s1_matches + l1, false);
     std::fill(s2_matches, s2_matches + l2, false);
-    uint matches = 0;
+    unsigned int matches = 0;
     for (int i = 0; i < l1; i++)
     {
         const int end = std::min(i + match_distance + 1, l2);
@@ -61,7 +61,7 @@ double jaro_distance(const std::string s1, const std::string s2) {
     return (m / l1 + m / l2 + (m - t) / m) / 3.0;
 }
 
-double jaro_winkler_distance(const string str1, const string str2, const double coeff_winkler) {
+double jaro_winkler_distance(const string str1, const string str2) {
     double d_j = jaro_distance(str1, str2);
     int prefix = 0;
     while (prefix < min(str1.size(), str2.size()) && prefix < 4 && str1[prefix] == str2[prefix])

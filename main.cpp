@@ -8,7 +8,7 @@ using namespace std;
 //#include "text.h"
 //#include "distance.h"
 
-#include "compare.h"
+#include "align.h"
 #include "tests.h"
 
 int main()
@@ -22,13 +22,13 @@ int main()
     Text udhr_en("udhr_en.txt",3./88);
     Tests tests_en(udhr_en);
 
-//    Text udhr_es("udhr_es.txt");
+//    Text udhr_es("udhr_es.txt",3/88.);
 //    Tests tests_es(udhr_es);
 
 //    Text udhr_de("udhr_de.txt");
 //    Tests tests_de(udhr_de);
 
-//    Text udhr_ru("udhr_ru.txt");
+//    Text udhr_ru("udhr_ru.txt", 3/90.);
 //    Tests tests_ru(udhr_ru);
 
 //    Text udhr_ar("udhr_ar.txt");
@@ -38,13 +38,18 @@ int main()
 //    Text udhr_ch("udhr_ch.txt");
 //    Tests tests_ch(udhr_ch);
 
-    //vector< pair<string,string> > compare = compareOftenUsedWords(udhr_fr,udhr_en);
-    //map< pair<string,string>,double > dtwcompare = DTWCompare(udhr_fr,udhr_en,compare, 0.1);
+    vector< pair<string,string> > compare = compareOftenUsedWords(udhr_fr,udhr_en);
+    map< pair<string,string>,double > dtwcompare = DTWCompare(udhr_fr,udhr_en,compare, 0.1);
 
-    hierarchicClustering(udhr_fr,0.8);
-    hierarchicClustering(udhr_en,0.8);
+    // Paragraph alignment taking into account DTWDistance
+    cout << endl << "Alignement : " << endl;
+    alignSmart(udhr_fr, udhr_en,dtwcompare);
 
-    map< pair< vector<string>,vector<string> >,double > jrcompareclusters = JRCompareClusters(udhr_fr,udhr_en, 0.9); //JW distance
+    //hierarchicClustering(udhr_fr);
+    //hierarchicClustering(udhr_en);
+
+
+    //map< pair< vector<string>,vector<string> >,double > jrcompareclusters = JRCompareClusters(udhr_fr,udhr_en, 0.9); //JW distance
 
 
 

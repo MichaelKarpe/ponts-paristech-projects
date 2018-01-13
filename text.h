@@ -35,6 +35,7 @@ class Text
 
     map<int, int> sizeSections; // Dictionnaire : {indice section : taille de la section}
     map<int, string> sectionContent; // Dictionnaire : {indice section : texte de la section}
+    map<int, double> sectionPosition; // normalized positions of the sections
 
     map<string, vector<int> > wordIndices; // Dictionnaire {mot : [indice1, ..., indicen]}
     map<string, vector<double> > wordPosition; // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
@@ -49,31 +50,81 @@ class Text
     void changeSection(int &currentSection);
 
 public:
-    //Constructor
+    /**
+     * Constructor
+     * @param filename file name
+     */
     Text(char *filename, double thresholdOftenUsedWords);
 
     //Assessors
     //Get
+    /**
+     * @return the content of the text as a string
+     */
     string getContent() const;
-
+    /**
+     * @return the number of sections in the text
+     */
     int getNbSections() const;
+    /**
+     * @return the number of spaces in the text
+     */
     int getNbSpaces() const;
+    /**
+     * @return the number of words in the text
+     */
     int getNbWords() const;
+    /**
+     * @return the size of the text
+     */
     int getSizeText() const;
+    /**
+     * @return the size of the cleaned text
+     */
     int getSizeCleanedText() const;
+    /**
+     * @return false if there's spaces in the language else true
+     */
     bool getIsLinguaContinua() const;
-
+    /**
+     * @return the map of the section indexes with their size
+     */
     map<int, int> getSizeSections() const;
+    /**
+     * @return the map of the normalized positions of the sections
+     */
+    map<int, double> getSectionPosition() const;
+    /**
+     * @return the content of each section in a map
+     */
     map <int, string> getSectionContent() const;
-
+    /**
+     * @return the words of the text in a vector
+     */
     vector<string> getWords() const;
+    /**
+     * @return the cluster
+     */
     vector< vector<string> > &getWordsClusters();
     vector<string> getOftenUsedWords() const;
 
+    /**
+     * @return the vector of indexes of each word in a map
+     */
     map<string, vector<int> > getWordIndices() const;
+    /**
+     * @return the positions of each word in a map
+     */
     map<string, vector<double> > getWordPosition() const;
+    /**
+     * @return the recency of each word in a map
+     */
     map<string, vector<double> > getWordRecency() const;
+    /**
+     * @return the indexes of the sections in which a word is, in a map
+     */
     map<string, vector<int> > getWordSectionIndices() const;
+
 
     //Set
 //    void setWordIndices();
