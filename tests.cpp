@@ -2,6 +2,7 @@
 
 Tests::Tests(Text txt)
 {
+    cout << "About this text :" << endl;
     //cout << "Content: " << content << endl;
     //cout << "Cleaned Content: " << cleanedContent << endl;
     cout << "Number of sections: " << txt.getNbSections() << endl;
@@ -10,6 +11,7 @@ Tests::Tests(Text txt)
     cout << "Size of text: " << txt.getSizeText() << endl;
     cout << "Size of cleaned text: " << txt.getSizeCleanedText() << endl;
     cout << "Is lingua continua: " << txt.getIsLinguaContinua() << endl;
+    cout << endl;
 
 //    cout << "Size of sections: ";
 //    for (map<int, int>::iterator it = txt.getSizeSections().begin(); it!=txt.getSizeSections().end(); ++it)
