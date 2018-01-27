@@ -52,6 +52,7 @@ void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,strin
         }
     }
 
+    // DTW distance computed before is taken into account
     for (map< pair<string,string>, double>::const_iterator it=compare.begin();it!=compare.end();++it) {
         vector<int> word1Sections = txt1.getWordSectionIndices()[(it->first).first];
         vector<int> word2Sections = txt1.getWordSectionIndices()[(it->first).second];

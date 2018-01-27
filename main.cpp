@@ -23,7 +23,7 @@ int main()
     Text udhr1(filename[0],3./89);  //Seuil pour oftenUsedWords (mots présents dans 3 sections minimum)
     Tests tests1(udhr1);            //Comparer avec bcp présents dans un texte (mais par ex que dans 1 section) ?
 
-    Text udhr2(filename[3],3./88);
+    Text udhr2(filename[1],3./88);
     Tests tests2(udhr2);
 
     //Compare often used words: display couple of words with smallest DTW distance
@@ -31,6 +31,7 @@ int main()
     vector< pair<string,string> > compare = compareOftenUsedWords(udhr1,udhr2);
     map< pair<string,string>,double > dtwcompare = DTWCompare(udhr1,udhr2,compare, 0.1);
 
+    //map< pair<string,string>,double > dtwgroups = DTWGroups(udhr1,udhr2,dtwcompare);
     // Paragraph alignment taking into account DTWDistance
     cout << endl << "Alignement : " << endl;
     alignSmart(udhr1, udhr2,dtwcompare);

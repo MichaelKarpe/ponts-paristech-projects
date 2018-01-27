@@ -1,6 +1,4 @@
-#ifndef COMPARE_H
-#define COMPARE_H
-
+#pragma once
 #include "clustering.h"
 
 class Compare
@@ -9,7 +7,7 @@ public:
     Compare();
 };
 /**
- * Make pairs of words that could possibly match
+ * Make pairs of words that could possibly match (heuristically)
  * @param txt1 first text
  * @param txt2 second text
  * @return a vector of pairs of words
@@ -35,10 +33,5 @@ map< pair<string,string>,double > DTWCompare(const Text txt1, const Text txt2, c
  */
 map< pair< vector<string>,vector<string> >,double > JRCompareClusters(const Text txt1, const Text txt2, const double threshold);
 
-/**
- * Align the paragraphs of 2 texts by length
- * @param txt1 first text
- * @param txt2 second text
- * @return the alignment as a map
- */
-#endif // COMPARE_H
+// Adding groups of words in the dictionary
+map< pair<string,string>,double > DTWGroups(Text txt1, Text txt2, const map< pair<string,string>,double > &DTWcomp);
