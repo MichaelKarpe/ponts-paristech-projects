@@ -4,12 +4,8 @@ void alignByLength(const Text &txt1, const Text &txt2) {
     for (int i=0;i<txt1.getSectionPosition().size();i++) {
         for (int j=0;j<txt2.getSectionPosition().size();j++) {
             crossTable.push_back(abs(txt1.getSectionPosition()[i] - txt2.getSectionPosition()[j]));
-            //cout << txt1.getSectionPosition()[i] << endl;
         }
     }
-
-    //for (int i=0; i<crossTable.size(); i++)
-    //    cout << crossTable[i] << endl;
 
 
     // Optimal path computation on the crosstable
@@ -90,8 +86,6 @@ void alignByLength2(const Text &txt1, const Text &txt2) {
             perfectMatches.push_back(make_pair(i,crossTable2to1[i]));
 
     int ind1=perfectMatches[0].first, ind2=perfectMatches[0].second;
-    cout << ind1 << " ; " << ind2 << endl;
-    cout << "COUCOU" << endl;
     for (int i=1;i<perfectMatches.size();i++) {
         for (int j=ind1;j<perfectMatches[i].first;j++)
             cout << j << " ";
@@ -103,6 +97,7 @@ void alignByLength2(const Text &txt1, const Text &txt2) {
         ind2=perfectMatches[i].second;
     }
 }
+
 
 
 void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,string> , double > &compare) {
@@ -151,8 +146,6 @@ void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,strin
                 I++; J++;
                 cout << str1 << " : " << str2 << endl;
                 str1 = to_string(I);str2 = to_string(J);
-                //cout << txt1.getSectionContent()[I] << "COUCOU" << endl;
-                //cout << txt2.getSectionContent()[J] << endl;
             }
             else {
                 I++;

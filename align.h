@@ -8,7 +8,6 @@
  * @param txt2 second text to compare
  */
 void alignByLength(const Text &txt1, const Text &txt2);
-void alignByLength2(const Text &txt1, const Text &txt2);
 /**
  * @brief print an alignment of the 2 texts considering the DTW distance
  * @param txt1 first text to compare
@@ -16,3 +15,7 @@ void alignByLength2(const Text &txt1, const Text &txt2);
  * @param compare dtw map computed with DTWCompare
  */
 void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,string> , double > &compare);
+
+vector<int> makeCrossTable(const Text &txt1, const Text &txt2);
+
+void alignByLength2(const Text &txt1, const Text &txt2);

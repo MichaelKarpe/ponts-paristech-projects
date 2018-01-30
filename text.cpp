@@ -2,14 +2,6 @@
 
 //Methods for constructor
 
-/**
-
-
-
-/**
- * Method used in constructor
- * Called when cursor at the end of the word,
- */
 void Text::addWordToTables(Word &currentWord, int &currentSection) {
     wordIndices[currentWord.getContent()].push_back(currentWord.getIndice());
     if (wordIndices[currentWord.getContent()].size()==1) {
@@ -51,7 +43,6 @@ void Text::addSpaceToCleanedText(const string line, const int indChar, int &curr
 void Text::changeSection(int &currentSection) {
     currentSection+=1;
     nbSections+=1;
-    //cout << currentSection << endl;
 }
 
 
@@ -158,10 +149,9 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
 
     //Normalization of sectionPosition
     double somme = 0;
-    //for (map<int,int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it) {
-    for (int i=0; i<sizeSections.size();i++) {
-        sectionPosition[i] = somme/sizeCleanedText;
-        somme += sizeSections[i];
+    for (map<int,int>::iterator it = sizeSections.begin(); it!=sizeSections.end(); ++it) {
+        sectionPosition[it->first] = somme/sizeCleanedText;
+        somme += it->second;
     }
 }
 
