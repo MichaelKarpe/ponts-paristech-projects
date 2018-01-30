@@ -4,8 +4,12 @@ void alignByLength(const Text &txt1, const Text &txt2) {
     for (int i=0;i<txt1.getSectionPosition().size();i++) {
         for (int j=0;j<txt2.getSectionPosition().size();j++) {
             crossTable.push_back(abs(txt1.getSectionPosition()[i] - txt2.getSectionPosition()[j]));
+            //cout << txt1.getSectionPosition()[i] << endl;
         }
     }
+
+    //for (int i=0; i<crossTable.size(); i++)
+    //    cout << crossTable[i] << endl;
 
 
     // Optimal path computation on the crosstable
@@ -43,6 +47,63 @@ void alignByLength(const Text &txt1, const Text &txt2) {
     }
     cout << str1 << " : " << str2 << endl;
 }
+
+vector<int> makeCrossTable(const Text &txt1, const Text &txt2) {
+    vector< int > crossTable;
+    crossTable.push_back(0);
+    double s1=txt2.getSectionPosition()[0], s2=txt2.getSectionPosition()[1];
+    int n=2;
+    int i=0;
+
+    while (i<txt1.getSectionPosition().size() && n-1<txt2.getSectionPosition().size()) {
+        if (abs(txt1.getSectionPosition()[i]-s1)<abs(txt1.getSectionPosition()[i]-s2)) { //plus près de s1 que de s2
+            crossTable.push_back(n-1);
+            i++;
+        }
+        else {
+            n++;
+            if (n-1!=txt2.getSectionPosition().size()) {
+                s1=txt2.getSectionPosition()[n-2];
+                s2=txt2.getSectionPosition()[n-1];
+            }
+        }
+    }
+
+    //BRICOLAGE, pb de gestion des indices à la fin
+    while (i<txt1.getSectionPosition().size()) {
+        crossTable.push_back(n-1);
+        i++;
+    }
+
+//    for (int i=0; i< crossTable.size(); i++)
+//        cout << i << " : " << crossTable[i] << endl;
+
+    return crossTable;
+}
+
+void alignByLength2(const Text &txt1, const Text &txt2) {
+    vector< int > crossTable1to2 = makeCrossTable(txt1,txt2);
+    vector< int > crossTable2to1 = makeCrossTable(txt2,txt1);
+    vector< pair<int, int> > perfectMatches;
+    for (int i=1;i<crossTable2to1.size();i++)
+        if (i==crossTable1to2[crossTable2to1[i]])
+            perfectMatches.push_back(make_pair(i,crossTable2to1[i]));
+
+    int ind1=perfectMatches[0].first, ind2=perfectMatches[0].second;
+    cout << ind1 << " ; " << ind2 << endl;
+    cout << "COUCOU" << endl;
+    for (int i=1;i<perfectMatches.size();i++) {
+        for (int j=ind1;j<perfectMatches[i].first;j++)
+            cout << j << " ";
+        cout << " : ";
+        for (int j=ind2;j<perfectMatches[i].second;j++)
+            cout << j << " ";
+        cout << endl;
+        ind1=perfectMatches[i].first;
+        ind2=perfectMatches[i].second;
+    }
+}
+
 
 void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,string> , double > &compare) {
     vector<double> crossTable;
@@ -90,6 +151,8 @@ void alignSmart(const Text &txt1, const Text &txt2, const map< pair<string,strin
                 I++; J++;
                 cout << str1 << " : " << str2 << endl;
                 str1 = to_string(I);str2 = to_string(J);
+                //cout << txt1.getSectionContent()[I] << "COUCOU" << endl;
+                //cout << txt2.getSectionContent()[J] << endl;
             }
             else {
                 I++;

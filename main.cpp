@@ -11,8 +11,6 @@ using namespace std;
 #include "align.h"
 #include "tests.h"
 
-
-
 int main()
 {
     //Attention : le cas "Lingua Continua" n'est pas traité !
@@ -28,13 +26,13 @@ int main()
 
     //Compare often used words: display couple of words with smallest DTW distance
     cout << "Couples of matching words :" << endl;
-    vector< pair<string,string> > compare = compareOftenUsedWords(udhr1,udhr2);
-    map< pair<string,string>,double > dtwcompare = DTWCompare(udhr1,udhr2,compare, 0.1);
+    //vector< pair<string,string> > compare = compareOftenUsedWords(udhr1,udhr2);
+    //map< pair<string,string>,double > dtwcompare = DTWCompare(udhr1,udhr2,compare, 0.1);
 
     //map< pair<string,string>,double > dtwgroups = DTWGroups(udhr1,udhr2,dtwcompare);
     // Paragraph alignment taking into account DTWDistance
     cout << endl << "Alignement : " << endl;
-    alignSmart(udhr1, udhr2,dtwcompare);
+    alignByLength2(udhr1, udhr2);
 
     //hierarchicClustering(udhr_fr);
     //hierarchicClustering(udhr_en);

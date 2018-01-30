@@ -11,11 +11,28 @@ Tests::Tests(Text txt)
     cout << "Size of text: " << txt.getSizeText() << endl;
     cout << "Size of cleaned text: " << txt.getSizeCleanedText() << endl;
     cout << "Is lingua continua: " << txt.getIsLinguaContinua() << endl;
+
     cout << endl;
+
+//    cout << "Section positions: ";
+//    for (map<int, double>::iterator it = txt.getSectionPosition().begin(); it!=txt.getSectionPosition().end(); ++it)
+//        cout << it->second << " ; " ;
+//    cout << endl;
+
 
 //    cout << "Size of sections: ";
 //    for (map<int, int>::iterator it = txt.getSizeSections().begin(); it!=txt.getSizeSections().end(); ++it)
 //        cout << it->second << " ; " ;
+//    cout << endl;
+
+    cout << "TEST: ";
+    for (int i=0; i<txt.getSizeSections().size();i++)
+        cout << txt.getSizeSections()[i] << " ; " ;
+    cout << endl;
+
+//    cout << "TEST BIS: ";
+//    for (int i=0; i<txt.getSectionPosition().size();i++)
+//        cout << txt.getSectionPosition()[i] << " ; " ;
 //    cout << endl;
 
 //    cout << "Words: ";
