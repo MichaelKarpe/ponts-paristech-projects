@@ -10,12 +10,10 @@
 #include <cctype> //tolower
 #include <algorithm> //find
 #include <cmath> //abs
+#include <map>
 using namespace std;
 
-#include <map>
-
 #include "constants.h"
-
 
 class Word {
     string content;
@@ -55,5 +53,3 @@ public:
      */
     void setIndice(int nindice);
 };
-
-//#endif // WORD_H

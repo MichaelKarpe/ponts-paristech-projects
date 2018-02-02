@@ -1,28 +1,5 @@
 #include "distance.h"
 
-Distance::Distance()
-{
-
-}
-
-//Distances
-
-/*double jaro_distance(string str1, string str2) {
-    int s1 = str1.size(), s2=str2.size();
-    int maxSeparation = max(s1, s2)/2-1; //max(max(s1, s2)/2-1, 0);
-    double transpositions = 0, match = 0;
-    for (int i=0;i<s1;i++)
-        for (int j=0;j<s2;j++)
-            if (str1[i]==str2[j] && abs(i-j)<=maxSeparation)
-                match+=1;
-    transpositions = transpositions/2.; //Pas encore ça
-    //cout << transpositions << endl;
-    if (match==0)
-        return 0;
-    else
-        return (match/double(s1) + match/double(s2) + (match-transpositions)/match)/3.;
-}*/
-
 double jaro_distance(const std::string s1, const std::string s2) {
     const int l1 = s1.length(), l2 = s2.length();
     if (l1 == 0)
@@ -83,23 +60,4 @@ double DTW(const vector<double> v1, const vector<double> v2) {
             dtw[(i+1)*(s2+1)+(j+1)] = abs(v1[i]-v2[j]) + min(min(dtw[i*(s2+1)+(j+1)], dtw[(i+1)*(s2+1)+j]), dtw[i*(s2+1)+j]);
 
     return dtw[s1*(s2+1)+s2];
-}
-
-
-// Levenshtein distance (useless?)
-double levenshtein_distance(const string str1, const string str2) {
-    int len1 = str1.size(), len2 = str2.size();
-    vector<unsigned int> col(len2+1), prevCol(len2+1);
-
-    for (unsigned int i = 0; i < prevCol.size(); i++)
-        prevCol[i] = i;
-    for (unsigned int i = 0; i < len1; i++) {
-        col[0] = i+1;
-        for (unsigned int j = 0; j < len2; j++)
-                        // note that std::min({arg1, arg2, arg3}) works only in C++11,
-                        // for C++98 use std::min(std::min(arg1, arg2), arg3)
-            col[j+1] = min( min(prevCol[1 + j] + 1, col[j] + 1), prevCol[j] + (str1[i]==str2[j] ? 0 : 1) );
-        col.swap(prevCol);
-    }
-    return prevCol[len2]; //Sans normalisation
 }

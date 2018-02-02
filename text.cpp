@@ -2,8 +2,14 @@
 
 //Methods for constructor
 
+/**
+ * @brief When word is detected, add currentWord to the different tables
+ * @param currentWord word to add
+ * @param currentSection number of current section in the text
+ */
 void Text::addWordToTables(Word &currentWord, int &currentSection) {
     wordIndices[currentWord.getContent()].push_back(currentWord.getIndice());
+    //If currentWord already in table, put indices of the word in a vector
     if (wordIndices[currentWord.getContent()].size()==1) {
         words.push_back(currentWord.getContent());
         vector<string> cluster;
@@ -11,7 +17,6 @@ void Text::addWordToTables(Word &currentWord, int &currentSection) {
         wordsClusters.push_back(cluster);
     }
     wordPosition[currentWord.getContent()].push_back(sizeCleanedText-currentWord.getSize());
-    //cout << sizeCleanedText-currentWord.getSize() << endl;
     if (wordSectionIndices[currentWord.getContent()].empty() || wordSectionIndices[currentWord.getContent()].back()!=currentSection)
         wordSectionIndices[currentWord.getContent()].push_back(currentSection);
 
@@ -20,19 +25,32 @@ void Text::addWordToTables(Word &currentWord, int &currentSection) {
     nbWords+=1;
 }
 
+/**
+ * @brief Add character to the cleanedContent
+ * @param character the character to add
+ * @param currentSection number of current section in the text
+ */
 void Text::addCharToCleanedText(const char character, int &currentSection) {
     cleanedContent+=character;
+    //If newline character, change section
     if (character!='\n') {
         sizeCleanedText+=1;
         sizeSections[currentSection]+=1;
         sectionContent[currentSection]+=character;
     }
-    if(int(character)<0 && int(character)!=-61) { //si accent : double caractère avec premier tq int = -61
+    //If accented character, it is composed with two characters and the first is such that int(firstcharacter)=-61
+    if(int(character)<0 && int(character)!=-61) {
         sizeCleanedText-=1;
         sizeSections[currentSection]-=1;
     }
 }
 
+/**
+ * @brief Add space character to cleanedContent
+ * @param line content of the current line
+ * @param indChar indice of the space character
+ * @param currentSection number of current section in the text
+ */
 void Text::addSpaceToCleanedText(const string line, const int indChar, int &currentSection) {
     if (line[indChar+1]!='\n') {
         addCharToCleanedText(' ', currentSection);
@@ -40,14 +58,21 @@ void Text::addSpaceToCleanedText(const string line, const int indChar, int &curr
     }
 }
 
+/**
+ * @brief Change section
+ * @param currentSection number of current section in the text
+ */
 void Text::changeSection(int &currentSection) {
     currentSection+=1;
     nbSections+=1;
 }
 
 
-//Constructor
-
+/**
+ * @brief Constructor: reads the text, cleans it and creates hash tables
+ * @param filename name of the file
+ * @param thresholdOftenUsedWords threshold between 0 and 1, word considered as often used if over it
+ */
 Text::Text(char* filename, double thresholdOftenUsedWords)
 {
     //Initialization
@@ -61,18 +86,18 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
     punctuation.insert(punctuation.end(), punctuationtable, punctuationtable+7);
 
     //Open file
-    ifstream filefirst(filename, ios::in);  // on ouvre en lecture // ATTENTION : fichier doit être dans dossier build !
+    //WARNING : files to open must be in build file !
+    ifstream filefirst(filename, ios::in);
     if(filefirst) {
         char character;
         while(filefirst.get(character))
             content+=character;
     }
-
     filefirst.close();
 
-    ifstream file(filename, ios::in); //A améliorer
+    ifstream file(filename, ios::in);
 
-    //Main loop for cleaning text + construct some tables
+    //Main loop for cleaning text and constructing hash tables
     int currentSection = 0;
     if(file) {
         string line;
@@ -84,6 +109,7 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
             for (int indChar=0;indChar<line.size();indChar++) {
                 char character = line[indChar];
 
+                //If space character
                 if (character==' ') {
                     if (*cleanedContent.rbegin()!=' ' && *cleanedContent.rbegin()!='\n') { //cleanedContent.back() seulement pour C++11
                         addWordToTables(currentWord, currentSection);
@@ -91,6 +117,7 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
                     }
                 }
 
+                //If newline character
                 else if (character=='\n') {
                     if (*cleanedContent.rbegin()!='\n') {
                         addCharToCleanedText(character, currentSection);
@@ -100,41 +127,44 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
                     }
                 }
 
+                //If other character
                 else {
-                    if (find(punctuation.begin(), punctuation.end(), character) != punctuation.end()) { //character in punctuation
+                    //If punctuation character
+                    if (find(punctuation.begin(), punctuation.end(), character) != punctuation.end()) {
                         if (*cleanedContent.rbegin()!=' ' && *cleanedContent.rbegin()!='\n')
-                            addSpaceToCleanedText(line, indChar, currentSection);
+                            addSpaceToCleanedText(line, indChar, currentSection); //Replace it by space character
                         if (line[indChar-1]!=' ' && indChar!=0)
                             addWordToTables(currentWord, currentSection);
                     }
+                    //If alphabetical character
                     else {
                         currentWord.setContent(currentWord.getContent()+char(tolower(character)));
                         addCharToCleanedText(char(tolower(character)), currentSection);
                     }
                 }
                 sizeText+=1;
-
             }
         }
     }
 
+    //LinguaContinua boolean
     isLinguaContinua = double(nbSpaces)/double(sizeCleanedText)<0.1;
 
-    //Construct oftenUsedWords
+    //Construct oftenUsedWords table
     for (map<string, vector<int> >::iterator it = wordSectionIndices.begin(); it!=wordSectionIndices.end(); ++it)
-        if (it->second.size()>=thresholdOftenUsedWords*nbSections)//nbSections/20) //>3 et dtwCompare < 0.1
+        if (it->second.size()>=thresholdOftenUsedWords*nbSections)
             oftenUsedWords.push_back(it->first);
 
-    //Construct wordFrequency
+    //Construct wordFrequency table
     for (map<string, vector<int> >::iterator it = wordIndices.begin(); it!=wordIndices.end(); ++it)
         wordFrequency[it->first]=double(it->second.size())/double(nbWords);
 
-    //Normalize wordPosition
+    //Normalize wordPosition table
     for (map<string, vector<double> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it)
         for (int i=0;i<it->second.size();i++)
             it->second[i]=double(it->second[i])/double(sizeCleanedText);
 
-    //Construct wordRecency
+    //Construct wordRecency table
     for (map<string, vector<double> >::iterator it = wordPosition.begin(); it!=wordPosition.end(); ++it) {
         double temp = it->second[0];
         wordRecency[it->first].push_back(temp);
@@ -156,9 +186,9 @@ Text::Text(char* filename, double thresholdOftenUsedWords)
 }
 
 
-///Assesseurs
+///--------------------Assessors--------------------///
 
-//Get
+///--------------------Get--------------------///
 
 string Text::getContent() const {
     return content;

@@ -1,4 +1,5 @@
 #include "align.h"
+
 void alignByLength(const Text &txt1, const Text &txt2) {
     vector<double> crossTable;
     for (int i=0;i<txt1.getSectionPosition().size();i++) {

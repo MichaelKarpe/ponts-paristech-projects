@@ -10,9 +10,9 @@ Word::Word(string ncontent, int nindice) {
     indice=nindice;
 }
 
-///Assessors
+///--------------------Assessors--------------------///
 
-//Get
+///--------------------Get--------------------///
 
 string Word::getContent() const {
     return content;

@@ -7,13 +7,10 @@
 #include <cctype> //tolower
 #include <algorithm> //find
 #include <cmath> //abs
+#include <map>
 using namespace std;
 
-#include <map>
 #include "word.h"
-
-//#ifndef TEXT_H
-//#define TEXT_H
 
 class Text
 {
@@ -51,13 +48,16 @@ class Text
 
 public:
     /**
-     * Constructor
-     * @param filename file name
+     * @brief Constructor: reads the text, cleans it and creates hash tables
+     * @param filename name of the file
+     * @param thresholdOftenUsedWords threshold between 0 and 1, word considered as often used if over it
      */
     Text(char *filename, double thresholdOftenUsedWords);
 
-    //Assessors
-    //Get
+    ///--------------------Assessors--------------------///
+
+    ///--------------------Get--------------------///
+
     /**
      * @return the content of the text as a string
      */
@@ -106,8 +106,10 @@ public:
      * @return the cluster
      */
     vector< vector<string> > &getWordsClusters();
+    /**
+     * @return often used words
+     */
     vector<string> getOftenUsedWords() const;
-
     /**
      * @return the vector of indexes of each word in a map
      */
@@ -124,17 +126,4 @@ public:
      * @return the indexes of the sections in which a word is, in a map
      */
     map<string, vector<int> > getWordSectionIndices() const;
-
-
-    //Set
-//    void setWordIndices();
-//    void setWordPosition();
-//    void setWordRecency();
-//    void setWordSectionIndices();
-//    void setSectionContent();
-
 };
-
-double jaro_winkler_distance(const string str1, const string str2, const double coeff_winkler);
-
-//#endif // TEXT_H

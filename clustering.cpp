@@ -1,10 +1,5 @@
 #include "clustering.h"
 
-Clustering::Clustering()
-{
-
-}
-
 ///Clustering methods
 
 void hierarchicClustering(Text &txt, const double threshold) {

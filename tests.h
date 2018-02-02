@@ -7,7 +7,7 @@ class Tests
 {
 public:
     /**
-     * Tests to assure the good working of the class Text
+     * Tests to ensure the good working of the class Text
      * @param txt Text to test
      */
     Tests(Text txt);

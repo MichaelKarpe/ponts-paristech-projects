@@ -1,11 +1,7 @@
 #pragma once
+
 #include "clustering.h"
 
-class Compare
-{
-public:
-    Compare();
-};
 /**
  * Make pairs of words that could possibly match (heuristically)
  * @param txt1 first text
@@ -13,6 +9,7 @@ public:
  * @return a vector of pairs of words
  */
 vector<pair<string, string> > compareOftenUsedWords(const Text txt1, const Text txt2);
+
 /**
  * Compute the DTW distances between the often used words of txt1 and
  * txt2 and save them into a map if they are under a threshold
@@ -33,5 +30,11 @@ map< pair<string,string>,double > DTWCompare(const Text txt1, const Text txt2, c
  */
 map< pair< vector<string>,vector<string> >,double > JRCompareClusters(const Text txt1, const Text txt2, const double threshold);
 
-// Adding groups of words in the dictionary
+/**
+ * @brief Adding groups of words in the dictionary
+ * @param txt1 first text
+ * @param txt2 second text
+ * @param DTWcomp
+ * @return
+ */
 map< pair<string,string>,double > DTWGroups(Text txt1, Text txt2, const map< pair<string,string>,double > &DTWcomp);

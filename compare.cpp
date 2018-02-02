@@ -1,20 +1,12 @@
 #include "compare.h"
 
-Compare::Compare()
-{
-
-}
-
 //Return couples of often used words in both texts
 vector< pair<string,string> > compareOftenUsedWords(const Text txt1, const Text txt2) {
     vector< pair<string,string> > couples;
     for (int i=0;i<txt1.getOftenUsedWords().size();i++)
         for (int j=0;j<txt2.getOftenUsedWords().size();j++)
-            if (txt1.getWordIndices()[txt1.getOftenUsedWords()[i]].size()<2*txt2.getWordIndices()[txt2.getOftenUsedWords()[j]].size() && txt2.getWordIndices()[txt2.getOftenUsedWords()[j]].size()<2*txt1.getWordIndices()[txt1.getOftenUsedWords()[i]].size()) {
+            if (txt1.getWordIndices()[txt1.getOftenUsedWords()[i]].size()<2*txt2.getWordIndices()[txt2.getOftenUsedWords()[j]].size() && txt2.getWordIndices()[txt2.getOftenUsedWords()[j]].size()<2*txt1.getWordIndices()[txt1.getOftenUsedWords()[i]].size())
                 couples.push_back(make_pair(txt1.getOftenUsedWords()[i],txt2.getOftenUsedWords()[j]));
-                //cout << txt1.getOftenUsedWords()[i] << " ; " << txt2.getOftenUsedWords()[j] << endl;
-            }
-
     return couples;
 }
 
