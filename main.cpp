@@ -26,8 +26,8 @@ int main()
 
     ///Compare often used words: display couple of words with smallest DTW distance
     cout << "Couples of matching words :" << endl;
-    vector< pair<string,string> > compare = compareOftenUsedWords(udhr1,udhr2);
-    map< pair<string,string>,double > dtwcompare = DTWCompare(udhr1,udhr2,compare, 0.1);
+//    vector< pair<string,string> > compare = compareOftenUsedWords(udhr1,udhr2);
+//    map< pair<string,string>,double > dtwcompare = DTWCompare(udhr1,udhr2,compare, 0.1);
 
 
     ///Compute DTW groups
@@ -38,6 +38,9 @@ int main()
     ///Compute paragraph alignment by length only
     cout << "Alignment by length only:" << endl;
     alignByLength2(udhr1, udhr2);
+
+//    cout << "Alignment by length only:" << endl;
+//    alignByLength2(udhr2, udhr1);
 
     ///Compute paragraph alignment taking into account DTWDistance
     cout << endl << "Alignment with DTW:" << endl;

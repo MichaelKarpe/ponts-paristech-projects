@@ -25,7 +25,7 @@ map< pair<string,string>,double > DTWCompare(const Text txt1, const Text txt2, c
             dict2to1[compare[i].second] = compare[i].first;
             dtwCompare[compare[i]]=dtw;
             cout << compare[i].first << " ; " << compare[i].second << " : " << dtwCompare[compare[i]] << endl;
-//          Pas une bonne approche : un mot peut être traduit de plusieurs façons, et comme boucle for qui supprime, pas efficace
+///          Pas une bonne approche : un mot peut être traduit de plusieurs façons, et comme boucle for qui supprime, pas efficace
 //            //If both words not in dictionnaries
 //            if (dict1to2.find(compare[i].first)==dict1to2.end() && dict2to1.find(compare[i].second)==dict2to1.end() ) {
 //                dict1to2[compare[i].first] = compare[i].second;

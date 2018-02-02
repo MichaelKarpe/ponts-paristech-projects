@@ -49,27 +49,27 @@ vector<int> makeCrossTable(const Text &txt1, const Text &txt2) {
     vector< int > crossTable;
     crossTable.push_back(0);
     double s1=txt2.getSectionPosition()[0], s2=txt2.getSectionPosition()[1];
-    int n=2;
-    int i=0;
+    int n=2; //number of paragraph in txt2
+    int i=0; //indice in txt1
 
-    while (i<txt1.getSectionPosition().size() && n-1<txt2.getSectionPosition().size()) {
+    while (i<txt1.getSectionPosition().size()) { //nbSections?
         if (abs(txt1.getSectionPosition()[i]-s1)<abs(txt1.getSectionPosition()[i]-s2)) { //plus près de s1 que de s2
             crossTable.push_back(n-1);
             i++;
         }
         else {
             n++;
-            if (n-1!=txt2.getSectionPosition().size()) {
+            if (n-1<txt2.getSectionPosition().size()) {
                 s1=txt2.getSectionPosition()[n-2];
                 s2=txt2.getSectionPosition()[n-1];
             }
+            else if(n-1==txt2.getSectionPosition().size()) {
+                s1=txt2.getSectionPosition()[n-2];
+                s2=INFINITY;
+            }
+            else
+                cout << "PROBLEME !" << endl;
         }
-    }
-
-    //BRICOLAGE, pb de gestion des indices à la fin
-    while (i<txt1.getSectionPosition().size()) {
-        crossTable.push_back(n-1);
-        i++;
     }
 
 //    for (int i=0; i< crossTable.size(); i++)
@@ -82,9 +82,15 @@ void alignByLength2(const Text &txt1, const Text &txt2) {
     vector< int > crossTable1to2 = makeCrossTable(txt1,txt2);
     vector< int > crossTable2to1 = makeCrossTable(txt2,txt1);
     vector< pair<int, int> > perfectMatches;
-    for (int i=1;i<crossTable2to1.size();i++)
-        if (i==crossTable1to2[crossTable2to1[i]])
-            perfectMatches.push_back(make_pair(i,crossTable2to1[i]));
+
+    for (int i=1;i<crossTable1to2.size();i++)
+        if (i==crossTable2to1[crossTable1to2[i]])
+            perfectMatches.push_back(make_pair(i,crossTable1to2[i])); //Dans le bon sens maintenant !
+
+//    cout << "Perfect matches" << endl;
+//    for (int i=0;i<perfectMatches.size();i++) {
+//        cout << perfectMatches[i].first << " ; " << perfectMatches[i].second << endl;
+//    }
 
     int ind1=perfectMatches[0].first, ind2=perfectMatches[0].second;
     for (int i=1;i<perfectMatches.size();i++) {
@@ -97,6 +103,13 @@ void alignByLength2(const Text &txt1, const Text &txt2) {
         ind1=perfectMatches[i].first;
         ind2=perfectMatches[i].second;
     }
+
+    for (int j=ind1;j<txt1.getSectionPosition().size()+1;j++)
+        cout << j << " ";
+    cout << " : ";
+    for (int j=ind2;j<txt2.getSectionPosition().size()+1;j++)
+        cout << j << " ";
+    cout << endl;
 }
 
 
