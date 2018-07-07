@@ -1,6 +1,4 @@
-# Billiard
-
-*Perfect trajectory forecasts in billiards*
+# Perfect trajectory forecasts in billiards
 
 This project has been realized from June 2015 to June 2016, during the end of my first year and my second year in _Classe Préparatoire_, for an exam called "Personal Initiative Workshop" _(Travail d'Initiative Personnelle Encadré - TIPE)_.
 
