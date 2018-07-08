@@ -14,37 +14,43 @@ using namespace Imagine;
 
 const int delta = 50; //50
 const int sigma2 = 5; //5
-const int beta = 5; //5
+const int beta = 50; //5
+const int alpha = 50;
 
-//Potentiel pour k-means
+//Potentiel pour gaussien et bords
 float pot(int fi, int fj) {
     float pote;
-    pote = 1.0 + fabs((float)(fi-fj))/delta;
+    //pote = 1.0 + fabs((float)(fi-fj))/delta;
+    pote = 1.0 + (float)(fi-fj)*(float)(fi-fj)/delta/delta;
     return(1.0/pote);
 }
 
 
-//Potentiel phi
-float phi(float x) {
-    float y;
-    y = x*x;
-    y = (y/(1.0+y));
-    return(y);
-}
-
-
-//Potentiel de clique
+//Potentiel de clique : pas de beta ?
 float Uclique (float a, float b) {
-    float Uo;
-    //Modèle de Potts
-    Uo = 1.0;
-    if (a==b)
-        Uo = -1.0;
 
-    //Uo = phi(a-b);
+    float Uo;
+
+    //Modèle de Potts
+    //Uo = (float) beta;
+    //if (a==b)
+    //    Uo = -(float) beta;
+
+    //Modèle markovien gaussien
+    Uo = beta*(a-b)*(a-b);
+
+    //Contours markovien gaussien
+    //Uo = pot(a,b);
+
     return(Uo);
 }
 
+// Potentiel clique ordre 1
+float U1(float x, float mu) {
+    float Uo;
+    Uo = (float)alpha*(x-mu)*(x-mu);
+    return(Uo);
+}
 
 // Potentiel clique 4-connexe
 float U14(float x00,float x10,float x01,float x20,float x02) {
@@ -62,17 +68,6 @@ float U18(float x00,float x10,float x01,float x20,float x02,float x11,float x21,
 }
 
 
-// Potentiel lié à la source
-float U0(float a, float b) {
-    float Uo;
-    //Uo = phi(a-b);*/
-    Uo = ((float) (a-b)*(a-b));
-    //Uo=0;
-    //if (a!=b)
-    //    Uo++;
-    return(Uo);
-}
-
 
 //Traitement par k-means
 void kmeans(Image<byte> &J, Image<byte> &K) {
@@ -85,7 +80,7 @@ void kmeans(Image<byte> &J, Image<byte> &K) {
             pixel[i][j] = (int) J(i,j);
 
     //cliques d'ordre 2 horizontales  et verticales
-    for(int passages=0; passages<20; passages++) {
+    for(int passages=0; passages<10; passages++) {
         for(int i=1; i<w-1; i++) {
             for(int j=1; j<h-1; j++) {
                 int xmin = 0;
@@ -111,15 +106,18 @@ void kmeans(Image<byte> &J, Image<byte> &K) {
 }
 
 //Traitement par recuit
-void recuit(Image<byte> &E, Image<byte> &S) {
+void recuit(Image<byte> &E, Image<byte> &S, vector<int> valgris) {
     int c = 8; //pour 8 connexité ou 4 connexité
     float s = 1.0; //sigma
-    float t = 1.0; //température
+    float t = 100.0; //température
     int m = 10; //nb de boucles metropolis
-    int n = 10; //nb de boucles recuit
+    int n = 100; //nb de boucles recuit
+    int g = 1; //gaussien avec image de référence
 
     int numRows = E.height();
     int numCols = E.width();
+
+    Image<byte> M = E.clone();
 
     int k,i,j,r;
     int lambda;
@@ -154,7 +152,8 @@ void recuit(Image<byte> &E, Image<byte> &S) {
                         a12 = (float)S((i+1        ) %numRows,(j-1+numCols) %numCols);
                         a22 = (float)S((i-1+numRows) %numRows,(j-1+numCols) %numCols);
                     }
-                    lambda = (int) floor(((pixmax-pixmin)*((float)rand()/RAND_MAX))+pixmin);
+                    //lambda = (int) floor(((pixmax-pixmin)*((float)rand()/RAND_MAX))+pixmin);
+                    lambda = valgris[rand()%valgris.size()];
                     //Régularisation
                     if (c==8) {
                         dU  = U18(lambda,a10,a01,a20,a02,a11,a21,a12,a22);
@@ -164,7 +163,10 @@ void recuit(Image<byte> &E, Image<byte> &S) {
                         dU  = U14(lambda,a10,a01,a20,a02);
                         dU -= U14(a00   ,a10,a01,a20,a02);
                     }
-
+                    if (g==1) {
+                        dU += U1(lambda, (float)M((i)           %numRows,(j)           %numCols));
+                        dU -= U1(a00, (float)M((i)           %numRows,(j)           %numCols));
+                    }
                     if (dU<0)
                         S(i%numRows,j%numCols)=(byte)lambda;
                     else
@@ -183,13 +185,16 @@ void recuit(Image<byte> &E, Image<byte> &S) {
 }
 
 //Traitement par ICM
-void ICM(Image<byte> &E, Image<byte> &S) {
+void ICM(Image<byte> &E, Image<byte> &S, vector<int> valgris) {
     int c = 8; //pour 8 connexité ou 4 connexité
     float s = 1.0; //sigma
-    int n = 10; //nb de boucles ICM
+    int n = 4; //nb de boucles ICM
+    int g = 1; //gaussien avec image de référence
 
     int numRows = E.height();
     int numCols = E.width();
+
+    Image<byte> M = E.clone();
 
     int k,i,j,r;
     int lambda;
@@ -209,6 +214,9 @@ void ICM(Image<byte> &E, Image<byte> &S) {
         }
     }
 
+    cout << pixmax << " ; " << pixmin << endl;
+
+    //B=S.clone();
     //Boucle de l'ICM
     for (r=0;r<n;r++) {
         if ((r%2)==1) {
@@ -222,7 +230,7 @@ void ICM(Image<byte> &E, Image<byte> &S) {
 
         for (i=0;i<(numRows);i++) {
             for (j=0;j<(numCols);j++) {
-                //a00 = (float)S((i)           %numRows,(j)           %numCols);
+                a00 = (float)B((i)           %numRows,(j)           %numCols);
                 a10 = (float)B((i+1)         %numRows,(j)           %numCols);
                 a20 = (float)B((i-1+numRows) %numRows,(j)           %numCols);
                 a01 = (float)B((i  )         %numRows,(j+1)         %numCols);
@@ -233,8 +241,11 @@ void ICM(Image<byte> &E, Image<byte> &S) {
                     a12 = (float)B((i+1        ) %numRows,(j-1+numCols) %numCols);
                     a22 = (float)B((i-1+numRows) %numRows,(j-1+numCols) %numCols);
                 }
-                lambda=((int) pixmax);
-                for (k=((int) pixmin);k<((int) pixmax);k++) {/* regularization */
+                //lambda=((int) pixmax);
+                lambda = (int)valgris[valgris.size()-1];
+                //for (k=((int) pixmin);k<((int) pixmax);k++) {/* regularization */
+                for (int l=0;l<valgris.size();l++) {
+                    k=valgris[l];
                     if (c==8) {
                         dU  = U18(lambda,a10,a01,a20,a02,a11,a21,a12,a22);
                         dU -= U18(k     ,a10,a01,a20,a02,a11,a21,a12,a22);
@@ -242,6 +253,10 @@ void ICM(Image<byte> &E, Image<byte> &S) {
                     else {
                         dU  = U14(lambda,a10,a01,a20,a02);
                         dU -= U14(k     ,a10,a01,a20,a02);
+                    }
+                    if (g==1) {
+                        dU += U1(lambda, (float)M((i)           %numRows,(j)           %numCols));
+                        dU -= U1(a00, (float)M((i)           %numRows,(j)           %numCols));
                     }
                     lambda=((dU>0.0)?(k):(lambda));
                 }
@@ -257,37 +272,87 @@ void ICM(Image<byte> &E, Image<byte> &S) {
             S=B.clone();
         }
     }
-
+    //S=C.clone();
 }
 
-
+void calculbruit(Image<byte> &E, Image<byte> &S, double &bruit) {
+    // E : image bruitée
+    // S : image débruitée
+    int sommebruit=0;
+    int sommesignal=0;
+    int w=E.width(), h=E.height();
+    for (int i=0;i<w;i++) {
+        for (int j=0;j<h;j++) {
+            int diff = (int)E(i,j)-(int)S(i,j);
+            sommebruit+=(diff*diff);
+            sommesignal+=(int)E(i,j)*(int)E(i,j);
+        }
+    }
+    bruit = 10*log((double)sommesignal/(double)sommebruit);
+}
 
 int main(int argc, char* argv[]) {
 
     Image<byte> I; //image nette
-    if(! load(I, argc>1? argv[1]: srcPath("A200.png"))) {
+    if(! load(I, argc>1? argv[1]: srcPath("lenna200.png"))) {
         std::cout << "Echec de lecture d'image" << std::endl;
         return 1;
+    }
+
+    int w=I.width(), h=I.height();
+
+    bool ngris[256];
+    for (int i=0;i<256;i++) {
+        ngris[i]=false;
+    }
+
+    for(int i=0; i<w; i++) {
+        for(int j=0; j<h; j++) {
+            if (ngris[(int)I(i,j)]==false)
+                ngris[(int)I(i,j)]=true;
+        }
+    }
+
+    vector<int> valgris;
+
+    for (int i=0;i<256;i++) {
+        if (ngris[i]==true)
+            valgris.push_back(i);
     }
 
     Image<byte> J=I.clone(); //future image bruitée
 
     //Générateur aléatoire de variable suivant une loi gaussienne
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    /*unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator (seed);
     std::normal_distribution<double> distribution (0.0,1.0); //moyenne 0.0, écart-type 1.0
 
-    int w=I.width(), h=I.height();
+    gaussianRandom();*/
 
-    for(int i=0; i<w; i++) {
-        for(int j=0; j<h; j++) {
-            double aleat = 127*distribution(generator);
-            if ((double)I(i,j)+aleat<=255 && 0<=(double)I(i,j)+aleat)
-                J(i,j)=byte((double)I(i,j)+aleat);
+    /*for(int i=0; i<w; i=i+1) {
+        for(int j=0; j<h; j=j+1) {
+            double aleat = 50*gaussianRandom();//distribution(generator);
+            if (aleat>=1)
+                J(i,j)=byte(valgris[rand()%valgris.size()]);
+            else
+                J(i,j)=I(i,j);
+        }
+    }*/
+
+    for(int i=0; i<w; i=i+1) {
+        for(int j=0; j<h; j=j+1) {
+            int aleat = int(50*gaussianRandom());
+            if ((int)I(i,j)+aleat<=255 && (int)I(i,j)+aleat>=0)
+                J(i,j)=byte((int)I(i,j)+aleat);
             else
                 J(i,j)=I(i,j);
         }
     }
+
+    double bruitinitial=0.0;
+    calculbruit(J,I,bruitinitial);
+
+    cout << "Bruit initial : " << bruitinitial << endl;
 
     openWindow(w, h);
     display(I);
@@ -297,8 +362,13 @@ int main(int argc, char* argv[]) {
     Image<byte> K = J.clone();
     //Ne décommenter qu'une seule ligne
     //kmeans(J,K);
-    //recuit(J,K);
-    ICM(J,K);
+    recuit(J,K,valgris);
+    //ICM(J,K,valgris);
+
+    double bruitfinal=0.0;
+    calculbruit(K,I,bruitfinal);
+
+    cout << "Bruit final : " << bruitfinal << endl;
 
     setActiveWindow(openWindow(K.width(), K.height()));
     display(K);
