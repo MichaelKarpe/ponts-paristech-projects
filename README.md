@@ -12,3 +12,5 @@ The results obtained have been very satisfactory. Considering wishlists with sev
 - 79% of course allocations corresponded to first wishes from students
 - 20% of course allocations corresponded to second wishes from students
 - Only 1% of course allocations corresponded to third wishes from students
+
+The main part of the final report of the project is available in the `doc` file (in French only).
