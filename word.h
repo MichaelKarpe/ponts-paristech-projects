@@ -1,15 +1,13 @@
 #pragma once
-//#ifndef WORD_H
-//#define WORD_H
 
 #include <iostream>
 #include <cstdio>
 #include <fstream>
 #include <vector>
 #include <set>
-#include <cctype> //tolower
-#include <algorithm> //find
-#include <cmath> //abs
+#include <cctype>       // tolower
+#include <algorithm>    // find
+#include <cmath>        // abs
 #include <map>
 using namespace std;
 

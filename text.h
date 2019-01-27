@@ -4,9 +4,9 @@
 #include <cstdio>
 #include <fstream>
 #include <vector>
-#include <cctype> //tolower
-#include <algorithm> //find
-#include <cmath> //abs
+#include <cctype>       // tolower
+#include <algorithm>    // find
+#include <cmath>        // abs
 #include <map>
 using namespace std;
 
@@ -17,30 +17,30 @@ class Text
     vector<char> punctuation;
 
     string content;
-    string cleanedContent; // Texte nettoyé
+    string cleanedContent;  // Cleaned text
 
-    int nbSections; // OK, vérifié
-    int nbSpaces; // OK, vérifié
-    int nbWords; // Pas bon, à revoir
+    int nbSections;         // OK, checked
+    int nbSpaces;           // OK, checked
+    int nbWords;            // KO, to be checked
     int sizeText;
-    int sizeCleanedText; // OK, vérifié
+    int sizeCleanedText;    // OK, checked
     bool isLinguaContinua;
 
     vector<string> words;
     vector< vector<string> > wordsClusters;
     vector<string> oftenUsedWords;
 
-    map<int, int> sizeSections; // Dictionnaire : {indice section : taille de la section}
-    map<int, string> sectionContent; // Dictionnaire : {indice section : texte de la section}
-    map<int, double> sectionPosition; // normalized positions of the sections
+    map<int, int> sizeSections;                     // Dictionary : {section indice : section size}
+    map<int, string> sectionContent;                // Dictionary : {section indice : section text}
+    map<int, double> sectionPosition;               // normalized positions of the sections
 
-    map<string, vector<int> > wordIndices; // Dictionnaire {mot : [indice1, ..., indicen]}
-    map<string, vector<double> > wordPosition; // Dictionnaire {mot : [position1, ..., positionn]} (les positions sont normalisées)
-    map<string, vector<double> > wordRecency; // Dictionnaire de récence normalisée
-    map<string, vector<int> > wordSectionIndices; // Dictionnaire {mot : [indicesection1, ..., indicesectionn]}
+    map<string, vector<int> > wordIndices;          // Dictionary {mot : [indice1, ..., indicen]}
+    map<string, vector<double> > wordPosition;      // Dictionary {mot : [position1, ..., positionn]} (positions are normalized)
+    map<string, vector<double> > wordRecency;       // Dictionary of normalized recency
+    map<string, vector<int> > wordSectionIndices;   // Dictionary {mot : [indicesection1, ..., indicesectionn]}
     map<string, double> wordFrequency;
 
-    //Methods for constructor
+    // Methods for constructor
     void addWordToTables(Word &currentWord, int &currentSection);
     void addCharToCleanedText(const char character, int &currentSection);
     void addSpaceToCleanedText(const string line, const int indChar, int &currentSection);
@@ -56,7 +56,7 @@ public:
 
     ///--------------------Assessors--------------------///
 
-    ///--------------------Get--------------------///
+    ///-----------------------Get-----------------------///
 
     /**
      * @return the content of the text as a string

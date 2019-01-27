@@ -12,7 +12,7 @@ Word::Word(string ncontent, int nindice) {
 
 ///--------------------Assessors--------------------///
 
-///--------------------Get--------------------///
+///-----------------------Get-----------------------///
 
 string Word::getContent() const {
     return content;
@@ -26,7 +26,7 @@ int Word::getSize() const {
     return content.length();
 }
 
-//Set
+///-----------------------Set-----------------------///
 
 void Word::setContent(string ncontent) {
     content=ncontent;
