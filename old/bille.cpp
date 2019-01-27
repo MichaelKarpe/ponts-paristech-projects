@@ -1,15 +1,14 @@
 #include "bille.h"
 
-
 //Constructeurs
 
 Bille::Bille() {
 
 }
 
-Bille::Bille(const Point &ip, const int &iabs, const double &iv, const Niveau &Niv)
+Bille::Bille(Point ip, int iabs, double iv)
 {
-    col=colors[rand()%Niv.getNbCol()];
+    col=colors[rand()%nbCouleurs];
     abs=iabs;
     v=iv;
     p=ip;
@@ -42,26 +41,26 @@ int Bille::getAbs() const {
     return abs;
 }
 
-void Bille::setCol(const Color &icol) {
+void Bille::setCol(Color icol) {
     col = icol;
 }
 
-void Bille::setVit(const double &iv) {
+void Bille::setVit(double iv) {
     v = iv;
 }
 
-void Bille::setCoor(const Point &ip) {
+void Bille::setCoor(Point ip) {
     p = ip;
 }
 
-void Bille::setAbs(const int &iabs) {
+void Bille::setAbs(double iabs) {
     abs = iabs;
 }
 
 
 // Fonctions traitant les données
 
-void Bille::avanceTirBille(const double &vx, const double &vy) {
+void Bille::avanceTirBille(double vx, double vy) {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
     p.setX(p.getX() + dt*vx);
     p.setY(p.getY() + dt*vy);
@@ -71,11 +70,11 @@ void Bille::avanceTirBille(const double &vx, const double &vy) {
 
 // Fonctions de tracé
 
-void Bille::traceBille() const {
+void Bille::traceBille() {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,col);
 }
 
-void Bille::effaceBille() const {
+void Bille::effaceBille() {
     fillCircle(p.getX()*zoom,p.getY()*zoom,R,WHITE);
 }
 

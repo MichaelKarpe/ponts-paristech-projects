@@ -6,45 +6,66 @@
 using namespace Imagine;
 #include <iostream>
 using namespace std;
+#include <numeric>
+
 
 // Variables de traitement des données
-const int w = 240;
-const int h = 120;
-const int r = 4;
-const int carre = 12;
+const int w = 240;      // Largeur fenêtre
+const int h = 120;      // Hauteur fenêtre
+const int r = 4;        // Rayon billes
+const int carre = 12;   // Unité de mesure pour la conception du jeu
 
 // Variables de tracé
 const int zoom = 5;
-const int W = w*zoom;
-const int H = h*zoom;
-const int R = r*zoom;
-const int CARRE = carre*zoom;
+const int W = w * zoom;
+const int H = h * zoom;
+const int R = r * zoom;
+const int CARRE = carre * zoom;
 
 // Paramètres
-const int nbBilles = 15;
-const int nbCouleurs = 4;
-const Color colors[8] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, BLACK, Color(128,128,128)};
+const int nbBilles = 10;  // Nombre de billes par serpent
+const int nbCouleurs = 8;
+const Color colors[nbCouleurs] = {RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, Color(128, 128, 128), BLACK};  // Couleurs des billes
 
-const double dt = 0.1;      //Modifier tous ces pas de temps!
-const double vDepart = 0.5;    //Level hardcore : vDepart = 20, dt = 1 !
-const double Vtir = 50.0;
+const int nbTraj = 2;                       // Nombre de trajectoires
+const int nbVit = 1;                        // Nombre de niveaux de vitesse pour augmenter la difficulté de jeu
+const int nbNiveaux = 5 * nbVit * nbTraj;
+const int nbSerpents = 3;                   // Nombre initial de serpents envoyés par niveau
 
+// Régler les paramètres avant d'envoyer
+
+const double dt = 0.05;         // Incrément de temps
+const double vDepart = 5.0;     // Vitesse initiale des serpents
+const double Vtir = 6000 * dt;  // Vitesse de tir (200 pour dt = 0.05)
+
+const float newSerp = 10.0 * 4.0 / float(nbBilles);  // Paramètre pour envoyer un nouveau serpent
 
 class Point
 {
-    int x,y;
+    int x, y;
+
 public:
 
     // Constructeurs
     Point();
-    Point(int ix, int iy);
+    Point(const int &ix, const int &iy);
 
     // Assesseurs
-    int getX() const ;
-    int getY() const ;
-    void setX(int ix);
-    void setY(int iy);
+
+    // Get
+    int getX() const;
+    int getY() const;
+
+    // Set
+    void setX(const int &ix);
+    void setY(const int &iy);
 };
 
 // Fonctions de tracé
 void quadrillage();
+
+// Affichage du menu
+void menu();
+void pagePerdu();
+void pageGagne();
+void rules();

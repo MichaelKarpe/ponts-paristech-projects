@@ -1,74 +1,112 @@
 // Imagine++ project
-// Project:  Vide
+// Project:  Zuma
 // Author:   Michaël Karpe & Bastien Déchamps
-// Date:     10/05/2017
+// Date:     02/06/2017
 
-#include "serpent.h"
+// ATTENTION ! remplacer \ par / dans les srcpth (imagine\...) et faire attention au maj min dans les noms de fichier (Cmakelists...)
+
+#include "grenouille.h"
 
 int main()
 {
+    Window Fenetre = openWindow(W, H, "Test Event");
+    while (true) {
+        // Menu
+        menu();
 
-    //srand((unsigned int)time(0));
+         for (int i_col = 4; i_col <= nbCouleurs; i_col++) {
+            for (int i_traj = 1 ; i_traj <= nbTraj; i_traj++) {
 
-    Window Fenetre=openWindow(W,H);
+                // Initialisation
+                srand((unsigned int)time(0));
+                Niveau Niv(i_traj, i_col);
+                Trajectoire traj = Niv.getTraj();
+                Grenouille G(traj, Niv);
+                vector<Serpent> listSerp;
+                listSerp.push_back(Serpent(traj, nbBilles, Niv));
+                int serpEnvoyes = 1;
+                bool finNiveau = false;
 
-    Grenouille G;
-    G.traceGrenouille();
-    //quadrillage();
+                // Tracés initiaux
+                traj.traceTrajectoire();
+                G.traceGrenouille();
+                for (int i = 0;i < listSerp.size(); i++)
+                    listSerp[i].traceSerpent(traj);
 
-    Trajectoire traj;
-    traj.trajectoire2();
-    traj.traceTrajectoire();
-    //traj.billesRandom();
-    cout << traj.size() << endl;
+                // Initialisation des paramètres de tir
+                bool finTir = true;
+                int ind_combo = -1;
+                double vx, vy;
+                Bille Btir(G.getPos(), 0, 0, Niv);
 
-    vector<Serpent> listSerp;
-    listSerp.push_back(Serpent(traj,nbBilles));
+                // Tant que la tête du 1er serpent n'atteint pas la fin de la trajectoire
+                while (!(listSerp.front().back().getAbs() >= traj.size()) && !finNiveau) {
+                    noRefreshBegin();
 
-    for (int i=0;i<listSerp.size();i++)
-        listSerp[i].traceSerpent(traj);
+                    // On retrace la trajectoire à chaque fois
+                    traj.traceTrajectoire();
 
-    bool serpentMort=false;
+                    // Diminution de la vitesse des serpents
+                    for (int i = 0;i < listSerp.size(); i++)
+                        listSerp[i].vitesseDiminue(traj);
 
-    // Paramètres servant pour le tir
-    bool finTir = true;
-    double vx;
-    double vy;
-    Bille Btir(G.getPos(),0,0);
+                    // Déplacement des serpents
+                    deplacementSerpents(traj, listSerp);
 
-    //Le premier serpent est celui qui est le plus proche de la fin
-    while (!(listSerp[0].getBille(listSerp[0].size()-1).getAbs() >= traj.size())) {
+                    // Fusion des serpents s'ils se touchent
+                    fusionSerpents(traj, ind_combo, listSerp);
 
-        //Diminution de la vitesse
-        for (int i=0;i<listSerp.size();i++)
-            listSerp[i].vitesseDiminue(traj);
+                    // Tir et tracé de la grenouille
+                    G.tir(finTir, vx, vy, Btir, listSerp, Niv);
 
-        //Déplacement des serpents
-        deplacementSerpents(traj,listSerp);
+                    // Insertion du tir en indice I (s'il existe)
+                    for (int i = 0; i < listSerp.size(); i++) {
+                        int I = listSerp[i].insererTir(traj, Btir, finTir);
+                        listSerp[i].destructionBilles(ind_combo, I, i, listSerp);
+                    }
 
-        //Fusion des serpents
-        fusionSerpents(listSerp, traj);
+                    if (serpEnvoyes < nbSerpents) {
+                        if (listSerp.size() > 0) {
+                            if (listSerp.back().serpentLoin(traj) && listSerp.back().front().getAbs() > 2 * r * (nbBilles + 5)) {
+                                listSerp.push_back(Serpent(traj, nbBilles, Niv));
+                                serpEnvoyes += 1;
+                            }
+                        }
+                        if (listSerp.size() == 0) {
+                            listSerp.push_back(Serpent(traj, nbBilles, Niv));
+                            serpEnvoyes += 1;
+                        }
+                    }
 
-        //Tir de la grenouille
-        G.tir(finTir,vx,vy,Btir);
-        G.traceGrenouille();
+                    if (serpEnvoyes == nbSerpents && listSerp.size() == 0)
+                        finNiveau = true;
 
-        //Insertion du tir en indice I (s'il existe)
-        for (int i=0;i<listSerp.size();i++) {
-            int I = listSerp[i].insererTir(traj,Btir,finTir);
-            listSerp[i].destructionBilles(I,i,listSerp);
+                    noRefreshEnd();
+
+                    // Pause pour affichage
+                    milliSleep(20); // Le + petit possible, 10ms minimum sinon bug
+                }
+
+                // Le niveau est terminé, on nettoie la fenêtre
+                clearWindow();
+
+                // Si le niveau a été réussi, message de félicitations
+                if (finNiveau == true) {
+                    pageGagne();
+                }
+                // Sinon, terminaison de la double boucle et message de défaite
+                else {
+                    i_traj = nbTraj + 1;
+                    i_col = nbCouleurs + 1;
+                    pagePerdu();
+                }
+
+                // Passage au niveau suivant si victoire ou fermeture de la fenêtre si défaite
+                clearWindow();
+
+            }
         }
-
-        //Arrivée d'un nouveau serpent
-        if (listSerp[listSerp.size()-1].serpentLoin(traj) && listSerp[listSerp.size()-1].getBille(0).getAbs()>2*r*(nbBilles+5) || serpentMort) //rajouter nbSerpents à envoyer
-            listSerp.push_back(Serpent(traj,nbBilles));
-
-        //Pause pour affichage
-        milliSleep(10); //Aussi à régler, le + petit possible, 10ms minimum sinon bug
     }
-
-    //Hypothèse simplificatrice : tous la vitesse du plus lent, mais pas utilisée pour le moment
     endGraphics();
-
     return 0;
 }
