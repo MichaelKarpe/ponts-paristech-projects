@@ -65,7 +65,10 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
 
         self.cost_matrix_courses = self.cost_function_courses()
         self.cost_matrix_projects = self.cost_function_projects()
-        self.model, self.ouv_cours, self.aff_cours, self.eff_cours, self.ouv_projet, self.aff_projet, self.eff_projet = self.solve()
+        (
+            self.model, self.ouv_cours, self.aff_cours, self.eff_cours, self.ouv_projet, self.aff_projet,
+            self.eff_projet
+        ) = self.solve()
 
     def cost_function_courses(self):
         cost_matrix_courses = [[
@@ -76,8 +79,9 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         for jour in range(self.parameters.nb_days):
             for eleve in range(self.parameters.nb_students):
                 for poids in range(self.parameters.nb_courses[jour]):
-                    cost_matrix_courses[jour][eleve][self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses[:jour]) + poids)] - 1] \
-                        = poids ** 2
+                    cost_matrix_courses[jour][eleve][
+                        self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses[:jour]) + poids)] - 1
+                    ] = poids ** 2
 
         return cost_matrix_courses
 
@@ -89,7 +93,9 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
 
         for eleve in range(self.parameters.nb_students):
             for poids in range(self.parameters.nb_wishes_PIR):
-                cost_matrix_projects[eleve][self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses) + poids)] - 1] = poids ** 2
+                cost_matrix_projects[eleve][
+                    self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses) + poids)] - 1
+                ] = poids ** 2
 
         return cost_matrix_projects
 
@@ -106,10 +112,18 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         eff_projet = assignment_model.var('effproj', self.PR)
 
         # Objective function
-        assignment_model.min(sum((sum(self.cost_matrix_courses[jour][eleve][projet] * aff_cours[jour][eleve, projet]
-                        for eleve, projet in self.ExC[jour]))
-                    for jour in range(self.parameters.nb_days)) + sum(self.cost_matrix_projects[eleve][projet] * aff_projet[eleve, projet]
-                                                        for eleve, projet in iprod(self.E, self.PR)))
+        assignment_model.min(
+            sum(
+                sum(
+                    self.cost_matrix_courses[jour][eleve][projet] * aff_cours[jour][eleve, projet]
+                    for eleve, projet in self.ExC[jour]
+                )
+                for jour in range(self.parameters.nb_days)
+            ) + sum(
+                self.cost_matrix_projects[eleve][projet] * aff_projet[eleve, projet]
+                for eleve, projet in iprod(self.E, self.PR)
+            )
+        )
 
         # Constraints
         for eleve, jour in self.ExJ:
@@ -120,13 +134,26 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         for jour in range(self.parameters.nb_days):
             for projet in self.C[jour]:
                 sum(aff_cours[jour][eleve, projet] for eleve in self.E) == eff_cours[jour][projet]
-                sum(aff_projet[eleve, sum(self.parameters.nb_courses[:jour]) + projet] for eleve in self.E) == eff_projet[sum(self.parameters.nb_courses[:jour]) + projet]
+                sum(
+                    aff_projet[eleve, sum(self.parameters.nb_courses[:jour]) + projet]
+                    for eleve in self.E
+                ) == eff_projet[sum(self.parameters.nb_courses[:jour]) + projet]
                 ouv_cours[jour][projet] * self.staffrequired.course_min_staff(jour, projet) <= eff_cours[jour][projet]
                 ouv_cours[jour][projet] * self.staffrequired.course_max_staff(jour, projet) >= eff_cours[jour][projet]
-                ouv_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)] * self.staffrequired.project_min_staff(jour, projet) <= eff_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)]
-                ouv_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)] * self.staffrequired.project_max_staff(jour, projet) <= eff_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)]
+                ouv_projet[
+                    int(sum(self.parameters.nb_courses[:jour]) + projet)
+                ] * self.staffrequired.project_min_staff(jour, projet) <= eff_projet[
+                    int(sum(self.parameters.nb_courses[:jour]) + projet)
+                ]
+                ouv_projet[
+                    int(sum(self.parameters.nb_courses[:jour]) + projet)
+                ] * self.staffrequired.project_max_staff(jour, projet) <= eff_projet[
+                    int(sum(self.parameters.nb_courses[:jour]) + projet)
+                ]
             for eleve, projet in self.ExC[jour]:
-                aff_projet[eleve, int(sum(self.parameters.nb_courses[:jour]) + projet)] <= aff_cours[jour][eleve, projet]
+                aff_projet[
+                    eleve, int(sum(self.parameters.nb_courses[:jour]) + projet)
+                ] <= aff_cours[jour][eleve, projet]
 
         # Solve
         assignment_model.solve()
@@ -144,16 +171,22 @@ class ResultsInterpreter(BaseResultsInterpreterComponent):
 
         # Courses
         for jour in range(self.parameters.nb_days):
-            assign2 = [(eleve, projet) for eleve in self.solver.E for projet in self.solver.C[jour]
-                    if self.solver.aff_cours[jour][eleve, projet].primal > 0.5]
+            assign2 = [
+                (eleve, projet)
+                for eleve in self.solver.E for projet in self.solver.C[jour]
+                if self.solver.aff_cours[jour][eleve, projet].primal > 0.5
+            ]
             for eleve, projet in assign2:
                 results[eleve][jour] = projet + 1
                 print("Student %d gets on Day %d Course %d" % (eleve + 1, jour + 1, projet + 1))
 
         # Research projects
         for eleve in self.solver.E:
-            assign3 = [projet for projet in self.solver.PR
-                    if self.solver.aff_projet[eleve, projet].primal > 0.5]
+            assign3 = [
+                projet
+                for projet in self.solver.PR
+                if self.solver.aff_projet[eleve, projet].primal > 0.5
+            ]
             for projet in assign3:
                 results[eleve][4] = projet + 1
                 print("Student %d gets Research Project %d" % (eleve + 1, projet + 1))
@@ -215,4 +248,6 @@ if __name__ == '__main__':
     wishlists_parser = WishlistsParser(RESEARCH_WISHLISTS_FILE)
     assignment_solver = AssignmentSolver(parameters_parser, staffrequired_parser, wishlists_parser)
     interpreter = ResultsInterpreter(parameters_parser, assignment_solver)
-    results_saver = ResultsSaver(STUDENTS_FILE, parameters_parser, staffrequired_parser, interpreter, RESEARCH_RESULTS_FILE)
+    results_saver = ResultsSaver(
+        STUDENTS_FILE, parameters_parser, staffrequired_parser, interpreter, RESEARCH_RESULTS_FILE
+    )

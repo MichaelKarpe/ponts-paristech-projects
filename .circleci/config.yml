@@ -1,0 +1,37 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.4-jessie-node
+    environment:
+      - PYTHONPATH: src
+      - CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - venv-{{ checksum "requirements.txt" }}
+      - run:
+          name: Install Python requirements
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          key: venv-{{ checksum "requirements.txt" }}
+          paths:
+            - 'venv'
+      - run:
+          name: Install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.0
+      - run:
+          name: Run Flake8
+          command: |
+            . venv/bin/activate
+            flake8 src
+          no_output_timeout: 1m
+      - store_test_results:
+          path: $CIRCLE_TEST_REPORTS/junit

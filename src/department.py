@@ -92,7 +92,8 @@ class ResultsInterpreter(BaseResultsInterpreterComponent):
 
         results = [0 for eleve in range(self.parameters.nb_students)]
         assign = [
-            (eleve, projet) for eleve in self.solver.E for projet in self.solver.P
+            (eleve, projet)
+            for eleve in self.solver.E for projet in self.solver.P
             if self.solver.aff_dep[eleve, projet].primal > 0.5
         ]
         for eleve, projet in assign:
@@ -145,4 +146,6 @@ if __name__ == '__main__':
     wishlists_parser = WishlistsParser(DEPARTMENT_WISHLISTS_FILE)
     assignment_solver = AssignmentSolver(parameters_parser, staffrequired_parser, wishlists_parser)
     interpreter = ResultsInterpreter(parameters_parser, assignment_solver)
-    results_saver = ResultsSaver(STUDENTS_FILE, parameters_parser, staffrequired_parser, interpreter, DEPARTMENT_RESULTS_FILE)
+    results_saver = ResultsSaver(
+        STUDENTS_FILE, parameters_parser, staffrequired_parser, interpreter, DEPARTMENT_RESULTS_FILE
+    )
