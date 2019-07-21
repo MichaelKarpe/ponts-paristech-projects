@@ -52,17 +52,27 @@ class Trajectory(Impactposition):
         if sum(distances) == 0:
             return 0
         else:
-            return np.sqrt(2 * self.acceleration * 0.01
-                           * (sum([self.border_restitution ** (n - i - 2) * collision_angle * distances[i]
-                                   for i in range(n - 1)])
-                              + distances[n - 1]) / (self.border_restitution ** (n - 2) * collision_angle))
+            return np.sqrt(
+                2
+                * self.acceleration
+                * 0.01
+                * (
+                    sum([self.border_restitution ** (n - i - 2) * collision_angle * distances[i] for i in range(n - 1)])
+                    + distances[n - 1]
+                )
+                / (self.border_restitution ** (n - 2) * collision_angle)
+            )
 
     def check_if_not_in_hole(self, rebound_coords):
         for rebound_pos in rebound_coords:
-            if (rebound_pos.x <= self.hole_width or rebound_pos.x >= self.length - self.hole_width) \
-                    and (rebound_pos.y <= self.hole_width or rebound_pos.y >= self.width - self.hole_width) \
-                    or (self.width - self.hole_width <= rebound_pos.x <= self.width + self.hole_width
-                        and (rebound_pos.y == self.radius or rebound_pos.y == self.width - self.radius)):
+            if (
+                (rebound_pos.x <= self.hole_width or rebound_pos.x >= self.length - self.hole_width)
+                and (rebound_pos.y <= self.hole_width or rebound_pos.y >= self.width - self.hole_width)
+                or (
+                    self.width - self.hole_width <= rebound_pos.x <= self.width + self.hole_width
+                    and (rebound_pos.y == self.radius or rebound_pos.y == self.width - self.radius)
+                )
+            ):
                 return False
         return True
 
@@ -73,16 +83,17 @@ class Trajectory(Impactposition):
         if pt2 is None:
             return True
 
-        vects = [np.array([[self.white_ball.x - pt1.x], [self.white_ball.y - pt1.y]])] + \
-             [np.array([[self.coords_balls[ind_ball].x - pt1.x], [self.coords_balls[ind_ball].y - pt1.y]])
-              for ind_ball in range(len(self.coords_balls))]
+        vects = [np.array([[self.white_ball.x - pt1.x], [self.white_ball.y - pt1.y]])] + [
+            np.array([[self.coords_balls[ind_ball].x - pt1.x], [self.coords_balls[ind_ball].y - pt1.y]])
+            for ind_ball in range(len(self.coords_balls))
+        ]
 
         u1, u2 = pt2.x - pt1.x, pt2.y - pt1.y
         matrix = (u1 ** 2 + u2 ** 2) ** (-0.5) * np.array([[u1, -u2], [u2, u1]])
         inv_matrix = np.linalg.inv(matrix)
-        vects_new_basis = [(np.dot(inv_matrix, vect)[0][0], np.dot(inv_matrix, vect)[1][0]) for vect in vects] \
-                          + [(np.dot(inv_matrix, np.array([[u1], [u2]]))[0][0],
-                              np.dot(inv_matrix, np.array([[u1], [u2]]))[1][0])]
+        vects_new_basis = [(np.dot(inv_matrix, vect)[0][0], np.dot(inv_matrix, vect)[1][0]) for vect in vects] + [
+            (np.dot(inv_matrix, np.array([[u1], [u2]]))[0][0], np.dot(inv_matrix, np.array([[u1], [u2]]))[1][0])
+        ]
 
         for vect in vects_new_basis[1:-1]:
             eps = 1e-3
@@ -92,22 +103,36 @@ class Trajectory(Impactposition):
         return True
 
     def check_trajectory(self, rebound_coords):
-        checked_paths = [self.check_path(self.white_ball, rebound_coords[0])] \
-                        + [self.check_path(rebound_coords[ind_rebound], rebound_coords[ind_rebound + 1])
-                           for ind_rebound in range(len(rebound_coords) - 1)] \
-                        + [self.check_path(rebound_coords[-1], self.impact_pos),
-                           self.check_path(self.pt, self.holes[self.index_pos])]
+        checked_paths = (
+            [self.check_path(self.white_ball, rebound_coords[0])]
+            + [
+                self.check_path(rebound_coords[ind_rebound], rebound_coords[ind_rebound + 1])
+                for ind_rebound in range(len(rebound_coords) - 1)
+            ]
+            + [
+                self.check_path(rebound_coords[-1], self.impact_pos),
+                self.check_path(self.pt, self.holes[self.index_pos]),
+            ]
+        )
 
         return sum(checked_paths) == len(checked_paths)
 
     def display_trajectory(self, direction):
         if self.achievable_trajectory[direction]:
-            x = [self.white_ball.x] \
-                + [self.rebound_coords[direction][ind_rebound].x
-                   for ind_rebound in range(len(self.rebound_coords[direction]))] \
+            x = (
+                [self.white_ball.x]
+                + [
+                    self.rebound_coords[direction][ind_rebound].x
+                    for ind_rebound in range(len(self.rebound_coords[direction]))
+                ]
                 + [self.impact_pos.x]
-            y = [self.white_ball.y] \
-                + [self.rebound_coords[direction][ind_rebound].y
-                   for ind_rebound in range(len(self.rebound_coords[direction]))] \
+            )
+            y = (
+                [self.white_ball.y]
+                + [
+                    self.rebound_coords[direction][ind_rebound].y
+                    for ind_rebound in range(len(self.rebound_coords[direction]))
+                ]
                 + [self.impact_pos.y]
-            plt.plot(x, y, color='black')
+            )
+            plt.plot(x, y, color="black")

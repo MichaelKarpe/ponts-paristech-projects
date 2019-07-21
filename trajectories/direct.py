@@ -12,8 +12,11 @@ class Directtraj(Trajectory):
         self.initial_speed, self.achievable_trajectory = {"direct": None}, {"direct": False}
         self.rebound_coords["direct"] = []
 
-        if self.achievable_impact_pos and self.check_path(self.white_ball, self.impact_pos) \
-                and self.check_path(self.pt, self.holes[self.index_pos]):
+        if (
+            self.achievable_impact_pos
+            and self.check_path(self.white_ball, self.impact_pos)
+            and self.check_path(self.pt, self.holes[self.index_pos])
+        ):
             collision_angle = self.shock_return(self.white_ball, self.impact_pos, self.pt)
 
             if collision_angle >= 0:  # Tout le temps ou que pour perpendiculaire ?
@@ -30,8 +33,7 @@ class Directtraj(Trajectory):
         return True
 
     def direct_distances(self):
-        distances = [dist(self.white_ball, self.impact_pos),
-                     dist(self.pt, self.holes[self.index_pos])]
+        distances = [dist(self.white_ball, self.impact_pos), dist(self.pt, self.holes[self.index_pos])]
 
         return distances
 

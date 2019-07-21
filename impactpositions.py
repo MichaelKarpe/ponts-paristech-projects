@@ -18,7 +18,7 @@ class Impactposition(Ball):
             self.draw_impact_pos()
 
     def check_impact_position(self):
-        for ball_coords in self.coords_balls[:self.index_ball] + self.coords_balls[self.index_ball+1:]:
+        for ball_coords in self.coords_balls[: self.index_ball] + self.coords_balls[self.index_ball + 1 :]:
             if dist(ball_coords, self.impact_pos) < 2 * self.radius:
                 return False
         return True
@@ -32,8 +32,10 @@ class Impactposition(Ball):
                 if y <= self.width - self.radius:
                     (x, y) = (self.length - self.radius, y)
                 else:
-                    (x, y) = (pt_color.x + (self.width - self.radius - pt_color.y) / self.slope,
-                              self.width - self.radius)
+                    (x, y) = (
+                        pt_color.x + (self.width - self.radius - pt_color.y) / self.slope,
+                        self.width - self.radius,
+                    )
 
             else:
                 y = pt_color.y - self.slope * (pt_color.x - self.radius)
@@ -50,8 +52,10 @@ class Impactposition(Ball):
                 if x <= self.length - self.radius:
                     (x, y) = (x, self.radius)
                 else:
-                    (x, y) = (self.length - self.radius,
-                              pt_color.y + self.slope * (self.length - self.radius - pt_color.x))
+                    (x, y) = (
+                        self.length - self.radius,
+                        pt_color.y + self.slope * (self.length - self.radius - pt_color.x),
+                    )
 
             else:
                 x = pt_color.x + (self.width - self.radius - pt_color.y) / self.slope
@@ -62,7 +66,7 @@ class Impactposition(Ball):
                     (x, y) = (self.radius, pt_color.y - self.slope * (pt_color.x - self.radius))
 
         if verbose:
-            plt.plot([self.white_ball.x, x], [self.white_ball.y, y], 'black')
+            plt.plot([self.white_ball.x, x], [self.white_ball.y, y], "black")
 
         return Point(x, y)
 
@@ -83,16 +87,20 @@ class Impactposition(Ball):
                 else:
                     (x, y) = (self.length - self.radius, rebound_y - (self.length - 2 * self.radius) * rebound_slope)
                     if y > self.width - self.radius:
-                        (x, y) = (self.radius - (self.width - self.radius - rebound_y) / rebound_slope,
-                                  self.width - self.radius)
+                        (x, y) = (
+                            self.radius - (self.width - self.radius - rebound_y) / rebound_slope,
+                            self.width - self.radius,
+                        )
 
             elif rebound_x == self.length - self.radius:
 
                 if rebound_slope >= 0:
                     (x, y) = (self.radius, rebound_y + (self.length - 2 * self.radius) * rebound_slope)
                     if y > self.width - self.radius:
-                        (x, y) = (self.length - self.radius - (self.width - self.radius - rebound_y) / rebound_slope,
-                                  self.width - self.radius)
+                        (x, y) = (
+                            self.length - self.radius - (self.width - self.radius - rebound_y) / rebound_slope,
+                            self.width - self.radius,
+                        )
 
                 else:
                     (x, y) = (self.radius, rebound_y + (self.length - 2 * self.radius) * rebound_slope)
@@ -109,15 +117,19 @@ class Impactposition(Ball):
                 else:
                     (x, y) = (rebound_x - (self.width - 2 * self.radius) / rebound_slope, self.width - self.radius)
                     if x > self.length - self.radius:
-                        (x, y) = (self.length - self.radius,
-                                  self.radius - (self.length - self.radius - rebound_x) * rebound_slope)
+                        (x, y) = (
+                            self.length - self.radius,
+                            self.radius - (self.length - self.radius - rebound_x) * rebound_slope,
+                        )
             else:
 
                 if rebound_slope >= 0:
                     (x, y) = (rebound_x + (self.width - 2 * self.radius) / rebound_slope, self.radius)
                     if x > self.length - self.radius:
-                        (x, y) = (self.length - self.radius,
-                                  self.width - self.radius - (self.length - self.radius - rebound_x) * rebound_slope)
+                        (x, y) = (
+                            self.length - self.radius,
+                            self.width - self.radius - (self.length - self.radius - rebound_x) * rebound_slope,
+                        )
 
                 else:
                     (x, y) = (rebound_x + (self.width - 2 * self.radius) / rebound_slope, self.radius)
@@ -130,4 +142,4 @@ class Impactposition(Ball):
 
     def draw_impact_pos(self):
         if self.achievable_impact_pos:
-            self.draw_ball(self.impact_pos, 'orange')
+            self.draw_ball(self.impact_pos, "orange")

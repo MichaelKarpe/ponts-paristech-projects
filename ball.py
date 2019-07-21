@@ -19,10 +19,18 @@ class Ball(Billiard):
             slope = (self.holes[i].y - self.pt.y) / (self.holes[i].x - self.pt.x)
 
             if self.holes[i].x - self.pt.x >= 0:
-                coords_impact_positions.append(Point(self.pt.x - 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
-                                                     self.pt.y - slope * 2 * self.radius / (1 + slope ** 2) ** (1 / 2)))
+                coords_impact_positions.append(
+                    Point(
+                        self.pt.x - 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
+                        self.pt.y - slope * 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
+                    )
+                )
             else:
-                coords_impact_positions.append(Point(self.pt.x + 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
-                                                     self.pt.y + slope * 2 * self.radius / (1 + slope ** 2) ** (1 / 2)))
+                coords_impact_positions.append(
+                    Point(
+                        self.pt.x + 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
+                        self.pt.y + slope * 2 * self.radius / (1 + slope ** 2) ** (1 / 2),
+                    )
+                )
 
         return coords_impact_positions
