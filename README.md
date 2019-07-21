@@ -14,3 +14,43 @@ The results obtained have been very satisfactory. Considering wishlists with sev
 - Only 1% of course allocations corresponded to third wishes from students
 
 The main part of the final report of the project is available in the `doc` file (in French only).
+
+
+## Index
+
+1.  [Dependencies](#dependencies)
+1.  [Installation](#installation)
+1.  [Launch App](#launch-app)
+
+## Dependencies
+
+- [anaconda](https://www.anaconda.com/distribution/)
+
+## Installation
+
+Install a conda environment:
+
+```bash
+conda create -n course-allocation anaconda python=3.7.2
+conda activate course-allocation
+pip install -r ./requirements.txt
+```
+
+_N.B.:_ The `requirements.txt` file has been generated with the following command lines:
+
+```bash
+conda create -n course-allocation anaconda python=3.7.2
+conda activate course-allocation
+pip install black pandas pymprog xlsxwriter
+pip freeze > requirements.txt
+```
+
+## Launch App
+
+Set the correct `PATH_TO_FOLDER` in the `src/config.py` file and then launch the following commands:
+
+```bash
+conda activate course-allocation
+python src/department.py
+python src/research.py
+```

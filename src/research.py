@@ -1,9 +1,17 @@
 from config import (
-    PARAMETERS_FILE, RESEARCH_RESULTS_FILE, RESEARCH_STAFFREQUIRED_FILE, RESEARCH_WISHLISTS_FILE, STUDENTS_FILE
+    PARAMETERS_FILE,
+    RESEARCH_RESULTS_FILE,
+    RESEARCH_STAFFREQUIRED_FILE,
+    RESEARCH_WISHLISTS_FILE,
+    STUDENTS_FILE,
 )
 from model import (
-    BaseAssignmentSolverComponent, BaseParametersParserComponent, BaseResultsInterpreterComponent,
-    BaseResultsSaverComponent, BaseStaffRequiredParserComponent, BaseWishlistsParserComponent
+    BaseAssignmentSolverComponent,
+    BaseParametersParserComponent,
+    BaseResultsInterpreterComponent,
+    BaseResultsSaverComponent,
+    BaseStaffRequiredParserComponent,
+    BaseWishlistsParserComponent,
 )
 from pymprog import iprod, model
 from utils import read_csv
@@ -30,20 +38,21 @@ class StaffRequiredParser(BaseStaffRequiredParserComponent):
         self.parameters = parameters_parser
 
     def course_min_staff(self, jour, projet):
-        return self.staffrequired[int(sum(self.parameters.nb_courses[:(jour - 1)]) + projet - 1)][0]
+        return self.staffrequired[int(sum(self.parameters.nb_courses[: (jour - 1)]) + projet - 1)][0]
 
     def course_max_staff(self, jour, projet):
-        return self.staffrequired[int(sum(self.parameters.nb_courses[:(jour - 1)]) + projet - 1)][1]
+        return self.staffrequired[int(sum(self.parameters.nb_courses[: (jour - 1)]) + projet - 1)][1]
 
     def project_min_staff(self, jour, projet):
-        return self.staffrequired[int(sum(self.parameters.nb_courses[:(jour - 1)]) + projet - 1)][2]
+        return self.staffrequired[int(sum(self.parameters.nb_courses[: (jour - 1)]) + projet - 1)][2]
 
     def project_max_staff(self, jour, projet):
-        return self.staffrequired[int(sum(self.parameters.nb_courses[:(jour - 1)]) + projet - 1)][3]
+        return self.staffrequired[int(sum(self.parameters.nb_courses[: (jour - 1)]) + projet - 1)][3]
 
 
 class WishlistsParser(BaseWishlistsParserComponent):
     """Parses wishlists from students."""
+
     pass
 
 
@@ -66,36 +75,40 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         self.cost_matrix_courses = self.cost_function_courses()
         self.cost_matrix_projects = self.cost_function_projects()
         (
-            self.model, self.ouv_cours, self.aff_cours, self.eff_cours, self.ouv_projet, self.aff_projet,
-            self.eff_projet
+            self.model,
+            self.ouv_cours,
+            self.aff_cours,
+            self.eff_cours,
+            self.ouv_projet,
+            self.aff_projet,
+            self.eff_projet,
         ) = self.solve()
 
     def cost_function_courses(self):
-        cost_matrix_courses = [[
-            [10000 for p in range(self.parameters.nb_courses[j])]
-            for e in range(self.parameters.nb_students)
-        ] for j in range(self.parameters.nb_days)]
+        cost_matrix_courses = [
+            [[10000 for p in range(self.parameters.nb_courses[j])] for e in range(self.parameters.nb_students)]
+            for j in range(self.parameters.nb_days)
+        ]
 
         for jour in range(self.parameters.nb_days):
             for eleve in range(self.parameters.nb_students):
                 for poids in range(self.parameters.nb_courses[jour]):
                     cost_matrix_courses[jour][eleve][
                         self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses[:jour]) + poids)] - 1
-                    ] = poids ** 2
+                    ] = (poids ** 2)
 
         return cost_matrix_courses
 
     def cost_function_projects(self):
         cost_matrix_projects = [
-            [10000 for projet in range(sum(self.parameters.nb_courses))]
-            for eleve in range(self.parameters.nb_students)
+            [10000 for projet in range(sum(self.parameters.nb_courses))] for eleve in range(self.parameters.nb_students)
         ]
 
         for eleve in range(self.parameters.nb_students):
             for poids in range(self.parameters.nb_wishes_PIR):
                 cost_matrix_projects[eleve][
                     self.wishlists.wishes[eleve][int(sum(self.parameters.nb_courses) + poids)] - 1
-                ] = poids ** 2
+                ] = (poids ** 2)
 
         return cost_matrix_projects
 
@@ -103,13 +116,13 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         assignment_model = model("assign")
 
         # Variables
-        ouv_cours = [assignment_model.var('ouv_cours', self.C[jour]) for jour in range(self.parameters.nb_days)]
-        aff_cours = [assignment_model.var('aff_cours', self.ExC[jour]) for jour in range(self.parameters.nb_days)]
-        eff_cours = [assignment_model.var('eff_cours', self.C[jour]) for jour in range(self.parameters.nb_days)]
+        ouv_cours = [assignment_model.var("ouv_cours", self.C[jour]) for jour in range(self.parameters.nb_days)]
+        aff_cours = [assignment_model.var("aff_cours", self.ExC[jour]) for jour in range(self.parameters.nb_days)]
+        eff_cours = [assignment_model.var("eff_cours", self.C[jour]) for jour in range(self.parameters.nb_days)]
 
-        ouv_projet = assignment_model.var('ouvproj', self.PR)
-        aff_projet = assignment_model.var('aff_proj', iprod(self.E, self.PR))
-        eff_projet = assignment_model.var('effproj', self.PR)
+        ouv_projet = assignment_model.var("ouvproj", self.PR)
+        aff_projet = assignment_model.var("aff_proj", iprod(self.E, self.PR))
+        eff_projet = assignment_model.var("effproj", self.PR)
 
         # Objective function
         assignment_model.min(
@@ -119,7 +132,8 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
                     for eleve, projet in self.ExC[jour]
                 )
                 for jour in range(self.parameters.nb_days)
-            ) + sum(
+            )
+            + sum(
                 self.cost_matrix_projects[eleve][projet] * aff_projet[eleve, projet]
                 for eleve, projet in iprod(self.E, self.PR)
             )
@@ -135,25 +149,20 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
             for projet in self.C[jour]:
                 sum(aff_cours[jour][eleve, projet] for eleve in self.E) == eff_cours[jour][projet]
                 sum(
-                    aff_projet[eleve, sum(self.parameters.nb_courses[:jour]) + projet]
-                    for eleve in self.E
+                    aff_projet[eleve, sum(self.parameters.nb_courses[:jour]) + projet] for eleve in self.E
                 ) == eff_projet[sum(self.parameters.nb_courses[:jour]) + projet]
                 ouv_cours[jour][projet] * self.staffrequired.course_min_staff(jour, projet) <= eff_cours[jour][projet]
                 ouv_cours[jour][projet] * self.staffrequired.course_max_staff(jour, projet) >= eff_cours[jour][projet]
-                ouv_projet[
-                    int(sum(self.parameters.nb_courses[:jour]) + projet)
-                ] * self.staffrequired.project_min_staff(jour, projet) <= eff_projet[
-                    int(sum(self.parameters.nb_courses[:jour]) + projet)
-                ]
-                ouv_projet[
-                    int(sum(self.parameters.nb_courses[:jour]) + projet)
-                ] * self.staffrequired.project_max_staff(jour, projet) <= eff_projet[
-                    int(sum(self.parameters.nb_courses[:jour]) + projet)
-                ]
+                ouv_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)] * self.staffrequired.project_min_staff(
+                    jour, projet
+                ) <= eff_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)]
+                ouv_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)] * self.staffrequired.project_max_staff(
+                    jour, projet
+                ) <= eff_projet[int(sum(self.parameters.nb_courses[:jour]) + projet)]
             for eleve, projet in self.ExC[jour]:
-                aff_projet[
-                    eleve, int(sum(self.parameters.nb_courses[:jour]) + projet)
-                ] <= aff_cours[jour][eleve, projet]
+                aff_projet[eleve, int(sum(self.parameters.nb_courses[:jour]) + projet)] <= aff_cours[jour][
+                    eleve, projet
+                ]
 
         # Solve
         assignment_model.solve()
@@ -173,7 +182,8 @@ class ResultsInterpreter(BaseResultsInterpreterComponent):
         for jour in range(self.parameters.nb_days):
             assign2 = [
                 (eleve, projet)
-                for eleve in self.solver.E for projet in self.solver.C[jour]
+                for eleve in self.solver.E
+                for projet in self.solver.C[jour]
                 if self.solver.aff_cours[jour][eleve, projet].primal > 0.5
             ]
             for eleve, projet in assign2:
@@ -182,11 +192,7 @@ class ResultsInterpreter(BaseResultsInterpreterComponent):
 
         # Research projects
         for eleve in self.solver.E:
-            assign3 = [
-                projet
-                for projet in self.solver.PR
-                if self.solver.aff_projet[eleve, projet].primal > 0.5
-            ]
+            assign3 = [projet for projet in self.solver.PR if self.solver.aff_projet[eleve, projet].primal > 0.5]
             for projet in assign3:
                 results[eleve][4] = projet + 1
                 print("Student %d gets Research Project %d" % (eleve + 1, projet + 1))
@@ -201,7 +207,7 @@ class ResultsSaver(BaseResultsSaverComponent):
         return self.student_names[ind_eleve - 1][0]
 
     def get_course_name(self, jour, projet):
-        return self.staffrequired.staffrequired[int(sum(self.parameters.nb_courses[:(jour - 1)]) + projet - 1)][4]
+        return self.staffrequired.staffrequired[int(sum(self.parameters.nb_courses[: (jour - 1)]) + projet - 1)][4]
 
     def get_research_project_name(self, projet):
         return self.staffrequired.staffrequired[projet - 1][5]
@@ -242,7 +248,7 @@ class ResultsSaver(BaseResultsSaverComponent):
         workbook.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parameters_parser = ParametersParser(PARAMETERS_FILE)
     staffrequired_parser = StaffRequiredParser(RESEARCH_STAFFREQUIRED_FILE, parameters_parser)
     wishlists_parser = WishlistsParser(RESEARCH_WISHLISTS_FILE)

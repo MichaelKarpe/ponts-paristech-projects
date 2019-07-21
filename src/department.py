@@ -1,9 +1,17 @@
 from config import (
-    DEPARTMENT_RESULTS_FILE, DEPARTMENT_STAFFREQUIRED_FILE, DEPARTMENT_WISHLISTS_FILE, PARAMETERS_FILE, STUDENTS_FILE
+    DEPARTMENT_RESULTS_FILE,
+    DEPARTMENT_STAFFREQUIRED_FILE,
+    DEPARTMENT_WISHLISTS_FILE,
+    PARAMETERS_FILE,
+    STUDENTS_FILE,
 )
 from model import (
-    BaseAssignmentSolverComponent, BaseParametersParserComponent, BaseResultsInterpreterComponent,
-    BaseResultsSaverComponent, BaseStaffRequiredParserComponent, BaseWishlistsParserComponent
+    BaseAssignmentSolverComponent,
+    BaseParametersParserComponent,
+    BaseResultsInterpreterComponent,
+    BaseResultsSaverComponent,
+    BaseStaffRequiredParserComponent,
+    BaseWishlistsParserComponent,
 )
 from pymprog import iprod, model
 from utils import read_csv
@@ -32,6 +40,7 @@ class StaffRequiredParser(BaseStaffRequiredParserComponent):
 
 class WishlistsParser(BaseWishlistsParserComponent):
     """Parses wishlists from students."""
+
     pass
 
 
@@ -51,24 +60,23 @@ class AssignmentSolver(BaseAssignmentSolverComponent):
         self.model, self.ouv_dep, self.aff_dep, self.eff_dep = self.solve()
 
     def cost_function(self):
-        return [[
-            (self.wishlists.wishes[eleve][projet] - 1) ** 2
-            for projet in range(self.parameters.nb_dept_projects)
-        ] for eleve in range(self.parameters.nb_students)]
+        return [
+            [(self.wishlists.wishes[eleve][projet] - 1) ** 2 for projet in range(self.parameters.nb_dept_projects)]
+            for eleve in range(self.parameters.nb_students)
+        ]
 
     def solve(self):
         assignment_model = model("assign")
 
         # Variables
-        ouv_dep = assignment_model.var('ouv_dep', self.P)
-        aff_dep = assignment_model.var('aff_dep', self.ExP)
-        eff_dep = assignment_model.var('eff_dep', self.P)
+        ouv_dep = assignment_model.var("ouv_dep", self.P)
+        aff_dep = assignment_model.var("aff_dep", self.ExP)
+        eff_dep = assignment_model.var("eff_dep", self.P)
 
         # Objective function
-        assignment_model.min(sum(
-            self.cost_matrix[eleve][projet] * aff_dep[eleve, projet]
-            for eleve, projet in self.ExP
-        ))
+        assignment_model.min(
+            sum(self.cost_matrix[eleve][projet] * aff_dep[eleve, projet] for eleve, projet in self.ExP)
+        )
 
         # Constraints
         for eleve in self.E:
@@ -93,7 +101,8 @@ class ResultsInterpreter(BaseResultsInterpreterComponent):
         results = [0 for eleve in range(self.parameters.nb_students)]
         assign = [
             (eleve, projet)
-            for eleve in self.solver.E for projet in self.solver.P
+            for eleve in self.solver.E
+            for projet in self.solver.P
             if self.solver.aff_dep[eleve, projet].primal > 0.5
         ]
         for eleve, projet in assign:
@@ -118,10 +127,7 @@ class ResultsSaver(BaseResultsSaverComponent):
         worksheet = workbook.add_worksheet()
 
         # Some data we want to write to the worksheet.
-        expenses = (
-            [self.get_student_name(i + 1), self.results[i]]
-            for i in range(self.parameters.nb_students)
-        )
+        expenses = ([self.get_student_name(i + 1), self.results[i]] for i in range(self.parameters.nb_students))
 
         # Start from the first cell. Rows and columns are zero indexed.
         row = 0
@@ -140,7 +146,7 @@ class ResultsSaver(BaseResultsSaverComponent):
         workbook.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parameters_parser = ParametersParser(PARAMETERS_FILE)
     staffrequired_parser = StaffRequiredParser(DEPARTMENT_STAFFREQUIRED_FILE)
     wishlists_parser = WishlistsParser(DEPARTMENT_WISHLISTS_FILE)
