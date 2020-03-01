@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="lloyd" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5OpenGL\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Widgets\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Gui\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 edit_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="lloyd">
+         <Option output="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/lloyd" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DQT_OPENGL_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DCGAL_USE_MPFR" />
+            <Add option="-DCGAL_USE_GMP" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/." />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/./build" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/build" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/5" />
+            <Add directory="/usr/include/c++/5/backward" />
+            <Add directory="/usr/include/x86_64-linux-gnu" />
+            <Add directory="/usr/include/x86_64-linux-gnu/c++/5" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtCore" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtGui" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtOpenGL" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtWidgets" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+            <Add directory="/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 lloyd" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="lloyd/fast">
+         <Option output="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/lloyd" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DQT_OPENGL_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DCGAL_USE_MPFR" />
+            <Add option="-DCGAL_USE_GMP" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/." />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/./build" />
+            <Add directory="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/build" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/5" />
+            <Add directory="/usr/include/c++/5/backward" />
+            <Add directory="/usr/include/x86_64-linux-gnu" />
+            <Add directory="/usr/include/x86_64-linux-gnu/c++/5" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtCore" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtGui" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtOpenGL" />
+            <Add directory="/usr/include/x86_64-linux-gnu/qt5/QtWidgets" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+            <Add directory="/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 lloyd/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="lloyd_automoc">
+         <Option working_dir="/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 lloyd_automoc" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/michael/Desktop/Projet\ MAIAP/lloyd_convergence-build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/glviewer.cpp">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/glviewer.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/include/cdt.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/include/dt.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/lloyd.ui">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/main.cpp">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/options.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/options.ui">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/plotviewer.cpp">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/plotviewer.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/scene.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/window.cpp">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/window.h">
+         <Option target="lloyd"/>
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALExports.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALExports-release.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/UseCGAL.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_Macros.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_VersionUtils.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_Common.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_Macros.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_SetupFlags.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_GeneratorSpecificSettings.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/CGAL_TweakFindBoost.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/CGAL/FindOpenGL.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\CGAL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5/Qt5ConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5/Qt5Config.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5/Qt5ConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5/Qt5Config.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5OpenGL/Qt5OpenGLConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5OpenGL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5OpenGL/Qt5OpenGLConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5OpenGL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5OpenGL/Qt5OpenGLConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5OpenGL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5OpenGL/Qt5OpenGLConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5OpenGL\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Widgets/Qt5WidgetsConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Gui/Qt5GuiConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Core/Qt5CoreConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Core/Qt5CoreConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Core/Qt5CoreConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="/home/michael/Desktop/Projet MAIAP/lloyd_convergence/../../../../../usr/lib/x86_64-linux-gnu/cmake/Qt5Core/Qt5CoreMacros.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Qt5Core\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

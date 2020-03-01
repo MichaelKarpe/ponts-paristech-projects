@@ -1,0 +1,4 @@
+/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/CMakeFiles/edit_cache.dir
+/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/CMakeFiles/rebuild_cache.dir
+/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/CMakeFiles/lloyd.dir
+/home/michael/Desktop/Projet MAIAP/lloyd_convergence-build/CMakeFiles/lloyd_automoc.dir
