@@ -3,7 +3,7 @@ attrs==19.1.0
 black==19.3b0
 certifi==2019.6.16
 Click==7.0
-numpy==1.16.4
+numpy==1.22.0
 pandas==0.25.0
 pymprog==1.1.2
 python-dateutil==2.8.0
