@@ -1,7 +1,7 @@
 appdirs==1.4.3
 attrs==19.1.0
 black==19.3b0
-certifi==2019.6.16
+certifi==2022.12.7
 Click==7.0
 numpy==1.16.4
 pandas==0.25.0
